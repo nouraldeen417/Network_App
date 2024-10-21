@@ -1,0 +1,15 @@
+<html>
+<head>
+
+</head>
+<body>
+    <h1> Project </h1>
+    <form action="{% url 'dowork' %}" method="POST">
+        {% csrf_token %}
+        <label for="ip">Enter IP:</label>
+        <input type="text" id="ip" name="ip" required>
+        
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
