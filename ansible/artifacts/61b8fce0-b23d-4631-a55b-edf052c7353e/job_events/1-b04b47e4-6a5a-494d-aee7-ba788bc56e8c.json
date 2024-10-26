@@ -1,0 +1,1 @@
+{"event": "verbose", "uuid": "b04b47e4-6a5a-494d-aee7-ba788bc56e8c", "counter": 1, "stdout": "\u001b[0;31mERROR! the playbook: ping.yaml could not be found\u001b[0m", "start_line": 0, "end_line": 1, "runner_ident": "61b8fce0-b23d-4631-a55b-edf052c7353e", "created": "2024-10-24T14:58:17.872784+00:00"}
