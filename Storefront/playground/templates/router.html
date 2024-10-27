@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devices Page</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            display: flex;
+            background-color: #ccc;
+            padding: 10px;
+            justify-content: space-around;
+        }
+        .navbar div {
+            padding: 10px;
+            border: 1px solid black;
+            background-color: lightblue;
+        }
+        .container {
+            margin: 20px;
+            padding: 20px;
+            background-color: #add8e6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar"> 
+        <div><a href="{% url 'RoutersView' %}">Routers</a></div>
+        <div><a href="{% url 'SwitchesView' %}">Switches</a></div>
+        <div><a href="{% url 'FirewallView' %}">Firewall</a></div>
+    </div>
+
+    <div class="container">
+        <h2>List all running routers</h2>
+        <table id="router-table" border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>IP Address</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Router data will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+        <h2>Stopped Routers Checklist</h2>
+        <form id="router-form" action="{% url 'RouterDoWork' %}" method="Post">
+            {% csrf_token %}
+            <ul id="stopped-routers-checklist">
+                <!-- Checklist of stopped routers will be inserted here by JavaScript -->
+            </ul>
+            <button type="submit">Submit Selected Routers</button>
+        </form>
+        <div id="message-container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <p>Allow user to select router and display running configuration</p>
+        <p>Allow to change some configuration</p>
+    </div>
+    
+    <script src="{% static 'js/script.js' %}" defer></script>
+</body>
+</html>

@@ -1,15 +1,59 @@
-<html>
+<html lang="en">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            display: flex;
+            background-color: #ccc;
+            padding: 10px;
+            justify-content: space-around;
+        }
+        .navbar div {
+            padding: 10px;
+            border: 1px solid black;
+            background-color: lightblue;
+        }
+        .container {
+            margin: 20px;
+            padding: 20px;
+            background-color: #add8e6;
+        }
+    </style>
 </head>
 <body>
-    <h1> Project </h1>
-    <form action="{% url 'dowork' %}" method="POST">
-        {% csrf_token %}
-        <label for="ip">Enter IP:</label>
-        <input type="text" id="ip" name="ip" required>
-        
-        <button type="submit">Submit</button>
-    </form>
+
+    <div class="navbar">
+        <div><a href="{% url 'RoutersView' %}">Routers</a></div>
+        <div><a href="{% url 'SwitchesView' %}">Switches</a></div>
+        <div><a href="{% url 'FirewallView' %}">Firewall</a></div>
+    </div>
+
+    <div class="container">
+        <h1>Hello To Our Web Site</h1>
+
+    </div>
+
+    <div class="container">
+        <h2>System Status</h2>
+        <table id="deviceTable" border="1">
+            <thead>
+                <tr>
+                    <th>Host</th>
+                    <th>Task</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically added here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    <script src="{% static 'js/hello_script.js' %} "></script>
 </body>
 </html>
