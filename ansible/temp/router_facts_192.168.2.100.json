@@ -7,10 +7,10 @@
     "net_config": "Building configuration...\n\nCurrent configuration : 3072 bytes\n!\n! Last configuration change at 21:06:58 UTC Sun Nov 24 2024\n!\nversion 15.2\nservice timestamps debug datetime msec\nservice timestamps log datetime msec\nno service password-encryption\nservice compress-config\n!\nhostname S1\n!\nboot-start-marker\nboot-end-marker\n!\n!\n!\nusername ansible privilege 15 nopassword\nno aaa new-model\n!\n!\n!\n!\n!\n!\n!\n!\nip domain-name cisco.com\nip cef\nno ipv6 cef\n!\n!\n!\nspanning-tree mode pvst\nspanning-tree extend system-id\n!\n!\n! \n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\ninterface GigabitEthernet0/0\n negotiation auto\n!\ninterface GigabitEthernet0/1\n negotiation auto\n!\ninterface GigabitEthernet0/2\n negotiation auto\n!\ninterface GigabitEthernet0/3\n negotiation auto\n!\ninterface GigabitEthernet1/0\n negotiation auto\n!\ninterface GigabitEthernet1/1\n negotiation auto\n!\ninterface GigabitEthernet1/2\n negotiation auto\n!\ninterface GigabitEthernet1/3\n negotiation auto\n!\ninterface Vlan1\n ip address 192.168.2.100 255.255.255.0\n!\nip forward-protocol nd\n!\nip http server\n!\nip ssh version 2\nip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr\nip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr\n!\n!\n!\n!\n!\nsnmp-server community S1 RO\nsnmp-server community private RW\n!\ncontrol-plane\n!\nbanner exec ^C\nIOSv - Cisco Systems Confidential -\n\nSupplemental End User License Restrictions\n\nThis IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.\n\nBy using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.\n^C\nbanner incoming ^C\nIOSv - Cisco Systems Confidential -\n\nSupplemental End User License Restrictions\n\nThis IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.\n\nBy using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.\n^C\nbanner login ^C\nIOSv - Cisco Systems Confidential -\n\nSupplemental End User License Restrictions\n\nThis IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.\n\nBy using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.\n^C\n!\nline con 0\nline aux 0\nline vty 0 4\n login local\n transport input ssh\nline vty 5 15\n login local\n transport input ssh\n!\n!\nend",
     "net_cpu_utilization": {
         "core": {
-            "five_minutes": 47,
-            "five_seconds": 43,
+            "five_minutes": 50,
+            "five_seconds": 87,
             "five_seconds_interrupt": 0,
-            "one_minute": 46
+            "one_minute": 54
         }
     },
     "net_filesystems": [
@@ -24,10 +24,10 @@
     },
     "net_gather_network_resources": [],
     "net_gather_subset": [
-        "hardware",
-        "interfaces",
+        "config",
         "default",
-        "config"
+        "interfaces",
+        "hardware"
     ],
     "net_hostname": "S1",
     "net_image": "flash0:/vios_l2-adventerprisek9-m",
@@ -147,7 +147,7 @@
         }
     },
     "net_iostype": "IOS",
-    "net_memfree_mb": 734.9000549316406,
+    "net_memfree_mb": 734.8882751464844,
     "net_memtotal_mb": 793.0905151367188,
     "net_model": "IOSv",
     "net_neighbors": {

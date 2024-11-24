@@ -13,9 +13,9 @@ class AutomationMethods:
         return  status
 
     def Router_list():
-        status=hello.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
-        print(status)
-        return  status
+        Fact_data=router.Routers_facts() #status has three lists host-ip list[], status list[] ,task name list[]
+        # print(status)
+        return  Fact_data
 # MY Data I used to Test 
 # class AutomationMethods:
 #     @staticmethod
