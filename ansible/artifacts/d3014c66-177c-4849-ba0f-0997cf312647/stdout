@@ -1,0 +1,4 @@
+
+PLAY [Gather information about the Cisco router] *******************************
+
+TASK [Ping all routers] ********************************************************

@@ -3,11 +3,16 @@ import sys
 # Add the path to the 'python' folder to the system path
 sys.path.append("..")
 # Now import 'some_file' from the 'python' directory
-from python import hello
+from python import hello,router
 class AutomationMethods:
     @staticmethod
     
     def Ping():
+        status=hello.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
+        print(status)
+        return  status
+
+    def Router_list():
         status=hello.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
         print(status)
         return  status

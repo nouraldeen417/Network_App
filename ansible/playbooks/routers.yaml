@@ -1,0 +1,19 @@
+---
+- name: Gather information about the Cisco router
+  hosts: all
+  gather_facts: false
+
+  tasks:
+   - name: Ping all routers
+     ansible.builtin.ping:
+
+   - name: Gather only the config and default facts
+     ios_facts:
+      gather_subset: all
+     register: current_users
+
+
+   - name: Save facts to a JSON file
+     copy:
+        content: "{{ ansible_facts | to_nice_json }}"
+        dest: "temp/router_facts_{{ inventory_hostname }}.json"

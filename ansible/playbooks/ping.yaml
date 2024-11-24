@@ -1,6 +1,6 @@
 ---
 - name: Gather information about the Cisco router
-  hosts: routers
+  hosts: all
   gather_facts: false
   # vars:
       
@@ -21,6 +21,8 @@
   #  - name: Print return information from the previous task
   #    ansible.builtin.debug:
   #      var: current_users 
-   - name: Test reachability to 10.10.10.10 using default vrf
-     ios_ping:
-         dest: 192.168.2.1
+  #  - name: Test reachability to 10.10.10.10 using default vrf
+  #    ios_ping:
+  #        dest: 192.168.2.1
+     - name: Ping all hosts
+       ansible.builtin.ping:

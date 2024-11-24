@@ -1,0 +1,8 @@
+
+PLAY [Gather information about the Cisco router] *******************************
+
+TASK [Ping all routers] ********************************************************
+[0;32mok: [192.168.2.100][0m
+[0;32mok: [192.168.2.1][0m
+
+TASK [Gather only the config and default facts] ********************************
