@@ -1,0 +1,1 @@
+{"event": "verbose", "uuid": "38fc9ec1-3cad-4754-8486-29f566cc9ead", "counter": 9, "stdout": "\u001b[0;31m- name: Merge provided configuration with device configuration\u001b[0m", "start_line": 8, "end_line": 9, "runner_ident": "7fdfa587-a794-4da2-8c29-e1ed740b8868", "created": "2025-01-20T15:15:52.766099+00:00"}

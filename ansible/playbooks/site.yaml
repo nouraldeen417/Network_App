@@ -1,0 +1,6 @@
+- name: Configure IOS devices
+  hosts: all
+  roles:
+    - { role: hostname, when: "'hostname' in selected_roles" }
+    - { role: banner, when: "'banner' in selected_roles" }
+    - { role: ip_config, when: "'ip_config' in selected_roles" }

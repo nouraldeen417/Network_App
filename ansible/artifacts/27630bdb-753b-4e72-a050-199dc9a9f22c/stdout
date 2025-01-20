@@ -1,0 +1,10 @@
+[0;31mERROR! conflicting action statements: cisco.ios.ios_interfaces, config[0m
+[0;31m[0m
+[0;31mThe error appears to be in '/root/python/Network/ansible/playbooks/roles/ip_config/tasks/main.yml': line 2, column 3, but may[0m
+[0;31mbe elsewhere in the file depending on the exact syntax problem.[0m
+[0;31m[0m
+[0;31mThe offending line appears to be:[0m
+[0;31m[0m
+[0;31m---[0m
+[0;31m- name: Merge provided configuration with device configuration[0m
+[0;31m  ^ here[0m

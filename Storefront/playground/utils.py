@@ -13,8 +13,8 @@ class AutomationMethods:
         return  status
 
     def Router_list():
-        Fact_data=router.Routers_facts() #status has three lists host-ip list[], status list[] ,task name list[]
-        # print(status)
+        Fact_data=router.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
+        print(Fact_data)
         return  Fact_data
 # MY Data I used to Test 
 # class AutomationMethods:

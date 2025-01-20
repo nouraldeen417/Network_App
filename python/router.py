@@ -44,7 +44,6 @@ def Routers_facts():
                            interfaces=router_interface_list(router_facts["net_interfaces"]),
                            neighbors=router_neighbor_list(router_facts["net_neighbors"])))
        
-    return facts
     # print (facts[0].device , 
     #        facts[0].interfaces[0].name , 
     #        facts[0].interfaces[0].address_subnet ,
@@ -60,6 +59,7 @@ def Routers_facts():
     #        facts[1].neighbors[0].name,
     #        facts[1].neighbors[0].address_subnet,
     #        facts[1].neighbors[0].port)
+    return facts
 
 def router_interface_list(dict):
     temp =[]
@@ -74,4 +74,4 @@ def router_neighbor_list(dict):
             temp.append([j["host"],j["ip"],j["port"]])
     return temp    
 
-Routers_facts()
+# Routers_facts()
