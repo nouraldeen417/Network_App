@@ -1,4 +1,16 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
 
-# Create your models here.
-    
+@receiver(post_save, sender=User)
+def notify_admin_on_registration(sender, instance, created, **kwargs):
+    if created and not instance.is_active:
+        # Send email to admin
+        send_mail(
+            subject='New User Registration Pending Approval',
+            message=f'User {instance.username} has registered and is awaiting approval.',
+            from_email='your-email@example.com',
+            recipient_list=['hishamhagag18@gmail.com'],  # Add admin email(s) here
+        )

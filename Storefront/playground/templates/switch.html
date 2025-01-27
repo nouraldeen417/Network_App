@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devices Page</title>
+    <title>Switches Page</title>
     {% load static %}
     <style>
         body {
@@ -108,7 +108,7 @@
         {% if request.user.is_staff %}
         <div><a href="{% url 'approve_users' %}">Pending Users</a></div>
         {% endif %}
-
+        
         {% if user.is_authenticated %}
         <!-- Styled Logout button -->
         <div>
@@ -121,8 +121,8 @@
     </div>
 
     <div class="container">
-        <center><h2>List all running routers</h2></center>
-        <table id="router-table" border="1">
+        <center><h2>List all running Switches</h2></center>
+        <table id="switch-table" border="1">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -134,16 +134,16 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Router data will be inserted here by JavaScript -->
+                <!-- switch data will be inserted here by JavaScript -->
             </tbody>
         </table>
-        <h2>Running Routers Checklist</h2>
-        <form id="router-form" action="{% url 'RouterDoWork' %}" method="Post">
+        <h2>Running Switches Checklist</h2>
+        <form id="switches-form" action="{% url 'SwitchDoWork' %}" method="Post">
             {% csrf_token %}
-            <ul id="running-routers-checklist">
-                <!-- Checklist of running routers will be inserted here by JavaScript -->
+            <ul id="running-switches-checklist">
+                <!-- Checklist of running switches will be inserted here by JavaScript -->
             </ul>
-            <button type="submit">Submit Selected Routers</button>
+            <button type="submit">Submit Selected Switches</button>
         </form>
         <div id="message-container">
             {% if messages %}
@@ -152,7 +152,7 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <p>Allow user to select router and display running configuration</p>
+        <p>Allow user to select switch and display running configuration</p>
         <p>Allow to change some configuration</p>
     </div>
     

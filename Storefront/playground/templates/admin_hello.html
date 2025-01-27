@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devices Page</title>
+    <title>Home Page</title>
     {% load static %}
     <style>
         body {
@@ -79,18 +79,6 @@
             background-color: #d32f2f; /* Darker red on hover */
             transform: scale(1.05); /* Slightly enlarge on hover */
         }
-        button {
-            padding: 8px 15px;
-            margin: 0 5px;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        button:hover {
-            opacity: 0.9;
-        }
         .container {
             margin: 20px;
             padding: 20px;
@@ -100,15 +88,12 @@
 </head>
 <body>
 
-    <div class="navbar"> 
+    <div class="navbar">
         <div><a href="{% url 'sayhello' %}">Home</a></div>
         <div><a href="{% url 'RoutersView' %}">Routers</a></div>
         <div><a href="{% url 'SwitchesView' %}">Switches</a></div>
         <div><a href="{% url 'FirewallView' %}">Firewall</a></div>
-        {% if request.user.is_staff %}
         <div><a href="{% url 'approve_users' %}">Pending Users</a></div>
-        {% endif %}
-
         {% if user.is_authenticated %}
         <!-- Styled Logout button -->
         <div>
@@ -121,41 +106,21 @@
     </div>
 
     <div class="container">
-        <center><h2>List all running routers</h2></center>
-        <table id="router-table" border="1">
+        <center><h1>Hello To Our Web Site</h1></center>
+        <h2>System Status</h2>
+        <table id="deviceTable" border="1">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>IP Address</th>
-                    <th>Location</th>
+                    <th>Host</th>
+                    <th>Task</th>
                     <th>Status</th>
-                    
                 </tr>
             </thead>
             <tbody>
-                <!-- Router data will be inserted here by JavaScript -->
+                <!-- Rows will be dynamically added here by JavaScript -->
             </tbody>
         </table>
-        <h2>Running Routers Checklist</h2>
-        <form id="router-form" action="{% url 'RouterDoWork' %}" method="Post">
-            {% csrf_token %}
-            <ul id="running-routers-checklist">
-                <!-- Checklist of running routers will be inserted here by JavaScript -->
-            </ul>
-            <button type="submit">Submit Selected Routers</button>
-        </form>
-        <div id="message-container">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="message {{ message.tags }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        </div>
-        <p>Allow user to select router and display running configuration</p>
-        <p>Allow to change some configuration</p>
     </div>
-    
-    <script src="{% static 'js/script.js' %}" defer></script>
+    <script src="{% static 'js/hello_script.js' %} "></script>
 </body>
 </html>
