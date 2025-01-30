@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 
-@receiver(post_save, sender=User)
+#@receiver(post_save, sender=User)
 def notify_admin_on_registration(sender, instance, created, **kwargs):
     if created and not instance.is_active:
         # Send email to admin
