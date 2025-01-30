@@ -101,14 +101,37 @@ def devices_list(request):
 
 @login_required
 def RouterList(request):
-        devices=AutomationMethods.Router_list()
-        serializable_devices = [
-        {'name':device.name , 'ip_address':device.ip_address,'location':device.location,'status':device.status}
-        for device in devices
-        ]
-        return JsonResponse(serializable_devices, safe=False)
-    #return Response([{'name':"Router1" , 'ip_address':"192.167.0.1",'location':"home",'status':"Stopped"},{'name':"Router2" , 'ip_address':"192.167.0.2",'location':"home",'status':"Running"}] ,status=status.HTTP_200_OK)
-    
+    # Fetch the list of devices (Facts objects)
+    devices = AutomationMethods.Router_list()
+
+    # Serialize the devices into a JSON-compatible format
+    serializable_devices = []
+    for device in devices:
+        # Serialize the device
+        device_data = {
+            'device': device.device,
+            'interfaces': [
+                {
+                    'name': interface.name,
+                    'address_subnet': interface.address_subnet,
+                    'status': interface.status
+                }
+                for interface in device.interfaces
+            ],
+            'neighbors': [
+                {
+                    'name': neighbor.name,
+                    'address_subnet': neighbor.address_subnet,
+                    'port': neighbor.port
+                }
+                for neighbor in device.neighbors
+            ]
+        }
+        serializable_devices.append(device_data)
+
+    # Return the serialized data as a JSON response
+    return JsonResponse(serializable_devices, safe=False)
+
 @login_required
 def SwitchList(request):
         devices=AutomationMethods.Switch_list()

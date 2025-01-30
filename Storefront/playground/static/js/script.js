@@ -17,62 +17,70 @@ async function fetchRouters() {
 
         // Populate table with data
         const tableBody = document.getElementById('router-table').getElementsByTagName('tbody')[0];
-        tableBody.innerHTML = ''; 
-        
-        const runningRoutersChecklist = document.getElementById('running-routers-checklist');
-        runningRoutersChecklist.innerHTML = ''; 
-        
-        data.forEach(router => {
-            const row = document.createElement('tr');
+        tableBody.innerHTML = ''; // Clear existing rows
 
-            // Create table cells for each router property
-            const idCell = document.createElement('td');
-            idCell.textContent = router.id;
+        data.forEach(fact => {
+            // Determine the max row count (interfaces vs neighbors)
+            const maxRows = Math.max(fact.interfaces.length, fact.neighbors.length);
 
-            const nameCell = document.createElement('td');
-            nameCell.textContent = router.name;
+            for (let i = 0; i < maxRows; i++) {
+                const row = document.createElement('tr');
 
-            const ipCell = document.createElement('td');
-            ipCell.textContent = router.ip_address;
+                // Device Cell (only on the first row for this device)
+                if (i === 0) {
+                    const deviceCell = document.createElement('td');
+                    deviceCell.textContent = fact.device;
+                    deviceCell.rowSpan = maxRows;
+                    row.appendChild(deviceCell);
+                }
 
-            const locationCell = document.createElement('td');
-            locationCell.textContent = router.location;
-            
-            const statusCell = document.createElement('td');
-            statusCell.textContent = router.status;
-            
-            // Append cells to the row
-            row.appendChild(idCell);
-            row.appendChild(nameCell);
-            row.appendChild(ipCell);
-            row.appendChild(locationCell);
-            row.appendChild(statusCell);
-            
-            // Append row to the table body
-            tableBody.appendChild(row);
-            // Add stopped routers to the checklist
-            if (router.status.toLowerCase() === 'running') {
-                const listItem = document.createElement('li');
+                // Interface Name, Subnet, and Status
+                const interfaceCellName = document.createElement('td');
+                const interfaceCellSubnet = document.createElement('td');
+                const interfaceCellStatus = document.createElement('td');
 
-                // Create a checkbox for each stopped router
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.name = 'selectedRouterIPs[]';
-                checkbox.value = router.ip_address;
+                if (i < fact.interfaces.length) {
+                    interfaceCellName.textContent = fact.interfaces[i].name;
+                    interfaceCellSubnet.textContent = fact.interfaces[i].address_subnet;
+                    interfaceCellStatus.textContent = fact.interfaces[i].status;
+                } else {
+                    interfaceCellName.textContent = "";
+                    interfaceCellSubnet.textContent = "";
+                    interfaceCellStatus.textContent = "";
+                }
 
-                const label = document.createElement('label');
-                label.textContent = `${router.name} (ID: ${router.id}, IP: ${router.ip_address})`;
-                label.htmlFor = `router-${router.id}`;
+                row.appendChild(interfaceCellName);
+                row.appendChild(interfaceCellSubnet);
+                row.appendChild(interfaceCellStatus);
 
-                listItem.appendChild(checkbox);
-                listItem.appendChild(label);
-                runningRoutersChecklist.appendChild(listItem);
+                // Neighbor Name, Subnet, and Port
+                const neighborCellName = document.createElement('td');
+                const neighborCellSubnet = document.createElement('td');
+                const neighborCellPort = document.createElement('td');
+
+                if (i < fact.neighbors.length) {
+                    neighborCellName.textContent = fact.neighbors[i].name;
+                    neighborCellSubnet.textContent = fact.neighbors[i].address_subnet;
+                    neighborCellPort.textContent = fact.neighbors[i].port;
+                } else {
+                    neighborCellName.textContent = "";
+                    neighborCellSubnet.textContent = "";
+                    neighborCellPort.textContent = "";
+                }
+
+                row.appendChild(neighborCellName);
+                row.appendChild(neighborCellSubnet);
+                row.appendChild(neighborCellPort);
+
+                // Append row to the table
+                tableBody.appendChild(row);
             }
         });
     } catch (error) {
         console.error('Error fetching data:', error);
     }
 }
+
 
 // Function to fetch data and populate the table
 async function fetchSwitches() {

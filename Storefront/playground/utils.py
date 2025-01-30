@@ -14,6 +14,7 @@ class AutomationMethods:
 
     def Router_list():
         Fact_data=AutomationMethodsData.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
+        
         print(Fact_data)
         return  Fact_data
     
@@ -41,18 +42,35 @@ class AutomationMethodsData:
         d2 = Device(host="device2", task="task2", status="Stopped")
         devices.append(d2)
         return devices
+    
     def Routers_facts():
         # Here you can add your processing logic
-        routers = []
-        
-        # First device
-        d1 = Router(name="Router1" , ip="192.167.0.1",loc="home",stat="Stopped")
-        routers.append(d1)
-        
-        # Second device
-        d2 = Router(name="Router2" , ip="192.167.0.1",loc="home",stat="Running")
-        routers.append(d2)
-        return routers
+        routers_facts = []
+
+        # First router facts
+        interfaces1 = [
+            ("Gig0/0", "192.167.0.1/24", "running"),
+            ("Gig0/1", "192.167.1.1/24", "stop")
+        ]
+        neighbors1 = [
+            ("Router2", "192.167.0.2/24", "Gig0/0")
+        ]
+        facts1 = Facts("Router1", interfaces1, neighbors1)
+        routers_facts.append(facts1)
+
+        # Second router facts
+        interfaces2 = [
+            ("Gig0/0", "192.167.0.2/24", "running"),
+            ("Gig0/1", "192.167.2.1/24", "stop")
+        ]
+        neighbors2 = [
+            ("Router1", "192.167.0.1/24", "Gig0/0")
+        ]
+        facts2 = Facts("Router2", interfaces2, neighbors2)
+        routers_facts.append(facts2)
+
+        return routers_facts
+
     def Switches_facts():
         # Here you can add your processing logic
         Switches = []
@@ -84,14 +102,7 @@ class Device:
         self.host = host
         self.task = task
         self.status = status
-
-class Router:
-    def __init__(self, name, ip, loc,stat):
-        self.name = name
-        self.ip_address=ip
-        self.location=loc,
-        self.status=stat
-
+        
 class Switch:
     def __init__(self, name, ip, loc,stat):
         self.name = name
@@ -105,3 +116,21 @@ class Firewall:
         self.ip_address=ip
         self.location=loc,
         self.status=stat
+class Facts:
+    class Interface:
+        def __init__(self, name, address_subnet, status):
+            self.name = name
+            self.address_subnet = address_subnet
+            self.status = status
+
+
+    class Neighbor:
+        def __init__(self, name, address_subnet ,port):
+            self.name = name
+            self.address_subnet = address_subnet
+            self.port = port
+
+    def __init__(self, device, interfaces, neighbors):
+        self.device = device
+        self.interfaces = [self.Interface(*interface) for interface in interfaces]  # List of Interface objects
+        self.neighbors = [self.Neighbor(*neighbor) for neighbor in neighbors]  # List of Neighbor objects

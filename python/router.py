@@ -21,7 +21,7 @@ class Facts:
         self.device = device
         self.interfaces = [self.Interface(*interface) for interface in interfaces]  # List of Interface objects
         self.neighbors = [self.Neighbor(*neighbor) for neighbor in neighbors]  # List of Neighbor objects
-          
+
 def Routers_facts():
     r = ansible_runner.run(
     private_data_dir="../ansible/",  # Current directory
