@@ -3,7 +3,7 @@ import sys
 # Add the path to the 'python' folder to the system path
 sys.path.append("..")
 # Now import 'some_file' from the 'python' directory
-#from python import hello,router
+from python import hello,router
 class AutomationMethods:
     @staticmethod
     
@@ -13,7 +13,7 @@ class AutomationMethods:
         return  status
 
     def Router_list():
-        Fact_data=AutomationMethodsData.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
+        Fact_data=router.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
         
         print(Fact_data)
         return  Fact_data

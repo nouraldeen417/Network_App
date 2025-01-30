@@ -7,6 +7,7 @@ const firewallsApiUrl = 'http://127.0.0.1:8000/playground/api/firewalls/';
 
 // Function to fetch data and populate the table
 async function fetchRouters() {
+
     try {
         const response = await fetch(routersApiUrl); // Call the API
         console.log(response);
@@ -41,7 +42,16 @@ async function fetchRouters() {
 
                 if (i < fact.interfaces.length) {
                     interfaceCellName.textContent = fact.interfaces[i].name;
-                    interfaceCellSubnet.textContent = fact.interfaces[i].address_subnet;
+                //     fact.interfaces[i].address_subnet.forEach(addressSubnet => {
+                //         console.log( addressSubnet.address);
+                //         console.log( addressSubnet.subnet);
+                //         interfaceCellSubnet.textContent = addressSubnet.address + "/" + addressSubnet.subnet;
+                //     });
+                    if (fact.interfaces[i].address_subnet.length > 0  )
+                    {
+                        interfaceCellSubnet.textContent = fact.interfaces[i].address_subnet[0].address + "/" + fact.interfaces[i].address_subnet[0].subnet;
+                        console.log(fact.interfaces[i].address_subnet[0].address);
+                    }
                     interfaceCellStatus.textContent = fact.interfaces[i].status;
                 } else {
                     interfaceCellName.textContent = "";
