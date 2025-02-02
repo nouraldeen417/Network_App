@@ -47,7 +47,7 @@ Before using the application, ensure that SSH is enabled on your Cisco devices:
 ## **Installation & Running the Application**
 
 ### **Clone the Repository**
-Click on this **[happy face](<repo_link_here>)** to clone the repo:
+Click on this **https://github.com/nouraldeen417/Network_App.git** to clone the repo:
 ```bash
 git clone <repo_link_here>
 cd Network_App
