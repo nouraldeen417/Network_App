@@ -35,7 +35,7 @@ def Routers_facts():
     # Print the hosts where tasks were executed
 
     for host in hosts_with_tasks:
-        facts_file = "/root/python/Network/ansible/temp/router_facts_" + host + ".json"
+        facts_file = "../ansible/temp/router_facts_" + host + ".json"
 
         with open(facts_file, "r") as f:
             router_facts = json.load(f)

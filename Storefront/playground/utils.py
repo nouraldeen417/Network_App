@@ -8,7 +8,7 @@ class AutomationMethods:
     @staticmethod
     
     def Ping():
-        status=AutomationMethodsData.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
+        status=hello.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
         print(status)
         return  status
 

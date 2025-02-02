@@ -1,28 +1,8 @@
 ---
-- name: Gather information about the Cisco router
+- name: Ping all devices in the topology
   hosts: all
   gather_facts: false
-  # vars:
-      
-  #   ansible_network_os: ios 
-  #   ansible_connection : network_cli
-  #   ansible_become: true
-  #   ansible_become_method: enable
-  #   ansible_network_cli_ssh_type: libssh
-  #   ansible_libssh_user: ansible
-  #   ansible_libssh_pass: 123
-
-
   tasks:
-  #  - name: Gather only the config and default facts
-  #    ios_facts:
-  #     gather_subset: all
-  #    register: current_users
-  #  - name: Print return information from the previous task
-  #    ansible.builtin.debug:
-  #      var: current_users 
-  #  - name: Test reachability to 10.10.10.10 using default vrf
-  #    ios_ping:
-  #        dest: 192.168.2.1
-     - name: Ping all hosts
-       ansible.builtin.ping:
+    - name: Ping devices
+      cisco.ios.ios_ping:
+        dest: "{{ ansible_host }}"
