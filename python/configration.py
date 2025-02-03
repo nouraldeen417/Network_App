@@ -12,6 +12,7 @@ def set_hostname(selected_host,new_hostname):
         }
     )
 
+
     return  runner.status
  
 def set_banner(selected_host,new_banner):
@@ -48,6 +49,6 @@ x = {
     'ipv4' : "192.168.10.25/24" 
     }
 
-print(set_hostname('Router1','R1'))
-print(set_banner('Router1','fuck you'))
-print(set_interfaceconfigration('Router1',x))
+# print(set_hostname('Router1','R1'))
+# print(set_banner('Router1','fuck you'))
+# print(set_interfaceconfigration('Router1',x))

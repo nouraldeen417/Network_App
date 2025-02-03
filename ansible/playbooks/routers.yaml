@@ -4,9 +4,9 @@
   gather_facts: false
 
   tasks:
-   - name: Ping all routers
-     ansible.builtin.ping:
-
+   - name: Ping devices
+     cisco.ios.ios_ping:
+       dest: "{{ ansible_host }}"
    - name: Gather only the config and default facts
      ios_facts:
       gather_subset: all

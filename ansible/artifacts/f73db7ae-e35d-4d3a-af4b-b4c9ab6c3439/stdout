@@ -1,0 +1,21 @@
+
+PLAY [Gather information about the Cisco router] *******************************
+
+TASK [Ping all routers] ********************************************************
+[0;32mok: [Switche1][0m
+[0;32mok: [Router1][0m
+[0;32mok: [Router2][0m
+
+TASK [Gather only the config and default facts] ********************************
+[0;32mok: [Switche1][0m
+[0;32mok: [Router1][0m
+[0;31mfatal: [Router2]: FAILED! => {"changed": false, "msg": "ssh connection failed: ssh connect failed: Timeout connecting to 192.168.3.2"}[0m
+
+TASK [Save facts to a JSON file] ***********************************************
+[0;33mchanged: [Router1][0m
+[0;33mchanged: [Switche1][0m
+
+PLAY RECAP *********************************************************************
+[0;33mRouter1[0m                    : [0;32mok=3   [0m [0;33mchanged=1   [0m unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+[0;31mRouter2[0m                    : [0;32mok=1   [0m changed=0    unreachable=0    [0;31mfailed=1   [0m skipped=0    rescued=0    ignored=0   
+[0;33mSwitche1[0m                   : [0;32mok=3   [0m [0;33mchanged=1   [0m unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
