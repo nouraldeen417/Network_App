@@ -89,18 +89,39 @@ def FirewallView(request):
     
 def routerconfiguration(request):
     router = request.GET.get('router', None)
+    print(router)
+    return render(request,'router_configuration.html',{'router': router})
+
+
+def sethostname(request):
+    selectedrouter=None
     if request.method == "POST":
-        print(request.POST.get('router'))
-        print(request.POST.get('hostname'))
         router=request.POST.get('router')
         hostname=request.POST.get('hostname')
+        print(router)
+        print(hostname)
         result = AutomationMethods.Set_Hostname(router,hostname)
+        selectedrouter=router
         if(result=="ok"):
             messages.success(request,"Hostname Sat Successfully")
         else :
-            messages.error(request,"Unexpected error, please try again error")
-    #print(router)
-    return render(request,'router_configuration.html',{'router': router})
+            messages.error(request,"Unexpected error when setting Host name, please try again error")
+    return render(request,'router_configuration.html',{'router': selectedrouter})
+
+def setbannername(request):
+    selectedrouter=None
+    if request.method == "POST":
+        router=request.POST.get('router')
+        bannername=request.POST.get('bannername')
+        print(router)
+        print(bannername)
+        result = AutomationMethods.Set_Hostname(router,bannername)
+        selectedrouter=router
+        if(result=="ok"):
+            messages.success(request,"Banner name Sat Successfully")
+        else :
+            messages.error(request,"Unexpected error when setting Banner name, please try again error")
+    return render(request,'router_configuration.html',{'router': selectedrouter})
 
 # API 
 @login_required

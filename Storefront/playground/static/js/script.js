@@ -53,7 +53,11 @@ async function fetchRouters() {
 
                 if (i < fact.interfaces.length) {
                     interfaceCellName.textContent = fact.interfaces[i].name;
-                    interfaceCellSubnet.textContent = fact.interfaces[i].address_subnet;
+                    if (fact.interfaces[i].address_subnet.length > 0  ){
+                        interfaceCellSubnet.textContent = fact.interfaces[i].address_subnet[0].address + "/" + fact.interfaces[i].address_subnet[0].subnet;
+                        console.log(fact.interfaces[i].address_subnet[0].address);
+                    }
+                    //interfaceCellSubnet.textContent = fact.interfaces[i].address_subnet;
                     interfaceCellStatus.textContent = fact.interfaces[i].status;
                 } else {
                     interfaceCellName.textContent = '';

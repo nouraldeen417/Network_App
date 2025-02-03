@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devices Page</title>
+    <title>Router Configuration</title>
     {% load static %}
     <style>
         body {
@@ -12,27 +13,6 @@
         h1 {
             text-align: center;
             color: #333;
-        }
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color:  #f9f9f9;
-            color: #333;
-        }
-        tr {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
         }
         .navbar {
             display: flex;
@@ -80,7 +60,7 @@
             transform: scale(1.05); /* Slightly enlarge on hover */
         }
         button {
-            padding: 8px 15px;
+            padding: 12px 15px;
             margin: 0 5px;
             border: none;
             background-color: #4CAF50;
@@ -96,10 +76,66 @@
             padding: 20px;
             background-color: #add8e6; /* Original light blue background */
         }
+        .message-container {
+            margin-top: 20px;
+        }
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        form {
+            {% comment %} margin-bottom: 20px; {% endcomment %}
+        }
+        .form-group {
+            display: flex;
+            align-items: center; /* Align label and input in the same row */
+            gap: 10px; /* Add spacing between label and input */
+            margin-bottom: 15px; /* Add spacing between form fields */
+        }
+        
+        label {
+            white-space: nowrap; /* Prevents label from breaking into a new line */
+            font-weight: bold;
+            font-size : 20px;
+            width: 150px;
+            color: #333;
+        }
+        
+        input[type="text"] {
+            flex: 1; /* Allow the text box to take the remaining space */
+            width:40%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        .button-container {
+            margin-top: 10px; /* Space between input and button */
+        }           
     </style>
 </head>
 <body>
 
+    <!-- Navbar -->
     <div class="navbar"> 
         <div><a href="{% url 'sayhello' %}">Home</a></div>
         <div><a href="{% url 'RoutersView' %}">Routers</a></div>
@@ -120,24 +156,47 @@
         {% endif %}
     </div>
 
+    <!-- Main Content -->
     <div class="container">
-        <center><h1>Router configurations<h1></center>
-        <h3>Set Host Name</h3>
-        <form id="router-form" action="{% url 'routerconfiguration' %}" method="Post">
+        <center><h1>Router Configurations</h1>
+        <h2>Set Host Name</h2>
+        <form id="hostname-form" action="{% url 'sethostname' %}" method="post">
             {% csrf_token %}
-            <label>hostname<label>
-            <input type="text" name ="hostname">
+            <label for="hostname">Host Name : </label>
+            <input type="text" id="hostname" name="hostname" placeholder="Enter new host name">
             <input type="hidden" name="router" value="{{ router }}">
-
             <button type="submit">Set Host Name</button>
+            
+            <div id="message-container" class="message-container">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if "Host" in message.message %}
+                        <div class="message {{ message.tags }}">{{ message }}</div>
+                        {%endif%}
+                    {% endfor %}
+                {% endif %}
+            </div>
         </form>
-        <div id="message-container">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="message {{ message.tags }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        </div>
+        
+        <h2>Set Banner Name</h2>
+        
+        <form id="banner-form" action="{% url 'setbannername' %}" method="post">
+            {% csrf_token %}
+            <label for="bannername">banner Name : </label>
+            <input type="text" id="bannername" name="bannername" placeholder="Enter new banner name">
+            <input type="hidden" name="router" value="{{ router }}">
+            <button type="submit">Set banner Name</button>
+            <div id="message-container" class="message-container">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if "Banner" in message.message %}
+                        <div class="message {{ message.tags }}">{{ message }}</div>
+                        {%endif%}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </form>
+    </center>
     </div>
 </body>
 </html>
