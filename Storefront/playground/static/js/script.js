@@ -5,9 +5,10 @@ const routersApiUrl = 'http://127.0.0.1:8000/playground/api/routers/';
 const switchesApiUrl = 'http://127.0.0.1:8000/playground/api/switches/';
 const firewallsApiUrl = 'http://127.0.0.1:8000/playground/api/firewalls/';
 
+
+
 // Function to fetch data and populate the table
 async function fetchRouters() {
-
     try {
         const response = await fetch(routersApiUrl); // Call the API
         console.log(response);
@@ -27,11 +28,21 @@ async function fetchRouters() {
             for (let i = 0; i < maxRows; i++) {
                 const row = document.createElement('tr');
 
-                // Device Cell (only on the first row for this device)
+                // Router Selection (Radio Button) - Only on the first row
                 if (i === 0) {
+                    const selectCell = document.createElement('td');
+                    const radioButton = document.createElement('input');
+                    radioButton.type = 'radio';
+                    radioButton.name = 'router';
+                    radioButton.value = fact.device;
+                    selectCell.rowSpan = maxRows; // Span across all rows for this device
+                    selectCell.appendChild(radioButton);
+                    row.appendChild(selectCell);
+
+                    // Device Cell - Only on the first row
                     const deviceCell = document.createElement('td');
                     deviceCell.textContent = fact.device;
-                    deviceCell.rowSpan = maxRows;
+                    deviceCell.rowSpan = maxRows; // Span across all rows for this device
                     row.appendChild(deviceCell);
                 }
 
@@ -42,21 +53,12 @@ async function fetchRouters() {
 
                 if (i < fact.interfaces.length) {
                     interfaceCellName.textContent = fact.interfaces[i].name;
-                //     fact.interfaces[i].address_subnet.forEach(addressSubnet => {
-                //         console.log( addressSubnet.address);
-                //         console.log( addressSubnet.subnet);
-                //         interfaceCellSubnet.textContent = addressSubnet.address + "/" + addressSubnet.subnet;
-                //     });
-                    if (fact.interfaces[i].address_subnet.length > 0  )
-                    {
-                        interfaceCellSubnet.textContent = fact.interfaces[i].address_subnet[0].address + "/" + fact.interfaces[i].address_subnet[0].subnet;
-                        console.log(fact.interfaces[i].address_subnet[0].address);
-                    }
+                    interfaceCellSubnet.textContent = fact.interfaces[i].address_subnet;
                     interfaceCellStatus.textContent = fact.interfaces[i].status;
                 } else {
-                    interfaceCellName.textContent = "";
-                    interfaceCellSubnet.textContent = "";
-                    interfaceCellStatus.textContent = "";
+                    interfaceCellName.textContent = '';
+                    interfaceCellSubnet.textContent = '';
+                    interfaceCellStatus.textContent = '';
                 }
 
                 row.appendChild(interfaceCellName);
@@ -73,9 +75,9 @@ async function fetchRouters() {
                     neighborCellSubnet.textContent = fact.neighbors[i].address_subnet;
                     neighborCellPort.textContent = fact.neighbors[i].port;
                 } else {
-                    neighborCellName.textContent = "";
-                    neighborCellSubnet.textContent = "";
-                    neighborCellPort.textContent = "";
+                    neighborCellName.textContent = '';
+                    neighborCellSubnet.textContent = '';
+                    neighborCellPort.textContent = '';
                 }
 
                 row.appendChild(neighborCellName);
@@ -86,10 +88,33 @@ async function fetchRouters() {
                 tableBody.appendChild(row);
             }
         });
+
+        // Add event listeners to radio buttons
+        const radioButtons = document.querySelectorAll('input[name="router"]');
+        const configureButton = document.getElementById('configure-btn');
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', () => {
+                // Enable the Configure button when a router is selected
+                configureButton.disabled = false;
+            });
+        });
+
+        // Add event listener to the Configure button
+        configureButton.addEventListener('click', () => {
+            const selectedRouter = document.querySelector('input[name="router"]:checked');
+            if (selectedRouter) {
+                // Redirect to routerconfiguration.html with the selected router's name
+                window.location.href = `/playground/routerconfiguration?router=${encodeURIComponent(selectedRouter.value)}`;
+            } else {
+                alert('Please select a router to configure.');
+            }
+        });
     } catch (error) {
         console.error('Error fetching data:', error);
     }
 }
+
 
 
 // Function to fetch data and populate the table

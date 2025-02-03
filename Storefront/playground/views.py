@@ -87,7 +87,21 @@ def SwitchesView(request):
 def FirewallView(request):
     return render(request,'firewall.html')
     
-    
+def routerconfiguration(request):
+    router = request.GET.get('router', None)
+    if request.method == "POST":
+        print(request.POST.get('router'))
+        print(request.POST.get('hostname'))
+        router=request.POST.get('router')
+        hostname=request.POST.get('hostname')
+        result = AutomationMethods.Set_Hostname(router,hostname)
+        if(result=="ok"):
+            messages.success(request,"Hostname Sat Successfully")
+        else :
+            messages.error(request,"Unexpected error, please try again error")
+    #print(router)
+    return render(request,'router_configuration.html',{'router': router})
+
 # API 
 @login_required
 def devices_list(request):

@@ -121,33 +121,23 @@
     </div>
 
     <div class="container">
-        <center><h2>List of Running Routers</h2></center>
-        <table id="router-table" border="1">
-            <thead>
-                <tr>
-                    <th rowspan="2">Select</th> 
-                    <th rowspan="2">Device</th>
-                    <th colspan="3">Interfaces</th>
-                    <th colspan="3">Neighbors</th>
-                </tr>
-                <tr>
-                    <th>Name</th>
-                    <th>Subnet</th>
-                    <th>Status</th>
-                    <th>Name</th>
-                    <th>Subnet</th>
-                    <th>Port</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Data will be inserted here by JavaScript -->
-            </tbody>
-        </table>
-        <center>
-            <button id="configure-btn" disabled>Configure</button>
-        </center>
+        <center><h1>Router configurations<h1></center>
+        <h3>Set Host Name</h3>
+        <form id="router-form" action="{% url 'routerconfiguration' %}" method="Post">
+            {% csrf_token %}
+            <label>hostname<label>
+            <input type="text" name ="hostname">
+            <input type="hidden" name="router" value="{{ router }}">
+
+            <button type="submit">Set Host Name</button>
+        </form>
+        <div id="message-container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
     </div>
-    
-    <script src="{% static 'js/script.js' %}" defer></script>
 </body>
 </html>
