@@ -1,6 +1,6 @@
 [routers]
 Router_01 ansible_host=192.168.2.1
-Router_02 ansible_host=192.168.3.2
+; Router_02 ansible_host=192.168.3.2
 [all:vars]
 ansible_connection=ansible.netcommon.network_cli
 ansible_become=yes
@@ -9,5 +9,5 @@ ansible_network_os=cisco.ios.ios
 ansible_user=ansible
 ansible_password=123
 [switches]
-Switche_01 ansible_host=192.168.2.100
+; Switche_01 ansible_host=192.168.2.100
 

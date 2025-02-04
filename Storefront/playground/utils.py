@@ -3,27 +3,28 @@ import sys
 # Add the path to the 'python' folder to the system path
 sys.path.append("..")
 # Now import 'some_file' from the 'python' directory
-#from python import hello,router,configration
+from python import hello,router,configration
 class AutomationMethods:
     @staticmethod
     
     def Ping():
-        status=AutomationMethodsData.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
+        status=hello.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
         print(status)
         return  status
 
     def Router_list():
-        Fact_data=AutomationMethodsData.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
+        Fact_data=router.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
         
         print(Fact_data)
         return  Fact_data
     
     def Set_Hostname(router,hostname):
-        status="ok";#configration.set_hostname(router,hostname)
+        status = configration.set_hostname(router,hostname)
+        print (status)
         return status
     
     def Set_Bannername(router,bannername):
-        status="ok";#configration.set_bannername(router,bannername)
+        status = configration.set_banner(router,bannername)
         return status
     
     def Switch_list():

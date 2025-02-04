@@ -17,7 +17,8 @@ class Facts:
             self.address_subnet = address_subnet
             self.port = port
 
-    def __init__(self, device, interfaces, neighbors):
+    def __init__(self, id, device, interfaces, neighbors):
+        self.id = id
         self.device = device
         self.interfaces = [self.Interface(*interface) for interface in interfaces]  # List of Interface objects
         self.neighbors = [self.Neighbor(*neighbor) for neighbor in neighbors]  # List of Neighbor objects
@@ -30,7 +31,6 @@ def Routers_facts():
     )
     # Get the list of hosts where tasks ran
     hosts_with_tasks = [host for host in  r.stats["ok"]]
-
     facts = []
     # Print the hosts where tasks were executed
 
@@ -40,11 +40,12 @@ def Routers_facts():
         with open(facts_file, "r") as f:
             router_facts = json.load(f)
         # print(router_interface_list(router_facts["net_interfaces"]))    
-        facts.append(Facts(device=router_facts["net_hostname"], 
+        facts.append(Facts(id=host ,device=router_facts["net_hostname"], 
                            interfaces=router_interface_list(router_facts["net_interfaces"]),
                            neighbors=router_neighbor_list(router_facts["net_neighbors"])))
        
-    # print (facts[0].device , 
+    # print (facts[0].id,
+    #        facts[0].device , 
     #        facts[0].interfaces[0].name , 
     #        facts[0].interfaces[0].address_subnet ,
     #        facts[0].interfaces[0].status ,
@@ -52,7 +53,8 @@ def Routers_facts():
     #        facts[0].neighbors[0].address_subnet,
     #        facts[0].neighbors[0].port)
     # print("\n")
-    # print (facts[1].device , 
+    # print (facts[1].id,
+    #        facts[1].device , 
     #        facts[1].interfaces[1].name , 
     #        facts[1].interfaces[1].address_subnet ,
     #        facts[1].interfaces[1].status ,

@@ -102,7 +102,7 @@ def sethostname(request):
         print(hostname)
         result = AutomationMethods.Set_Hostname(router,hostname)
         selectedrouter=router
-        if(result=="ok"):
+        if(result == "successful"):
             messages.success(request,"Hostname Sat Successfully")
         else :
             messages.error(request,"Unexpected error when setting Host name, please try again error")
@@ -115,9 +115,9 @@ def setbannername(request):
         bannername=request.POST.get('bannername')
         print(router)
         print(bannername)
-        result = AutomationMethods.Set_Hostname(router,bannername)
+        result = AutomationMethods.Set_Bannername(router,bannername)
         selectedrouter=router
-        if(result=="ok"):
+        if(result == "successful" ):
             messages.success(request,"Banner name Sat Successfully")
         else :
             messages.error(request,"Unexpected error when setting Banner name, please try again error")
@@ -144,6 +144,7 @@ def RouterList(request):
     for device in devices:
         # Serialize the device
         device_data = {
+            'id' : device.id,
             'device': device.device,
             'interfaces': [
                 {

@@ -34,7 +34,7 @@ async function fetchRouters() {
                     const radioButton = document.createElement('input');
                     radioButton.type = 'radio';
                     radioButton.name = 'router';
-                    radioButton.value = fact.device;
+                    radioButton.value = fact.id;
                     selectCell.rowSpan = maxRows; // Span across all rows for this device
                     selectCell.appendChild(radioButton);
                     row.appendChild(selectCell);
