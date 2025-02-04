@@ -1,0 +1,8 @@
+
+PLAY [Ping all devices in the topology] ****************************************
+
+TASK [Ping devices] ************************************************************
+[0;31mfatal: [Router_01]: FAILED! => {"changed": false, "msg": "ssh connection failed: ssh connect failed: No route to host"}[0m
+
+PLAY RECAP *********************************************************************
+[0;31mRouter_01[0m                  : ok=0    changed=0    unreachable=0    [0;31mfailed=1   [0m skipped=0    rescued=0    ignored=0   

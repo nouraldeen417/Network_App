@@ -1,0 +1,17 @@
+
+PLAY [Configure IOS devices] ***************************************************
+
+TASK [Gathering Facts] *********************************************************
+[0;32mok: [Router_01][0m
+
+TASK [hostname : SET Host Name] ************************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [banner : Configure banner from file] *************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ip_config : Merge provided configuration with device configuration] ******
+[0;31mfatal: [Router_01]: FAILED! => {"changed": false, "module_stderr": "interface GigabitEthernet\r\ninterface GigabitEthernet\r\n% Incomplete command.\r\n\r\nR1(config)#", "module_stdout": "", "msg": "MODULE FAILURE\nSee stdout/stderr for the exact error"}[0m
+
+PLAY RECAP *********************************************************************
+[0;31mRouter_01[0m                  : [0;32mok=1   [0m changed=0    unreachable=0    [0;31mfailed=1   [0m [0;36mskipped=2   [0m rescued=0    ignored=0   

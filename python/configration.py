@@ -29,7 +29,7 @@ def set_banner(selected_host,new_banner):
 
     return  runner.status
 #interface number [0/1]  ipv4/mask
-def set_interfaceconfigration(selected_host,interface_data):
+def set_interfaceconfigration(selected_host,interface_name,ip):
     runner = ansible_runner.run(
     private_data_dir="../ansible/",  # Current directory
     playbook="playbooks/site.yaml",
@@ -37,8 +37,8 @@ def set_interfaceconfigration(selected_host,interface_data):
     limit=selected_host,  # Dynamically target the selected host
     extravars={  # Pass the selected role as a variable
             "selected_roles": 'ip_config',  # Dynamically set the role
-            "interfaces": interface_data['interfacenum'],
-            "ipv4": interface_data["ipv4"]
+            "interfaces": interface_name,
+            "ipv4": ip
         }
     )
 
@@ -51,4 +51,4 @@ x = {
 
 # print(set_hostname('Router1','R1'))
 # print(set_banner('Router1','fuck you'))
-# print(set_interfaceconfigration('Router1',x))
+# print(set_interfaceconfigration('Router_01',"x","192.168.1.100"))
