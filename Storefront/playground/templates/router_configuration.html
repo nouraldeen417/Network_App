@@ -178,14 +178,14 @@
             </div>
         </form>
         
-        <h2>Set Banner Name</h2>
+        <h2>Set Banner</h2>
         
-        <form id="banner-form" action="{% url 'setbannername' %}" method="post">
+        <form id="banner-form" action="{% url 'setbanner' %}" method="post">
             {% csrf_token %}
-            <label for="bannername">banner Name : </label>
-            <input type="text" id="bannername" name="bannername" placeholder="Enter new banner name">
+            <label for="banner">banner : </label>
+            <input type="text" id="banner" name="banner" placeholder="Enter new banner">
             <input type="hidden" name="router" value="{{ router }}">
-            <button type="submit">Set banner Name</button>
+            <button type="submit">Set banner </button>
             <div id="message-container" class="message-container">
                 {% if messages %}
                     {% for message in messages %}
@@ -196,7 +196,44 @@
                 {% endif %}
             </div>
         </form>
+
+        <h2>Set Interface Configration</h2>
+        
+        <form id="interface-form" action="{% url 'setInterfaceConfigration' %}" method="post">
+            {% csrf_token %}
+            
+            <!-- Hidden input for router ID -->
+            <input type="hidden" name="router" value="{{ router }}">
+            
+            <!-- Text box for IPv4 -->
+            <label for="ipv4">IPv4 : </label>
+            <input type="text" id="ipv4" name="ipv4" placeholder="Enter IPv4">
+            <br><br>
+            
+            <!-- Container for interface radio buttons -->
+            <label>Select Interface:</label>
+            <div id="interface-radio-container">
+
+            </div>
+            
+            <!-- Submit button -->
+            <button type="submit">Set Interface</button>
+            
+            <!-- Message container -->
+            <div id="message-container" class="message-container">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if "Interface" in message.message %}
+                            <div class="message {{ message.tags }}">{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </form>
+
     </center>
     </div>
+    
+    <script src="{% static 'js/script.js' %}" defer></script>
 </body>
 </html>

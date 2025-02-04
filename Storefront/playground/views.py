@@ -103,24 +103,43 @@ def sethostname(request):
         result = AutomationMethods.Set_Hostname(router,hostname)
         selectedrouter=router
         if(result == "successful"):
-            messages.success(request,"Hostname Sat Successfully")
+            messages.success(request,"Hostname has been setten Successfully")
         else :
             messages.error(request,"Unexpected error when setting Host name, please try again error")
     return render(request,'router_configuration.html',{'router': selectedrouter})
 
-def setbannername(request):
+def setbanner(request):
     selectedrouter=None
     if request.method == "POST":
         router=request.POST.get('router')
-        bannername=request.POST.get('bannername')
+        banner=request.POST.get('banner')
         print(router)
-        print(bannername)
-        result = AutomationMethods.Set_Bannername(router,bannername)
+        print(banner)
+        result = AutomationMethods.Set_Banner(router,banner)
         selectedrouter=router
         if(result == "successful" ):
-            messages.success(request,"Banner name Sat Successfully")
+            messages.success(request,"Banner has been setten Successfully")
         else :
             messages.error(request,"Unexpected error when setting Banner name, please try again error")
+    return render(request,'router_configuration.html',{'router': selectedrouter})
+
+
+def setInterfaceConfigration(request):
+    selectedrouter=None
+    if request.method == "POST":
+        router=request.POST.get('router')
+        interfacename=request.POST.get('interface')
+        ipv4=request.POST.get('ipv4')
+        
+        print(router)
+        print(interfacename)
+        print(ipv4)
+        result = AutomationMethods.set_interfaceconfigration(router,interfacename,ipv4)
+        selectedrouter=router
+        if(result == "successful" ):
+            messages.success(request,"Interface IP has been setten Successfully")
+        else :
+            messages.error(request,"Unexpected error when setting Interface Ip, please try again error")
     return render(request,'router_configuration.html',{'router': selectedrouter})
 
 # API 

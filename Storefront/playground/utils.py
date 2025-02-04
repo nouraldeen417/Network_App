@@ -3,28 +3,36 @@ import sys
 # Add the path to the 'python' folder to the system path
 sys.path.append("..")
 # Now import 'some_file' from the 'python' directory
-from python import hello,router,configration
+#from python import hello,router,configration
 class AutomationMethods:
     @staticmethod
     
     def Ping():
-        status=hello.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
+        status=AutomationMethodsData.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
         print(status)
         return  status
 
     def Router_list():
-        Fact_data=router.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
+        Fact_data=AutomationMethodsData.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
         
         print(Fact_data)
         return  Fact_data
     
     def Set_Hostname(router,hostname):
-        status = configration.set_hostname(router,hostname)
+        status = "successful"#configration.set_hostname(router,hostname)
         print (status)
         return status
     
-    def Set_Bannername(router,bannername):
-        status = configration.set_banner(router,bannername)
+    def Set_Banner(router,banner):
+        status = "successful"#configration.set_banner(router,banner)
+        return status
+    
+    def set_interfaceconfigration(selected_host,interface_name,ipv4):
+        print("sucess")
+        print(selected_host)
+        print(interface_name)
+        print(ipv4)
+        status = "successful"
         return status
     
     def Switch_list():
@@ -64,7 +72,7 @@ class AutomationMethodsData:
         neighbors1 = [
             ("Router2", "192.167.0.2/24", "Gig0/0")
         ]
-        facts1 = Facts("Router1", interfaces1, neighbors1)
+        facts1 = Facts("id1","Router1", interfaces1, neighbors1)
         routers_facts.append(facts1)
 
         # Second router facts
@@ -75,7 +83,7 @@ class AutomationMethodsData:
         neighbors2 = [
             ("Router1", "192.167.0.1/24", "Gig0/0")
         ]
-        facts2 = Facts("Router2", interfaces2, neighbors2)
+        facts2 = Facts("id2","Router2", interfaces2, neighbors2)
         routers_facts.append(facts2)
 
         return routers_facts
@@ -139,7 +147,8 @@ class Facts:
             self.address_subnet = address_subnet
             self.port = port
 
-    def __init__(self, device, interfaces, neighbors):
+    def __init__(self,id,device, interfaces, neighbors):
+        self.id=id
         self.device = device
         self.interfaces = [self.Interface(*interface) for interface in interfaces]  # List of Interface objects
         self.neighbors = [self.Neighbor(*neighbor) for neighbor in neighbors]  # List of Neighbor objects

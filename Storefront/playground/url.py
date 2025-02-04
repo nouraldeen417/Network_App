@@ -22,6 +22,7 @@ urlpatterns=[
     path('approve_users/', views.approve_users, name='approve_users'),
     path('routerconfiguration/', views.routerconfiguration, name='routerconfiguration'),
     path('sethostname/', views.sethostname, name='sethostname'),
-    path('setbannername/', views.setbannername, name='setbannername'), 
+    path('setbanner/', views.setbanner, name='setbanner'), 
+    path('setInterfaceConfigration/', views.setInterfaceConfigration, name='setInterfaceConfigration'), 
     
 ]
