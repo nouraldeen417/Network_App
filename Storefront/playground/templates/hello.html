@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,108 +7,215 @@
     {% load static %}
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            min-height: 100vh;
         }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color:  #f9f9f9;
-            color: #333;
-        }
-        tr {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
+
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #ccc;
-            padding: 10px 20px;
-            border-radius: 15px; /* Adds the curved edges */
+            background-color: #ffffff;
+            padding: 15px 30px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin: 10px; /* Adds space around the navbar */
+            margin-bottom: 30px;
         }
-    
+
         .navbar .links {
             display: flex;
             gap: 20px;
         }
-    
+
         .navbar a {
             text-decoration: none;
-            color: #000;
-            padding: 8px 15px;
-            border-radius: 10px; /* Adds rounded corners to the links */
-            background-color: lightblue;
-            transition: background-color 0.3s, color 0.3s;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background-color: #e8f4ff;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
-    
+
         .navbar a:hover {
             background-color: #007bff;
             color: white;
+            transform: translateY(-1px);
         }
-    
+
         .logout-btn {
-            background-color: #f44336; /* Red color */
+            background-color: #ff4757;
             color: white;
             border: none;
-            padding: 8px 20px;
+            padding: 10px 20px;
             cursor: pointer;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
+
         .logout-btn:hover {
-            background-color: #d32f2f; /* Darker red on hover */
-            transform: scale(1.05); /* Slightly enlarge on hover */
+            background-color: #ff6b81;
+            transform: translateY(-1px);
         }
+
         .container {
-            margin: 20px;
-            padding: 20px;
-            background-color: #add8e6; /* Original light blue background */
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2d3436;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        h2 {
+            color: #2d3436;
+            margin: 25px 0;
+            font-size: 24px;
+            font-weight: 500;
+            border-bottom: 2px solid #e8f4ff;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2d3436;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #f1f7ff;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Status indicators */
+        .status-success {
+            color: #2ecc71;
+            font-weight: 500;
+        }
+
+        .status-error {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            color: #f1c40f;
+            font-weight: 500;
+        }
+
+        /* Welcome section */
+        .welcome-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #e8f4ff 0%, #f5f7fa 100%);
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .welcome-section h1 {
+            margin: 0;
+            color: #2d3436;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .container {
+                margin: 15px;
+                padding: 20px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 12px 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .navbar .links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
-
     <div class="navbar">
-        <div><a href="{% url 'sayhello' %}">Home</a></div>
-        <div><a href="{% url 'RoutersView' %}">Routers</a></div>
-        <div><a href="{% url 'SwitchesView' %}">Switches</a></div>
-        <div><a href="{% url 'FirewallView' %}">Firewall</a></div>
-        {% if user.is_authenticated %}
-        <!-- Styled Logout button -->
-        <div>
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
+        <div class="links">
+            <a href="{% url 'sayhello' %}">Home</a>
+            <a href="{% url 'RoutersView' %}">Routers</a>
+            <a href="{% url 'SwitchesView' %}">Switches</a>
+            <a href="{% url 'FirewallView' %}">Firewall</a>
+            {% if request.user.is_staff %}
+            <a href="{% url 'approve_users' %}">Pending Users</a>
+            {% endif %}
         </div>
+
+        {% if user.is_authenticated %}
+        <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
         {% endif %}
     </div>
 
     <div class="container">
-        <center><h1>Hello To Our Web Site</h1></center>
+        <div class="welcome-section">
+            <h1>Welcome to Network Management System</h1>
+        </div>
+
         <h2>System Status</h2>
-        <table id="deviceTable" border="1">
+        <table id="deviceTable">
             <thead>
                 <tr>
                     <th>Host</th>
@@ -120,6 +228,7 @@
             </tbody>
         </table>
     </div>
-    <script src="{% static 'js/hello_script.js' %} "></script>
+
+    <script src="{% static 'js/hello_script.js' %}"></script>
 </body>
 </html>

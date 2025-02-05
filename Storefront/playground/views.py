@@ -157,7 +157,7 @@ def devices_list(request):
 def RouterList(request):
     # Fetch the list of devices (Facts objects)
     devices = AutomationMethods.Router_list()
-
+    print("routerlist")
     # Serialize the devices into a JSON-compatible format
     serializable_devices = []
     for device in devices:
