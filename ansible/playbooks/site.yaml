@@ -1,5 +1,6 @@
 - name: Configure IOS devices
   hosts: all
+  gather_facts: false
   roles:
     - { role: hostname, when: "'hostname' in selected_roles" }
     - { role: banner, when: "'banner' in selected_roles" }

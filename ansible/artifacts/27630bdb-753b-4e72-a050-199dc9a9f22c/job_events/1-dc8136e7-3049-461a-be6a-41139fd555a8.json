@@ -1,1 +1,0 @@
-{"event": "verbose", "uuid": "dc8136e7-3049-461a-be6a-41139fd555a8", "counter": 1, "stdout": "\u001b[0;31mERROR! conflicting action statements: cisco.ios.ios_interfaces, config\u001b[0m", "start_line": 0, "end_line": 1, "runner_ident": "27630bdb-753b-4e72-a050-199dc9a9f22c", "created": "2025-01-20T15:15:48.337623+00:00"}

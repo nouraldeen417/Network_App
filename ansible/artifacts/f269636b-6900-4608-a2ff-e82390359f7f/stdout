@@ -1,0 +1,10 @@
+
+PLAY [Configure IOS devices] ***************************************************
+
+TASK [hostname : SET Host Name] ************************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [banner : Configure banner from file] *************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ip_config : set interface up] ********************************************

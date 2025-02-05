@@ -19,6 +19,11 @@ def Ping():
             hst=event_data.get('host', event_data.get('remote_addr'))  
             tsk=event_data.get('task', event_data.get('name', event_data.get('play')))
             stat=event.get('event')
+            if (stat == 'runner_on_ok'):
+                stat = "Device is connected successfully"
+            else:
+                stat = "Device is OFF"
+  
             devices.append(Device(host=hst, task=tsk, status=stat))
             
     # print(host + status + task)
