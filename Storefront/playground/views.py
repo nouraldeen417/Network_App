@@ -102,10 +102,10 @@ def sethostname(request):
         print(hostname)
         result = AutomationMethods.Set_Hostname(router,hostname)
         selectedrouter=router
-        if(result == "successful"):
-            messages.success(request,"Hostname has been setten Successfully")
+        if(result == "ok"):# i change here
+            messages.success(request,"Hostname has been set Successfully")
         else :
-            messages.error(request,"Unexpected error when setting Host name, please try again error")
+            messages.error(request,f"Error while setting setting Host name: {result}")# i change here
     return render(request,'router_configuration.html',{'router': selectedrouter})
 
 def setbanner(request):
@@ -117,10 +117,10 @@ def setbanner(request):
         print(banner)
         result = AutomationMethods.Set_Banner(router,banner)
         selectedrouter=router
-        if(result == "successful" ):
-            messages.success(request,"Banner has been setten Successfully")
+        if(result == "ok" ):# i change here
+            messages.success(request,"Banner has been set Successfully")
         else :
-            messages.error(request,"Unexpected error when setting Banner name, please try again error")
+            messages.error(request,f"Error while setting setting Banner name: {result}")# i change here
     return render(request,'router_configuration.html',{'router': selectedrouter})
 
 
@@ -136,10 +136,10 @@ def setInterfaceConfigration(request):
         print(ipv4)
         result = AutomationMethods.set_interfaceconfigration(router,interfacename,ipv4)
         selectedrouter=router
-        if(result == "successful" ):
-            messages.success(request,"Interface IP has been setten Successfully")
+        if(result == "ok" ): # i change here
+            messages.success(request,"Interface IP has been set successfully.")
         else :
-            messages.error(request,"Unexpected error when setting Interface Ip, please try again error")
+            messages.error(request,f"Error while setting the Interface Ip: {result}")# i change here
     return render(request,'router_configuration.html',{'router': selectedrouter})
 
 # API 

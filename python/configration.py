@@ -14,7 +14,7 @@ def _get_ansibleresult(runner):
     if runner.rc != 0:
         if "could not match supplied host" in error_msg:
             return "Host not found in inventory."
-        elif "ssh connection failed" in error_msg and "Timeout" in error_msg:
+        elif "ssh connection failed" in error_msg and "Timeout" in error_msg or "No route to host" in error_msg:
             return "Host is unreachable (network/firewall issue)."
         elif "ssh connection failed" in error_msg or "Failed to authenticate" in error_msg:
             return "Authentication failure (SSH key or password issue)."
@@ -64,7 +64,7 @@ def set_banner(selected_host,new_banner):
 
 
 def set_interfaceconfigration(selected_host,interface_name,ip_subnet):
-    error_msg = "Please select any interface to configure! "    
+    error_msg = "Please select any Interface to configure! "    
     runner = 0
     if (interface_name == None ):
       return error_msg  

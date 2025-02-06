@@ -1,0 +1,17 @@
+
+PLAY [Configure IOS devices] ***************************************************
+
+TASK [hostname : SET Host Name] ************************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [banner : Configure banner from file] *************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ip_config : set interface up] ********************************************
+[0;33mchanged: [Router_01][0m
+
+TASK [ip_config : Set interface ipv4] ******************************************
+[0;31mfatal: [Router_01]: FAILED! => {"changed": false, "module_stderr": "ip address 192.168.10.100 255.255.255.128\r\n% 192.168.10.0 overlaps with GigabitEthernet0/2\r\nR1(config-if)#", "module_stdout": "", "msg": "MODULE FAILURE\nSee stdout/stderr for the exact error"}[0m
+
+PLAY RECAP *********************************************************************
+[0;31mRouter_01[0m                  : [0;32mok=1   [0m [0;33mchanged=1   [0m unreachable=0    [0;31mfailed=1   [0m [0;36mskipped=2   [0m rescued=0    ignored=0   
