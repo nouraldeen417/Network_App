@@ -28,6 +28,7 @@ def Routers_facts():
     private_data_dir="../ansible/",  # Current directory
     playbook="playbooks/routers.yaml",
     inventory="hosts",  # Path to external inventory file
+    rotate_artifacts=1
     )
     # Get the list of hosts where tasks ran
     hosts_with_tasks = [host for host in  r.stats["ok"]]

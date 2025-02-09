@@ -4,7 +4,8 @@ def Ping():
     r = ansible_runner.run(
     private_data_dir="../ansible/",  # Current directory
     playbook="playbooks/ping.yaml",
-    inventory="hosts",  # Path to external inventory file
+    inventory="hosts",    # Path to external inventory file
+    rotate_artifacts=1
     )
     #host=[]
     #task=[]

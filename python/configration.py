@@ -10,7 +10,8 @@ def _get_ansibleresult(runner):
         if event.get('event') == 'runner_on_failed':
             error_msg = event['event_data'].get('res', {}).get('module_stderr', '') +  event['event_data'].get('res', {}).get('msg', '')
 
-        
+    
+      
     if runner.rc != 0:
         if "could not match supplied host" in error_msg:
             return "Host not found in inventory."
@@ -22,6 +23,12 @@ def _get_ansibleresult(runner):
             return "IP Address used by another interface."
         else:
             return f"Unknown error: {error_msg}"
+    
+    changed = runner.stats.get('changed', {})
+    print (changed)
+    if not bool(changed):
+        return "Configuration already exists. No changes were made." 
+
     return "ok"
 
 def set_hostname(selected_host,new_hostname):
@@ -35,6 +42,7 @@ def set_hostname(selected_host,new_hostname):
         playbook="playbooks/site.yaml",
         inventory="hosts",  # Path to external inventory file
         limit=selected_host,  # Dynamically target the selected host
+        rotate_artifacts=1,
         extravars={  # Pass the selected role as a variable
                 "selected_roles": 'hostname',  # Dynamically set the role
                 "new_hostname": new_hostname
@@ -43,7 +51,7 @@ def set_hostname(selected_host,new_hostname):
         error_msg = _get_ansibleresult(runner)
     return error_msg
 
-def set_banner(selected_host,new_banner):
+def set_banner(selected_hosts,new_banner):
     error_msg = "Empty input"    
     if (new_banner == "" ):
         return error_msg 
@@ -52,7 +60,7 @@ def set_banner(selected_host,new_banner):
         private_data_dir="../ansible/",  # Current directory
         playbook="playbooks/site.yaml",
         inventory="hosts",  # Path to external inventory file
-        limit=selected_host,  # Dynamically target the selected host
+        limit=','.join(selected_hosts) ,         # Limit to selected routers
         extravars={                          # Pass the selected role as a variable
                 "selected_roles": 'banner',  # Dynamically set the role
                 "new_banner": new_banner
@@ -63,7 +71,7 @@ def set_banner(selected_host,new_banner):
 
 
 
-def set_interfaceconfigration(selected_host,interface_name,ip_subnet):
+def set_interfaceconfigration(selected_hosts,interface_name,ip_subnet):
     error_msg = "Please select any Interface to configure! "    
     runner = 0
     if (interface_name == None ):
@@ -73,7 +81,8 @@ def set_interfaceconfigration(selected_host,interface_name,ip_subnet):
         private_data_dir="../ansible/",         # Current directory
         playbook="playbooks/site.yaml",
         inventory="hosts",                      # Path to external inventory file
-        limit=selected_host,                    # Dynamically target the selected host
+        limit=','.join(selected_hosts),          # Limit to selected routers
+        rotate_artifacts=1,                
         extravars={                             # Pass the selected role as a variable
                 "selected_roles": 'ip_config',  # Dynamically set the role
                 "interfaces": interface_name,
@@ -87,7 +96,7 @@ def set_interfaceconfigration(selected_host,interface_name,ip_subnet):
     error_msg = _get_ansibleresult(runner)
     return error_msg
 
-
+x=['Router_01','Router_02']
 # print(set_hostname('Router_01','R1'))
-# print(set_banner('Router1','fuck you'))
-# print(set_interfaceconfigration('Router_01',"GigabitEthernet0/2","192.168.7.100/24"))
+print(set_banner(x,'fuck you'))
+# print(set_interfaceconfigration('Router_01',"GigabitEthernet0/1","192.168.5.10/24"))
