@@ -14,3 +14,12 @@ def notify_admin_on_registration(sender, instance, created, **kwargs):
             from_email='your-email@example.com',
             recipient_list=['hishamhagag18@gmail.com'],  # Add admin email(s) here
         )
+
+class Device(models.Model):
+    uniqename = models.CharField (max_length=100,  unique=True)
+    hostname  = models.CharField (max_length=100,  unique=True)
+    ip        = models.CharField (max_length=15 ,  unique=True)
+
+    def __str__(self):
+        return self.uniqename
+    
