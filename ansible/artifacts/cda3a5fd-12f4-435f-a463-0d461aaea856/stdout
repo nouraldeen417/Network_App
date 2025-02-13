@@ -1,0 +1,15 @@
+[0;32mRouter_01 | SUCCESS => {[0m
+[0;32m    "changed": false,[0m
+[0;32m    "stdout": [[0m
+[0;32m        ""[0m
+[0;32m    ],[0m
+[0;32m    "stdout_lines": [[0m
+[0;32m        [[0m
+[0;32m            ""[0m
+[0;32m        ][0m
+[0;32m    ][0m
+[0;32m}[0m
+[0;31mRouter_02 | FAILED! => {[0m
+[0;31m    "changed": false,[0m
+[0;31m    "msg": "ssh connection failed: ssh connect failed: No route to host"[0m
+[0;31m}[0m

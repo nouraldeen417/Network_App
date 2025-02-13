@@ -1,19 +1,34 @@
 ---
-- name: Gather information about the Cisco router
-  hosts: all
+# - name: Gather Facts and Routing Table from Cisco Device
+#   hosts: all
+#   gather_facts: false
+#   tasks:
+#     - name: Ping devices
+#       cisco.ios.ios_ping:
+#        dest: "{{ ansible_host }}"
+#     - name: Gather all facts
+#       ios_facts:
+#         gather_subset: all
+#       register: current_users
+#     - name: Run 'show ip route' command
+#       cisco.ios.ios_command:
+#         commands:
+#           - show ip route
+#       register: routing_table
+
+#     - name: Save combined facts to a JSON file
+#       copy:
+#         content: >-
+#           {{
+#             ansible_facts | combine({'routing_table': routing_table}) | to_nice_json
+#           }}
+#         dest: "./temp/router_facts_{{ inventory_hostname }}.json"
+
+- name: Configure IOS devices
+  hosts: routers
   gather_facts: false
-
-  tasks:
-   - name: Ping devices
-     cisco.ios.ios_ping:
-       dest: "{{ ansible_host }}"
-   - name: Gather only the config and default facts
-     ios_facts:
-      gather_subset: all
-     register: current_users
-
-
-   - name: Save facts to a JSON file
-     copy:
-        content: "{{ ansible_facts | to_nice_json }}"
-        dest: "./temp/router_facts_{{ inventory_hostname }}.json"
+  roles:
+    - role: ping 
+    - role: router_facts
+    # - role: static_routing
+    # - role: ospf

@@ -1,0 +1,20 @@
+
+PLAY [Configure IOS devices] ***************************************************
+
+TASK [banner : Configure banner from file] *************************************
+[0;36mskipping: [Router_02][0m
+
+TASK [ip_config : set interface up] ********************************************
+[0;36mskipping: [Router_02][0m
+
+TASK [ip_config : Set interface ipv4] ******************************************
+[0;36mskipping: [Router_02][0m
+
+TASK [interfaces : set interface up] *******************************************
+[0;36mskipping: [Router_02][0m
+
+TASK [ospf : Configure OSPF process and router ID] *****************************
+[0;31mfatal: [Router_02]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: int object has no element 0\n\nThe error appears to be in '/root/Network_App/ansible/playbooks/roles/ospf/tasks/main.yml': line 3, column 3, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n#tasks file for ospf\n- name: Configure OSPF process and router ID\n  ^ here\n"}[0m
+
+PLAY RECAP *********************************************************************
+[0;31mRouter_02[0m                  : ok=0    changed=0    unreachable=0    [0;31mfailed=1   [0m [0;36mskipped=4   [0m rescued=0    ignored=0   

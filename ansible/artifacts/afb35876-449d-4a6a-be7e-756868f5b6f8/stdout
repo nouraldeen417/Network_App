@@ -1,0 +1,20 @@
+
+PLAY [Configure IOS devices] ***************************************************
+
+TASK [banner : Configure banner from file] *************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ip_config : set interface up] ********************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ip_config : Set interface ipv4] ******************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [interfaces : set interface up] *******************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ospf : Configure OSPF process and router ID] *****************************
+[0;31mfatal: [Router_01]: FAILED! => {"msg": "'networks' is undefined"}[0m
+
+PLAY RECAP *********************************************************************
+[0;31mRouter_01[0m                  : ok=0    changed=0    unreachable=0    [0;31mfailed=1   [0m [0;36mskipped=4   [0m rescued=0    ignored=0   

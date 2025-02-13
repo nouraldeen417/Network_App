@@ -1,0 +1,44 @@
+[0;32mRouter_02 | SUCCESS => {[0m
+[0;32m    "changed": false,[0m
+[0;32m    "stdout": [[0m
+[0;32m        "OSPF Router with ID (2.2.2.2) (Process ID 1)\n\n\t\tRouter Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum Link count\n1.1.1.1         1.1.1.1         327         0x80000002 0x0029A8 2\n2.2.2.2         2.2.2.2         291         0x80000004 0x0005BF 2\n\n\t\tNet Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum\n192.168.3.2     2.2.2.2         535         0x80000001 0x00F2C4"[0m
+[0;32m    ],[0m
+[0;32m    "stdout_lines": [[0m
+[0;32m        [[0m
+[0;32m            "OSPF Router with ID (2.2.2.2) (Process ID 1)",[0m
+[0;32m            "",[0m
+[0;32m            "\t\tRouter Link States (Area 0)",[0m
+[0;32m            "",[0m
+[0;32m            "Link ID         ADV Router      Age         Seq#       Checksum Link count",[0m
+[0;32m            "1.1.1.1         1.1.1.1         327         0x80000002 0x0029A8 2",[0m
+[0;32m            "2.2.2.2         2.2.2.2         291         0x80000004 0x0005BF 2",[0m
+[0;32m            "",[0m
+[0;32m            "\t\tNet Link States (Area 0)",[0m
+[0;32m            "",[0m
+[0;32m            "Link ID         ADV Router      Age         Seq#       Checksum",[0m
+[0;32m            "192.168.3.2     2.2.2.2         535         0x80000001 0x00F2C4"[0m
+[0;32m        ][0m
+[0;32m    ][0m
+[0;32m}[0m
+[0;32mRouter_01 | SUCCESS => {[0m
+[0;32m    "changed": false,[0m
+[0;32m    "stdout": [[0m
+[0;32m        "OSPF Router with ID (1.1.1.1) (Process ID 1)\n\n\t\tRouter Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum Link count\n1.1.1.1         1.1.1.1         328         0x80000002 0x0029A8 2\n2.2.2.2         2.2.2.2         294         0x80000004 0x0005BF 2\n\n\t\tNet Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum\n192.168.3.2     2.2.2.2         538         0x80000001 0x00F2C4"[0m
+[0;32m    ],[0m
+[0;32m    "stdout_lines": [[0m
+[0;32m        [[0m
+[0;32m            "OSPF Router with ID (1.1.1.1) (Process ID 1)",[0m
+[0;32m            "",[0m
+[0;32m            "\t\tRouter Link States (Area 0)",[0m
+[0;32m            "",[0m
+[0;32m            "Link ID         ADV Router      Age         Seq#       Checksum Link count",[0m
+[0;32m            "1.1.1.1         1.1.1.1         328         0x80000002 0x0029A8 2",[0m
+[0;32m            "2.2.2.2         2.2.2.2         294         0x80000004 0x0005BF 2",[0m
+[0;32m            "",[0m
+[0;32m            "\t\tNet Link States (Area 0)",[0m
+[0;32m            "",[0m
+[0;32m            "Link ID         ADV Router      Age         Seq#       Checksum",[0m
+[0;32m            "192.168.3.2     2.2.2.2         538         0x80000001 0x00F2C4"[0m
+[0;32m        ][0m
+[0;32m    ][0m
+[0;32m}[0m
