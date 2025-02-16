@@ -17,6 +17,24 @@ PYTHON_VERSION=$(python3 --version 2>/dev/null | awk '{print $2}')
 REQUIRED_VERSION="3.11"
 PYTHON_EXEC="/usr/bin/python3.11"
 
+# Function to install Python 3.11
+install_python() {
+    echo "Installing Python 3.11..."
+    sudo $PACKAGE_MANAGER  update
+    sudo $PACKAGE_MANAGER  install -y software-properties-common
+    sudo $PACKAGE_MANAGER  update
+    sudo $PACKAGE_MANAGER  install -y python3.11 python3.11-venv python3.11-dev
+    echo "Python 3.11 installed successfully."
+}
+
+# Function to set Python 3.11 as the default
+set_default_python() {
+    echo "Setting Python 3.11 as the default..."
+    sudo update-alternatives --install /usr/bin/python3 python3 $PYTHON_EXEC 1
+    sudo update-alternatives --set python3 $PYTHON_EXEC
+    echo "Python 3.11 is now the default."
+}
+
 # Detect package manager
 if command -v apt &>/dev/null; then
     PACKAGE_MANAGER="apt"
@@ -83,20 +101,3 @@ deactivate
 echo "Setup complete! Your environment is ready."
 echo "To activate the virtual environment, run: source $VENV_NAME/bin/activate"
 echo "To start the Django development server, run: python manage.py runserver"
-# Function to install Python 3.11
-install_python() {
-    echo "Installing Python 3.11..."
-    sudo $PACKAGE_MANAGER  update
-    sudo $PACKAGE_MANAGER  install -y software-properties-common
-    sudo $PACKAGE_MANAGER  update
-    sudo $PACKAGE_MANAGER  install -y python3.11 python3.11-venv python3.11-dev
-    echo "Python 3.11 installed successfully."
-}
-
-# Function to set Python 3.11 as the default
-set_default_python() {
-    echo "Setting Python 3.11 as the default..."
-    sudo update-alternatives --install /usr/bin/python3 python3 $PYTHON_EXEC 1
-    sudo update-alternatives --set python3 $PYTHON_EXEC
-    echo "Python 3.11 is now the default."
-}
