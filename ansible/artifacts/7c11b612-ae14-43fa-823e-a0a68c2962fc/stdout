@@ -1,0 +1,9 @@
+
+PLAY [Configure IOS devices] ***************************************************
+
+TASK [hostname : SET Host Name] ************************************************
+[0;36mskipping: [Router_01][0m
+[0;36mskipping: [Router_02][0m
+
+TASK [banner : Configure banner from file] *************************************
+[0;31mfatal: [Router_01]: FAILED! => {"changed": false, "msg": "ssh connection failed: ssh connect failed: No route to host"}[0m

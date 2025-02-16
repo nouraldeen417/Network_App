@@ -21,9 +21,7 @@ PYTHON_EXEC="/usr/bin/python3.11"
 install_python() {
     echo "Installing Python 3.11..."
     sudo $PACKAGE_MANAGER  update
-    sudo $PACKAGE_MANAGER  install -y software-properties-common
-    sudo $PACKAGE_MANAGER  update
-    sudo $PACKAGE_MANAGER  install -y python3.11 python3.11-venv python3.11-dev
+    sudo $PACKAGE_MANAGER  install -y python3.11 
     echo "Python 3.11 installed successfully."
 }
 
