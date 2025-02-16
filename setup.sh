@@ -10,15 +10,12 @@ PROJECT_DIR="Network_App"
 INVENTORY_SOURCE="./hosts-sample"
 INVENTORY_DEST="./ansible/inventory/"
 
-# go to project directory
-cd $PROJECT_DIR
+#!/bin/bash
 
-# Check if Python 3 is installed
-if ! command -v python3 &> /dev/null
-then
-    echo "Python 3 could not be found. Please install Python 3 and try again."
-    exit 1
-fi
+# Check if Python3 is installed and get its version
+PYTHON_VERSION=$(python3 --version 2>/dev/null | awk '{print $2}')
+REQUIRED_VERSION="3.11"
+PYTHON_EXEC="/usr/bin/python3.11"
 
 # Detect package manager
 if command -v apt &>/dev/null; then
@@ -31,6 +28,29 @@ else
     echo "Unsupported package manager. Install dependencies manually."
     exit 1
 fi
+
+
+# Check if Python 3.11 is installed
+if [[ -x "$PYTHON_EXEC" ]]; then
+    echo "Python 3.11 is already installed."
+else
+    echo "Python 3.11 is not installed. Installing..."
+    install_python
+fi
+
+# Verify the current default Python version
+PYTHON_MAJOR_MINOR=$(echo "$PYTHON_VERSION" | cut -d. -f1,2)
+
+if [[ "$PYTHON_MAJOR_MINOR" != "$REQUIRED_VERSION" ]]; then
+    echo "Updating default Python to 3.11..."
+    set_default_python
+else
+    echo "Python 3.11 is already the default version."
+fi
+
+# Verify the update
+python3 --version
+
 
 # Create a virtual environment
 echo "Creating virtual environment..."
@@ -63,3 +83,20 @@ deactivate
 echo "Setup complete! Your environment is ready."
 echo "To activate the virtual environment, run: source $VENV_NAME/bin/activate"
 echo "To start the Django development server, run: python manage.py runserver"
+# Function to install Python 3.11
+install_python() {
+    echo "Installing Python 3.11..."
+    sudo $PACKAGE_MANAGER  update
+    sudo $PACKAGE_MANAGER  install -y software-properties-common
+    sudo $PACKAGE_MANAGER  update
+    sudo $PACKAGE_MANAGER  install -y python3.11 python3.11-venv python3.11-dev
+    echo "Python 3.11 installed successfully."
+}
+
+# Function to set Python 3.11 as the default
+set_default_python() {
+    echo "Setting Python 3.11 as the default..."
+    sudo update-alternatives --install /usr/bin/python3 python3 $PYTHON_EXEC 1
+    sudo update-alternatives --set python3 $PYTHON_EXEC
+    echo "Python 3.11 is now the default."
+}
