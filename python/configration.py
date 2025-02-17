@@ -60,7 +60,7 @@ def set_banner(selected_hosts,new_banner):
         private_data_dir="../ansible/",  # Current directory
         playbook="playbooks/site.yaml",
         inventory="hosts",  # Path to external inventory file
-        limit=','.join(selected_hosts) ,         # Limit to selected routers
+        limit=selected_hosts ,         # Limit to selected routers
         extravars={                          # Pass the selected role as a variable
                 "selected_roles": 'banner',  # Dynamically set the role
                 "new_banner": new_banner
@@ -81,7 +81,7 @@ def set_interfaceconfigration(selected_hosts,interface_name,ip_subnet):
         private_data_dir="../ansible/",         # Current directory
         playbook="playbooks/site.yaml",
         inventory="hosts",                      # Path to external inventory file
-        limit=','.join(selected_hosts),          # Limit to selected routers
+        limit=selected_hosts,          # Limit to selected routers
         rotate_artifacts=1,                
         extravars={                             # Pass the selected role as a variable
                 "selected_roles": 'ip_config',  # Dynamically set the role
@@ -96,7 +96,7 @@ def set_interfaceconfigration(selected_hosts,interface_name,ip_subnet):
     error_msg = _get_ansibleresult(runner)
     return error_msg
 
-x=['Router_01','Router_02']
-# print(set_hostname('Router_01','R1'))
-print(set_banner(x,'fuck you'))
-# print(set_interfaceconfigration('Router_01',"GigabitEthernet0/1","192.168.5.10/24"))
+# x=['Router_01','Router_02']
+# # print(set_hostname('Router_01','R1'))
+# print(set_banner(x,'fuck you'))
+# # print(set_interfaceconfigration('Router_01',"GigabitEthernet0/1","192.168.5.10/24"))

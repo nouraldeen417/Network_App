@@ -35,3 +35,5 @@ class Device:
         self.host = host
         self.task = task
         self.status = status
+
+# Ping()

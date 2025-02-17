@@ -1,0 +1,304 @@
+{
+    "net_all_ipv4_addresses": [
+        "192.168.3.101",
+        "192.168.3.109",
+        "192.168.3.2",
+        "192.168.3.34",
+        "192.168.3.113",
+        "3.3.3.3",
+        "4.4.4.4"
+    ],
+    "net_all_ipv6_addresses": [],
+    "net_api": "cliconf",
+    "net_config": "Building configuration...\n\n  \nCurrent configuration : 6074 bytes\n!\nversion 15.6\nservice timestamps debug datetime msec\nservice timestamps log datetime msec\nno service password-encryption\n!\nhostname Router_2\n!\nboot-start-marker\nboot-end-marker\n!\n!\nenable secret 5 $1$mtZQ$SfLueL8ypyAl34DHlSGKo0\n!\nno aaa new-model\nethernet lmi ce\n!\n!\n!\nno process cpu autoprofile hog\nmmi polling-interval 60\nno mmi auto-configure\nno mmi pvc\nmmi snmp-timeout 180\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\nno ip domain lookup\nip domain name cisco.com\nip cef\nno ipv6 cef\n!\nmultilink bundle-name authenticated\n!\n!\n!\n!\nusername group2 privilege 15 secret 5 $1$7elh$31ZSBKPHBFBoOB7UsSNdA/\nusername ansible privilege 15 secret 5 $1$AxF9$vjG/A0wbGgEwivdZALnxl1\n!\nredundancy\n!\nno cdp run\n!\n! \n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\ninterface Loopback3\n ip address 3.3.3.3 255.255.255.255\n!\ninterface Loopback4\n ip address 4.4.4.4 255.255.255.255\n!\ninterface GigabitEthernet0/0\n ip address 192.168.3.101 255.255.255.252\n ip flow ingress\n ip flow egress\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/1\n ip address 192.168.3.109 255.255.255.252\n ip access-group R2 in\n ip flow ingress\n ip flow egress\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/2\n ip address 192.168.3.2 255.255.255.224\n ip access-group R2_SERVERS out\n ip flow ingress\n ip flow egress\n standby 1 ip 192.168.3.3\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/3\n ip address 192.168.3.34 255.255.255.224\n ip helper-address 192.168.3.4\n ip flow ingress\n ip flow egress\n standby 2 ip 192.168.3.35\n standby 2 priority 150\n standby 2 preempt\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/4\n ip address 192.168.3.113 255.255.255.252\n ip flow ingress\n ip flow egress\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/5\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/6\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/7\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/8\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/9\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/10\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/11\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/12\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/13\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/14\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\ninterface GigabitEthernet0/15\n no ip address\n shutdown\n duplex auto\n speed auto\n media-type rj45\n no cdp enable\n!\nip forward-protocol nd\n!\nip flow-export version 9\n!\nno ip http server\nno ip http secure-server\nip ssh version 2\nip ssh pubkey-chain\n  username ansible\n   key-hash ssh-rsa 4BD2C574DFFF953B483E14D1FC1E879E root@server-01.linux.comp.local\n!\nip access-list extended R2\n permit ospf any any\n permit tcp 192.168.2.128 0.0.0.63 any eq telnet\n deny   icmp 192.168.2.64 0.0.0.63 192.168.1.64 0.0.0.63\n permit icmp any any\n permit ip any any\n permit tcp any any eq www\n permit tcp any any eq 443\n permit tcp any any eq ftp\nip access-list extended R2_SERVERS\n permit ospf any any\n permit icmp any any\n permit tcp 192.168.2.128 0.0.0.63 192.168.3.0 0.0.0.31 eq telnet\n permit ip any any\n permit tcp any any eq www\n permit tcp any any eq 443\n permit tcp any any eq ftp\n!\n!\n!\n!\ncontrol-plane\n!\nbanner exec ^CCCCCCC\n**************************************************************************\n* IOSv is strictly limited to use for evaluation, demonstration and IOS  *\n* education. IOSv is provided as-is and is not supported by Cisco's      *\n* Technical Advisory Center. Any use or disclosure, in whole or in part, *\n* of the IOSv Software or Documentation to any third party for any       *\n* purposes is expressly prohibited except as otherwise authorized by     *\n* Cisco in writing.                                                      *\n**************************************************************************^C\nbanner incoming ^CCCCCCC\n**************************************************************************\n* IOSv is strictly limited to use for evaluation, demonstration and IOS  *\n* education. IOSv is provided as-is and is not supported by Cisco's      *\n* Technical Advisory Center. Any use or disclosure, in whole or in part, *\n* of the IOSv Software or Documentation to any third party for any       *\n* purposes is expressly prohibited except as otherwise authorized by     *\n* Cisco in writing.                                                      *\n**************************************************************************^C\nbanner login ^CCCCCCC\n**************************************************************************\n* IOSv is strictly limited to use for evaluation, demonstration and IOS  *\n* education. IOSv is provided as-is and is not supported by Cisco's      *\n* Technical Advisory Center. Any use or disclosure, in whole or in part, *\n* of the IOSv Software or Documentation to any third party for any       *\n* purposes is expressly prohibited except as otherwise authorized by     *\n* Cisco in writing.                                                      *\n**************************************************************************^C\nbanner motd ^CCCCC\n\n\n\n\n!!!!!Welcome To Die Guys!!!!!\n\n^C\n!\nline con 0\n exec-timeout 0 0\n logging synchronous\n login local\nline aux 0\n exec-timeout 0 0\n logging synchronous\n login local\nline vty 0 4\n exec-timeout 5 30\n logging synchronous\n login local\n transport input ssh\nline vty 5 15\n login local\n transport input ssh\n!\nno scheduler allocate\n!\nend",
+    "net_cpu_utilization": {
+        "core": {
+            "five_minutes": 5,
+            "five_seconds": 10,
+            "five_seconds_interrupt": 0,
+            "one_minute": 5
+        }
+    },
+    "net_filesystems": [
+        "flash0:"
+    ],
+    "net_filesystems_info": {
+        "flash0:": {
+            "spacefree_kb": 1948176.0,
+            "spacetotal_kb": 2092496.0
+        }
+    },
+    "net_gather_network_resources": [],
+    "net_gather_subset": [
+        "default",
+        "hardware",
+        "interfaces",
+        "config"
+    ],
+    "net_hostname": "Router_2",
+    "net_image": "flash0:/vios-adventerprisek9-m",
+    "net_interfaces": {
+        "GigabitEthernet0/0": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [
+                {
+                    "address": "192.168.3.101",
+                    "subnet": "30"
+                }
+            ],
+            "lineprotocol": "up",
+            "macaddress": "5000.0004.0000",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "up",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/1": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [
+                {
+                    "address": "192.168.3.109",
+                    "subnet": "30"
+                }
+            ],
+            "lineprotocol": "up",
+            "macaddress": "5000.0004.0001",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "up",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/10": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.000a",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/11": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.000b",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/12": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.000c",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/13": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.000d",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/14": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.000e",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/15": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.000f",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/2": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [
+                {
+                    "address": "192.168.3.2",
+                    "subnet": "27"
+                }
+            ],
+            "lineprotocol": "up",
+            "macaddress": "5000.0004.0002",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "up",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/3": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [
+                {
+                    "address": "192.168.3.34",
+                    "subnet": "27"
+                }
+            ],
+            "lineprotocol": "up",
+            "macaddress": "5000.0004.0003",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "up",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/4": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [
+                {
+                    "address": "192.168.3.113",
+                    "subnet": "30"
+                }
+            ],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.0004",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/5": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.0005",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/6": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.0006",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/7": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.0007",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/8": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.0008",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "GigabitEthernet0/9": {
+            "bandwidth": 1000000,
+            "description": null,
+            "duplex": "Auto",
+            "ipv4": [],
+            "lineprotocol": "down",
+            "macaddress": "5000.0004.0009",
+            "mediatype": "RJ45",
+            "mtu": 1500,
+            "operstatus": "administratively down",
+            "type": "iGbE"
+        },
+        "Loopback3": {
+            "bandwidth": 8000000,
+            "description": null,
+            "duplex": null,
+            "ipv4": [
+                {
+                    "address": "3.3.3.3",
+                    "subnet": "32"
+                }
+            ],
+            "lineprotocol": "up",
+            "macaddress": null,
+            "mediatype": null,
+            "mtu": 1514,
+            "operstatus": "up",
+            "type": null
+        },
+        "Loopback4": {
+            "bandwidth": 8000000,
+            "description": null,
+            "duplex": null,
+            "ipv4": [
+                {
+                    "address": "4.4.4.4",
+                    "subnet": "32"
+                }
+            ],
+            "lineprotocol": "up",
+            "macaddress": null,
+            "mediatype": null,
+            "mtu": 1514,
+            "operstatus": "up",
+            "type": null
+        }
+    },
+    "net_iostype": "IOS",
+    "net_memfree_mb": 611.5820617675781,
+    "net_memtotal_mb": 676.0699768066406,
+    "net_model": "IOSv",
+    "net_neighbors": {},
+    "net_operatingmode": "autonomous",
+    "net_python_version": "3.11.11",
+    "net_serialnum": "9QM3DA46UCEGQ67PJ5EPS",
+    "net_system": "ios",
+    "net_version": "15.6(1)T",
+    "network_resources": {}
+}
