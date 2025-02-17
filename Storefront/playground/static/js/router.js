@@ -1,6 +1,6 @@
 // Function to fetch data and populate the table
-const routersApiUrl = 'http://127.0.0.1:8000/playground/api/routers/';
-
+// const routersApiUrl = 'http://127.0.0.1:8000/playground/api/routers/';
+const routersApiUrl = 'http://192.168.1.100/playground/api/routers/';
 async function fetchRouters() {
     try {
         const response = await fetch(routersApiUrl); // Call the API

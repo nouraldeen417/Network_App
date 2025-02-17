@@ -1,10 +1,12 @@
 // Path: your-javascript-file.js
 
 // API endpoint URL
-const routersApiUrl = 'http://127.0.0.1:8000/playground/api/routers/';
-const switchesApiUrl = 'http://127.0.0.1:8000/playground/api/switches/';
-const firewallsApiUrl = 'http://127.0.0.1:8000/playground/api/firewalls/';
-
+// const routersApiUrl = 'http://127.0.0.1:8000/playground/api/routers/';
+// const switchesApiUrl = 'http://127.0.0.1:8000/playground/api/switches/';
+// const firewallsApiUrl = 'http://127.0.0.1:8000/playground/api/firewalls/';
+const routersApiUrl = 'http://192.168.1.100/playground/api/routers/';
+const switchesApiUrl = 'http://192.168.1.100/playground/api/switches/';
+const firewallsApiUrl = 'http://192.168.1.100/playground/api/firewalls/';
 // Function to fetch data and populate the table
 async function fetchRouters() {
     try {

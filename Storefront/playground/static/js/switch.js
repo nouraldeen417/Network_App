@@ -1,6 +1,6 @@
 
-const switchesApiUrl = 'http://127.0.0.1:8000/playground/api/switches/';
-
+// const switchesApiUrl = 'http://127.0.0.1:8000/playground/api/switches/';
+const switchesApiUrl = 'http://192.168.1.100/playground/api/switches/';
 async function fetchSwitches() {
     try {
         const response = await fetch(switchesApiUrl); // Call the API

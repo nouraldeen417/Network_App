@@ -24,6 +24,7 @@ class AutomationMethods:
     
     def Set_Banner(selected_host,banner):
         status = configration.set_banner(selected_host,banner) #"ok"
+        print (status)
         return status
     
     def set_interfaceconfigration(selected_host,interface_name,ipv4):
