@@ -1,8 +1,0 @@
-
-PLAY [Configure IOS devices] ***************************************************
-
-TASK [ospf : delete OSPF process and router ID] ********************************
-[0;32mok: [Router_02] => (item={'network': '192.168.2.0', 'wildcard': '0.0.0.255'})[0m
-
-PLAY RECAP *********************************************************************
-[0;32mRouter_02[0m                  : [0;32mok=1   [0m changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   

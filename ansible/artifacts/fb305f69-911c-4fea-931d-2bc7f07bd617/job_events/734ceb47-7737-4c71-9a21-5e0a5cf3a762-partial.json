@@ -1,0 +1,1 @@
+{"event": "playbook_on_start", "pid": 32575, "uuid": "734ceb47-7737-4c71-9a21-5e0a5cf3a762", "created": "2025-02-20T22:44:03.929053+00:00", "event_data": {"playbook": "playbooks/routers.yaml", "playbook_uuid": "734ceb47-7737-4c71-9a21-5e0a5cf3a762", "uuid": "734ceb47-7737-4c71-9a21-5e0a5cf3a762"}}

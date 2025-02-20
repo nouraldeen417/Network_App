@@ -1,0 +1,1 @@
+{"event": "verbose", "uuid": "2efb931c-1bc8-4d77-83fe-ce14d7df20fc", "counter": 9, "stdout": "\u001b[0;31m    - { role: hostname  , when: \"'hostname' in selected_roles\"        }\u001b[0m", "start_line": 8, "end_line": 9, "runner_ident": "206d4ae8-b977-44ea-9ff0-064c73fc58ed", "created": "2025-02-20T22:44:07.531819+00:00"}

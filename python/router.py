@@ -63,7 +63,8 @@ def Routers_facts():
            facts[0].neighbors[0].address_subnet,
            facts[0].neighbors[0].port,
            facts[0].routing[0].protocol,           
-           facts[0].routing[1].protocol)
+           facts[0].routing[1].protocol,
+           facts[0].routing[2].protocol)
     print("\n")
     # print (facts[1].id,
     #        facts[1].device , 
@@ -92,7 +93,7 @@ def parse_routing_table(output):
     # Map protocol codes to human-readable descriptions
     protocol_map = {
         "C": "Direct Connected",
-        "L": "Local",
+        # "L": "Local",
         "S": "Static",
         "O": "OSPF",
         "R": "RIP",
@@ -106,7 +107,7 @@ def parse_routing_table(output):
     route_pattern = re.compile(
         r"^\s*(?P<protocol>\w+)\s+"
         r"(?P<network>[\d./]+)\s+"
-        r"is directly connected,\s+"
+        r".*,\s+"
         r"(?P<interface>\S+)"
     )
 

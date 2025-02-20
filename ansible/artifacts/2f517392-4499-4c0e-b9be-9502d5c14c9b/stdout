@@ -1,8 +1,0 @@
-[0;31mRouter_01 | FAILED! => {[0m
-[0;31m    "changed": false,[0m
-[0;31m    "msg": "ssh connection failed: ssh connect failed: Connection refused"[0m
-[0;31m}[0m
-[0;31mRouter_02 | FAILED! => {[0m
-[0;31m    "changed": false,[0m
-[0;31m    "msg": "ssh connection failed: ssh connect failed: No route to host"[0m
-[0;31m}[0m

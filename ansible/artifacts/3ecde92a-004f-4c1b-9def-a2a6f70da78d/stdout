@@ -1,0 +1,38 @@
+
+PLAY [Configure IOS devices] ***************************************************
+
+TASK [hostname : SET Host Name] ************************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [banner : Configure banner from file] *************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ip_config : set interface up] ********************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ip_config : Set interface ipv4] ******************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [interfaces : set interface up] *******************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ospf : Configure OSPF process and router ID] *****************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ospf : Configure OSPF on the interface] **********************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ospf : delete OSPF process and router ID] ********************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ospf : Remove OSPF process] **********************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [ospf : Remove OSPF from interfaces] **************************************
+[0;36mskipping: [Router_01][0m
+
+TASK [static_routing : Add a static route] *************************************
+[0;33mchanged: [Router_01][0m
+
+PLAY RECAP *********************************************************************
+[0;33mRouter_01[0m                  : [0;32mok=1   [0m [0;33mchanged=1   [0m unreachable=0    failed=0    [0;36mskipped=10  [0m rescued=0    ignored=0   

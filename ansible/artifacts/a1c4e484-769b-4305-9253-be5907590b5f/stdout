@@ -1,0 +1,11 @@
+
+PLAY [Configure IOS devices] ***************************************************
+
+TASK [ospf : delete OSPF process and router ID] ********************************
+[0;36mskipping: [Router_01][0m
+
+TASK [static_routing : Add a static route] *************************************
+[0;33mchanged: [Router_01][0m
+
+PLAY RECAP *********************************************************************
+[0;33mRouter_01[0m                  : [0;32mok=1   [0m [0;33mchanged=1   [0m unreachable=0    failed=0    [0;36mskipped=1   [0m rescued=0    ignored=0   

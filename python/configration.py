@@ -1,7 +1,7 @@
 import ansible_runner
 import re
 import ipaddress
-import show
+# from ..python import show
 
 VALID_IP_PATTERN = r"^((25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])/(1[0-9]|2[0-9]|3[0-2])$"
 
@@ -203,7 +203,30 @@ def set_ospfconfigration(selected_hosts,tag,interface_name,cidr_list,
 
     error_msg = _get_ansibleresult(runner)
     return error_msg
+def set_static_routing(selected_hosts, tag ,cidr,next_hop,admin_distance):
+    error_msg = "Please select any Interface to configure! "    
+    runner = 0
 
+    if (next_hop == None and admin_distance == None):
+      return error_msg  
+    else:
+        runner = ansible_runner.run(
+        private_data_dir="../ansible/",          # Current directory
+        playbook="playbooks/site.yaml",
+        inventory="hosts",                       # Path to external inventory file
+        limit=selected_hosts,          # Limit to selected routers
+        rotate_artifacts=0,
+         tags=tag,           
+        extravars={                              # Pass the selected role as a variable
+                "selected_roles": 'static_routing',   # Dynamically set the role
+                "cidr": cidr,
+                "next_hop":next_hop,
+                "admin_distance":admin_distance
+            }
+        )
+
+    error_msg = _get_ansibleresult(runner)
+    return error_msg
 
 # Run the function
 # if status == 0:
@@ -241,9 +264,11 @@ def set_ospfconfigration(selected_hosts,tag,interface_name,cidr_list,
 #     dead_timer=40
 # ) 
 
-show.ospf_neighbors()
-show.ospf_database()
-show.routing_table()
+# show.ospf_neighbors()
+# show.ospf_database()
+# show.routing_table()
 
 
 # print(status)
+
+set_static_routing('Router_01','remove_configration',"0.0.0.0/0","192.168.3.2",150)

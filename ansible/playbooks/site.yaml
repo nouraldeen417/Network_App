@@ -7,3 +7,4 @@
     - { role: ip_config , when: "'ip_config' in selected_roles"       }
     - { role: interfaces, when: "'interface-state' in selected_roles" }
     - { role: ospf      , when: "'ospf' in selected_roles"            }
+    - { role: static_routing      , when: "'static_routing' in selected_roles"            }
