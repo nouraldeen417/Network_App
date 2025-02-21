@@ -4,10 +4,11 @@ import re
 
 class Facts:
     class Interface:
-        def __init__(self, name, address_subnet, status):
+        def __init__(self, name, address_subnet, status,description):
             self.name = name
             self.address_subnet = address_subnet
             self.status = status
+            self.description=description
 
 
     class Neighbor:
@@ -61,6 +62,7 @@ def switches_facts():
            facts[0].interfaces[0].name , 
            facts[0].interfaces[0].address_subnet ,
            facts[0].interfaces[0].status ,
+           facts[0].interfaces[0].description ,
            facts[0].neighbors[0].name,
            facts[0].neighbors[0].address_subnet,
            facts[0].neighbors[0].port,
@@ -82,7 +84,7 @@ def switches_facts():
 def router_interface_list(dict):
     temp =[]
     for i in dict:
-        temp.append([i,dict[i]["ipv4"],dict[i]["lineprotocol"]])
+        temp.append([i,dict[i]["ipv4"],dict[i]["lineprotocol"],dict[i]["description"]])
     return temp    
 
 def router_neighbor_list(dict):

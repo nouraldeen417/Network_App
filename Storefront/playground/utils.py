@@ -181,12 +181,14 @@ class Facts:
         self.neighbors = [self.Neighbor(*neighbor) for neighbor in neighbors]  # List of Neighbor objects
         self.routing = [self.Routing(*routing_table) for routing_table in routing_tables]  # List of Neighbor objects
 
+#switch_fact
 class Facts:
     class Interface:
-        def __init__(self, name, address_subnet, status):
+        def __init__(self, name, address_subnet, status,description):
             self.name = name
             self.address_subnet = address_subnet
             self.status = status
+            self.description=description #new data
 
 
     class Neighbor:
