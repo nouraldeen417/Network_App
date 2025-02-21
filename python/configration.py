@@ -216,7 +216,7 @@ def set_static_routing(selected_hosts, tag ,cidr,next_hop,admin_distance):
         inventory="hosts",                       # Path to external inventory file
         limit=selected_hosts,          # Limit to selected routers
         rotate_artifacts=0,
-         tags=tag,           
+        tags=tag,           
         extravars={                              # Pass the selected role as a variable
                 "selected_roles": 'static_routing',   # Dynamically set the role
                 "cidr": cidr,
@@ -271,4 +271,4 @@ def set_static_routing(selected_hosts, tag ,cidr,next_hop,admin_distance):
 
 # print(status)
 
-set_static_routing('Router_01','remove_configration',"0.0.0.0/0","192.168.3.2",150)
+# set_static_routing('Router_01','remove_configration',"0.0.0.0/0","192.168.3.2",150)

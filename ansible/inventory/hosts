@@ -9,5 +9,5 @@ ansible_network_os=cisco.ios.ios
 ansible_user=ansible
 ansible_password=123
 [switches]
-; Switche_01 ansible_host=192.168.2.100
+Switche_01 ansible_host=192.168.2.100
 

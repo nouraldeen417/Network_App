@@ -4,27 +4,27 @@ import random
 # Add the path to the 'python' folder to the system path
 sys.path.append("..")
 # Now import 'some_file' from the 'python' directory
-#from python import hello,router,configration
+from python import hello,router,configration,switch
 class AutomationMethods:
     @staticmethod
     
     def Ping():
-        status=AutomationMethodsData.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
+        status=hello.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
         print(status)
         return  status
 
     def Router_list():
-        Fact_data=AutomationMethodsData.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]        
+        Fact_data=router.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]        
         print(Fact_data)
         return  Fact_data
     
     def Set_Hostname(selected_host,hostname):
-        status = 'ok'#configration.set_hostname(selected_host,hostname) #"ok"
+        status = configration.set_hostname(selected_host,hostname) #"ok"
         print (status)
         return status
     
     def Set_Banner(selected_host,banner):
-        status = 'ok'#configration.set_banner(selected_host,banner) #"ok"
+        status = configration.set_banner(selected_host,banner) #"ok"
         return status
     
     def set_interfaceconfigration(selected_host,interface_name,ipv4):
@@ -32,12 +32,12 @@ class AutomationMethods:
         print(selected_host)
         print(interface_name)
         print(ipv4)
-        status = 'ok'#configration.set_interfaceconfigration(selected_host,interface_name,ipv4) #"ok"
+        status = configration.set_interfaceconfigration(selected_host,interface_name,ipv4) #"ok"
         print(status)
         return status
     
     def Switch_list():
-        Fact_data=AutomationMethodsData.Switches_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
+        Fact_data=switch.switches_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
         print(Fact_data)
         return Fact_data
     def Firewall_list():
@@ -154,6 +154,35 @@ class Firewall:
         
 class Facts:
     class Interface:
+        def __init__(self, name, address_subnet, status,description):
+            self.name = name
+            self.address_subnet = address_subnet
+            self.status = status
+            self.description=description #new data
+
+
+    class Neighbor:
+        def __init__(self, name, address_subnet ,port):
+            self.name = name
+            self.address_subnet = address_subnet
+            self.port = port
+
+    class Routing:
+        def __init__(self, protocol, net ,intf,next_hop,admin_distance):
+            self.protocol = protocol
+            self.network = net
+            self.interface = intf
+            self.next_hop=next_hop #new data
+            self.admin_distance=admin_distance #new data
+    def __init__(self, id, device, interfaces, neighbors,routing_tables):
+        self.id = id
+        self.device = device
+        self.interfaces = [self.Interface(*interface) for interface in interfaces]  # List of Interface objects
+        self.neighbors = [self.Neighbor(*neighbor) for neighbor in neighbors]  # List of Neighbor objects
+        self.routing = [self.Routing(*routing_table) for routing_table in routing_tables]  # List of Neighbor objects
+
+class Facts:
+    class Interface:
         def __init__(self, name, address_subnet, status):
             self.name = name
             self.address_subnet = address_subnet
@@ -166,14 +195,16 @@ class Facts:
             self.address_subnet = address_subnet
             self.port = port
 
-    class Routing:
-        def __init__(self, protocol, net ,intf):
-            self.protocol = protocol
-            self.network = net
-            self.interface = intf
-    def __init__(self, id, device, interfaces, neighbors,routing_tables):
+    class Vlan:
+        def __init__(self, id, name ,status,port):
+            self.id = id
+            self.name = name
+            self.status = status
+            self.port=port
+
+    def __init__(self, id, device, interfaces, neighbors,vlans):
         self.id = id
         self.device = device
         self.interfaces = [self.Interface(*interface) for interface in interfaces]  # List of Interface objects
-        self.neighbors = [self.Neighbor(*neighbor) for neighbor in neighbors]  # List of Neighbor objects
-        self.routing = [self.Routing(*routing_table) for routing_table in routing_tables]  # List of Neighbor objects
+        self.neighbors  = [self.Neighbor(*neighbor) for neighbor in neighbors]      # List of Neighbor objects
+        self.vlans      = [self.Vlan(*vlan) for vlan in vlans]                      # List of Neighbor objects

@@ -1,1 +1,0 @@
-{"event": "verbose", "uuid": "c5baafe6-ffbe-4005-9c51-3b5616feaede", "counter": 3, "stdout": "\u001b[0;31mThe error appears to be in '/root/Network_App/ansible/playbooks/site.yaml': line 5, column 7, but may\u001b[0m", "start_line": 2, "end_line": 3, "runner_ident": "206d4ae8-b977-44ea-9ff0-064c73fc58ed", "created": "2025-02-20T22:44:07.515393+00:00"}
