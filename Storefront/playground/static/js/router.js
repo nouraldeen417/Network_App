@@ -1,132 +1,136 @@
-// Function to fetch data and populate the table
 const routersApiUrl = 'http://127.0.0.1:8000/playground/api/routers/';
+let currentDeviceData = null;
 
-async function fetchRouters() {
-    try {
-        const response = await fetch(routersApiUrl); // Call the API
-        console.log(response);
-        if (!response.ok) {
-            throw new Error(`An error occurred: ${response.statusText}`);
-        }
-        const data = await response.json(); // Parse JSON response
-
-        localStorage.setItem('routerData', JSON.stringify(data));
-        console.log('Data stored in localStorage:', data);
-
-        // Populate table with data
-        const tableBody = document.getElementById('router-table').getElementsByTagName('tbody')[0];
-        tableBody.innerHTML = ''; // Clear existing rows
-
-        data.forEach(fact => {
-            // Determine the max row count (interfaces vs neighbors)
-            const maxRows = Math.max(fact.interfaces.length, fact.neighbors.length);
-
-            for (let i = 0; i < maxRows; i++) {
-                const row = document.createElement('tr');
-
-                // Router Selection (Radio Button) - Only on the first row
-                if (i === 0) {
-                    const selectCell = document.createElement('td');
-                    const radioButton = document.createElement('input');
-                    radioButton.type = 'radio';
-                    radioButton.name = 'router';
-                    radioButton.value = fact.id;
-                    selectCell.rowSpan = maxRows; // Span across all rows for this device
-                    selectCell.appendChild(radioButton);
-                    row.appendChild(selectCell);
-
-                    // Device Cell - Only on the first row
-                    const deviceCell = document.createElement('td');
-                    deviceCell.textContent = fact.device;
-                    deviceCell.rowSpan = maxRows; // Span across all rows for this device
-                    row.appendChild(deviceCell);
-                }
-
-                // Interface Name, Subnet, and Status
-                const interfaceCellName = document.createElement('td');
-                const interfaceCellSubnet = document.createElement('td');
-                const interfaceCellStatus = document.createElement('td');
-
-                if (i < fact.interfaces.length) {
-                    interfaceCellName.textContent = fact.interfaces[i].name;
-                    if (fact.interfaces[i].address_subnet.length > 0  ){
-                        interfaceCellSubnet.textContent = fact.interfaces[i].address_subnet[0].address + "/" + fact.interfaces[i].address_subnet[0].subnet;
-                        console.log(fact.interfaces[i].address_subnet[0].address);
-                    }
-                    //interfaceCellSubnet.textContent = fact.interfaces[i].address_subnet;
-                    interfaceCellStatus.textContent = fact.interfaces[i].status;
-                } else {
-                    interfaceCellName.textContent = '';
-                    interfaceCellSubnet.textContent = '';
-                    interfaceCellStatus.textContent = '';
-                }
-
-                row.appendChild(interfaceCellName);
-                row.appendChild(interfaceCellSubnet);
-                row.appendChild(interfaceCellStatus);
-
-                // Neighbor Name, Subnet, and Port
-                const neighborCellName = document.createElement('td');
-                const neighborCellSubnet = document.createElement('td');
-                const neighborCellPort = document.createElement('td');
-
-                if (i < fact.neighbors.length) {
-                    neighborCellName.textContent = fact.neighbors[i].name;
-                    neighborCellSubnet.textContent = fact.neighbors[i].address_subnet;
-                    neighborCellPort.textContent = fact.neighbors[i].port;
-                } else {
-                    neighborCellName.textContent = '';
-                    neighborCellSubnet.textContent = '';
-                    neighborCellPort.textContent = '';
-                }
-
-                row.appendChild(neighborCellName);
-                row.appendChild(neighborCellSubnet);
-                row.appendChild(neighborCellPort);
-
-                // Append row to the table
-                tableBody.appendChild(row);
-
-                // Add click event listener to the row
-                row.addEventListener('click', () => {
-                    const radioButton = row.querySelector('input[type="radio"]');
-                    if (radioButton) {
-                        radioButton.checked = true;
-
-                        // Enable the Configure button
-                        const configureButton = document.getElementById('configure-btn');
-                        configureButton.disabled = false;
-                    }
-                });
-            }
-        });
-
-        // Add event listeners to radio buttons
-        const radioButtons = document.querySelectorAll('input[name="router"]');
-        const configureButton = document.getElementById('configure-btn');
-
-        radioButtons.forEach(radio => {
-            radio.addEventListener('change', () => {
-                // Enable the Configure button when a router is selected
-                configureButton.disabled = false;
-            });
-        });
-
-        // Add event listener to the Configure button
-        configureButton.addEventListener('click', () => {
-            const selectedRouter = document.querySelector('input[name="router"]:checked');
-            if (selectedRouter) {
-                // Redirect to routerconfiguration.html with the selected router's name
-                window.location.href = `/playground/routerconfiguration?router=${encodeURIComponent(selectedRouter.value)}`;
-            } else {
-                alert('Please select a router to configure.');
-            }
-        });
-    } catch (error) {
-        console.error('Error fetching data:', error);
+// Function to switch tabs
+function openTab(tabName) {
+    const tabcontent = document.getElementsByClassName('tabcontent');
+    for (let i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = 'none';
     }
-};
+    document.getElementById(tabName).style.display = 'block';
+
+    const tablinks = document.getElementsByClassName('tablink');
+    for (let i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove('active');
+    }
+    document.querySelector(`button[onclick="openTab('${tabName}')"]`).classList.add('active');
+}
+
+// Function to enable configure button
+function enableConfigureButton() {
+    const configureButton = document.getElementById('configure-btn');
+    configureButton.disabled = false;
+}
+
+// Function to fetch device information
+async function fetchDeviceInfo() {
+    try {
+        const storedData = localStorage.getItem('routerData');
+        console.log("hello stored data")
+        console.log(storedData);
+        if (!storedData) {
+            console.error('No data found in localStorage.');
+            storedData = await fetch(routersApiUrl);
+        return;
+        }
+
+        const data = JSON.parse(storedData);
+        
+        const deviceSelect = document.getElementById('device-select');
+        const selectedDeviceId = deviceSelect.value;
+        
+        // Find the selected device
+        const selectedDevice = data.find(d => d.id === selectedDeviceId);
+        currentDeviceData = selectedDevice;
+        
+        if (selectedDevice) {
+            // Enable configure button when device is selected
+            enableConfigureButton();
+            
+            // Populate Interfaces Table
+            const interfacesTable = document.getElementById('interfaces-table');
+            interfacesTable.innerHTML = selectedDevice.interfaces.map(intf => `
+                <tr>
+                    <td>${intf.name}</td>
+                    <td>${intf.address_subnet.length > 0 ? 
+                        `${intf.address_subnet[0].address}/${intf.address_subnet[0].subnet}` : ''}</td>
+                    <td class="status-${intf.status.toLowerCase()}">${intf.status}</td>
+                    <td>${intf.description || ''}</td>
+                </tr>
+            `).join('');
+
+            // Populate Neighbors Table
+            const neighborsTable = document.getElementById('neighbors-table');
+            neighborsTable.innerHTML = selectedDevice.neighbors.map(neighbor => `
+                <tr>
+                    <td>${neighbor.name}</td>
+                    <td>${neighbor.port}</td>
+                    
+                    <td>${neighbor.address_subnet}</td>
+                </tr>
+            `).join('');
+            // Populate Routing Table
+            const routingTableBody = document.getElementById('routing-table-body');
+            if (selectedDevice.routes) {
+                routingTableBody.innerHTML = selectedDevice.routes.map(route => `
+                    <tr>
+                        <td>${route.interface}</td>
+                        <td>${route.network}</td>
+                        <td>${route.protocol}</td>
+                        
+                    </tr>
+                `).join('');
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching device info:', error);
+    }
+}
+
+// Function to populate device select options
+async function populateDeviceSelect() {
+    try {
+        const response = await fetch(routersApiUrl);
+        const data = await response.json();
+        console.log(data);
+        localStorage.setItem('routerData', JSON.stringify(data));
+        const deviceSelect = document.getElementById('device-select');
+        deviceSelect.innerHTML = data.map(device => 
+            `<option value="${device.id}">${device.device}</option>`
+        ).join('');
+        
+        // Fetch initial device data
+        fetchDeviceInfo();
+    } catch (error) {
+        console.error('Error fetching devices:', error);
+    }
+}
+
+// Function to handle configure button click
+function handleConfigureClick() {
+    if (currentDeviceData) {
+        window.location.href = `/playground/routerconfiguration?router=${encodeURIComponent(currentDeviceData.id)}`;
+    } else {
+        alert('Please select a device to configure.');
+    }
+}
+
+// Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
-    fetchRouters();  // Initial data load
-    setInterval(fetchRouters, 600000);  // Refresh every 600,000 milliseconds (10 minutes)
+    const configureButton = document.getElementById('configure-btn');
+    const deviceSelect = document.getElementById('device-select');
+    
+    // Add event listeners
+    configureButton.addEventListener('click', handleConfigureClick);
+    deviceSelect.addEventListener('change', () => {
+        fetchDeviceInfo();
+        enableConfigureButton();
+    });
+    
+    // Initial setup
+    openTab('interfaces');
+    populateDeviceSelect();
+    
+    // Set up auto-refresh
+    setInterval(fetchDeviceInfo, 600000); // Refresh every 10 minutes
 });

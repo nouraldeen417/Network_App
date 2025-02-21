@@ -180,6 +180,14 @@ def RouterList(request):
                     'port': neighbor.port
                 }
                 for neighbor in device.neighbors
+            ],
+            'routes': [
+                {
+                    'protocol' : routing.protocol,
+                    'network' : routing.network,
+                    'interface' : routing.interface
+                } 
+                for routing in device.routing
             ]
         }
         serializable_devices.append(device_data)

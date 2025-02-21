@@ -1,29 +1,30 @@
 # utils.py
 import sys
+import random
 # Add the path to the 'python' folder to the system path
 sys.path.append("..")
 # Now import 'some_file' from the 'python' directory
-from python import hello,router,configration
+#from python import hello,router,configration
 class AutomationMethods:
     @staticmethod
     
     def Ping():
-        status=hello.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
+        status=AutomationMethodsData.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
         print(status)
         return  status
 
     def Router_list():
-        Fact_data=router.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]        
+        Fact_data=AutomationMethodsData.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]        
         print(Fact_data)
         return  Fact_data
     
     def Set_Hostname(selected_host,hostname):
-        status = configration.set_hostname(selected_host,hostname) #"ok"
+        status = 'ok'#configration.set_hostname(selected_host,hostname) #"ok"
         print (status)
         return status
     
     def Set_Banner(selected_host,banner):
-        status = configration.set_banner(selected_host,banner) #"ok"
+        status = 'ok'#configration.set_banner(selected_host,banner) #"ok"
         return status
     
     def set_interfaceconfigration(selected_host,interface_name,ipv4):
@@ -31,7 +32,7 @@ class AutomationMethods:
         print(selected_host)
         print(interface_name)
         print(ipv4)
-        status = configration.set_interfaceconfigration(selected_host,interface_name,ipv4) #"ok"
+        status = 'ok'#configration.set_interfaceconfigration(selected_host,interface_name,ipv4) #"ok"
         print(status)
         return status
     
@@ -74,32 +75,36 @@ class AutomationMethodsData:
         return devices
     
     def Routers_facts():
-        # Here you can add your processing logic
-        routers_facts = []
+        dummy_interfaces = [
+        ("GigabitEthernet0/0", "192.168.1.1/24", "up"),
+        ("GigabitEthernet0/1", "192.168.2.1/24", "down"),
+        ("GigabitEthernet0/2", "10.0.0.1/24", "up"),
+        ]
 
-        # First router facts
-        interfaces1 = [
-            ("Gig0/0", "192.167.0.1/24", "running"),
-            ("Gig0/1", "192.167.1.1/24", "stop")
+        dummy_neighbors = [
+        ("RouterA", "192.168.1.2/24", "GigabitEthernet0/0"),
+        ("Switch1", "192.168.2.2/24", "GigabitEthernet0/1"),
+        ("Firewall1", "10.0.0.2/24", "GigabitEthernet0/2"),
         ]
-        neighbors1 = [
-            ("Router2", "192.167.0.2/24", "Gig0/0")
-        ]
-        facts1 = Facts("id1","Router1", interfaces1, neighbors1)
-        routers_facts.append(facts1)
 
-        # Second router facts
-        interfaces2 = [
-            ("Gig0/0", "192.167.0.2/24", "running"),
-            ("Gig0/1", "192.167.2.1/24", "stop")
+        dummy_routing_table = [
+        ("OSPF", "192.168.3.0/24", "GigabitEthernet0/0"),
+        ("Static", "172.16.0.0/16", "GigabitEthernet0/1"),
+        ("BGP", "10.10.10.0/24", "GigabitEthernet0/2"),
         ]
-        neighbors2 = [
-            ("Router1", "192.167.0.1/24", "Gig0/0")
-        ]
-        facts2 = Facts("id2","Router2", interfaces2, neighbors2)
-        routers_facts.append(facts2)
 
-        return routers_facts
+        device_name = f"Device-{random.randint(100, 999)}"
+        device_id = device_name
+        facts=[]
+        facts.append(Facts(device_id, device_name, dummy_interfaces, dummy_neighbors, dummy_routing_table));
+        device_name = f"Device-{random.randint(100, 999)}"
+        device_id = device_name
+        dummy_routing_table = [
+        ("VLAN", "192.168.3.0/24", "GigabitEthernet0/0"),
+        ("Static", "172.16.0.0/16", "GigabitEthernet0/1"),
+        ]
+        facts.append(Facts(device_id, device_name, dummy_interfaces, dummy_neighbors, dummy_routing_table));
+        return facts
 
     def Switches_facts():
         # Here you can add your processing logic
@@ -146,6 +151,7 @@ class Firewall:
         self.ip_address=ip
         self.location=loc,
         self.status=stat
+        
 class Facts:
     class Interface:
         def __init__(self, name, address_subnet, status):
@@ -160,8 +166,14 @@ class Facts:
             self.address_subnet = address_subnet
             self.port = port
 
-    def __init__(self,id,device, interfaces, neighbors):
-        self.id=id
+    class Routing:
+        def __init__(self, protocol, net ,intf):
+            self.protocol = protocol
+            self.network = net
+            self.interface = intf
+    def __init__(self, id, device, interfaces, neighbors,routing_tables):
+        self.id = id
         self.device = device
         self.interfaces = [self.Interface(*interface) for interface in interfaces]  # List of Interface objects
         self.neighbors = [self.Neighbor(*neighbor) for neighbor in neighbors]  # List of Neighbor objects
+        self.routing = [self.Routing(*routing_table) for routing_table in routing_tables]  # List of Neighbor objects

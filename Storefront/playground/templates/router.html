@@ -3,205 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devices Page</title>
-    {% load static %}
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            min-height: 100vh;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #ffffff;
-            padding: 15px 30px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .navbar .links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .navbar a {
-            text-decoration: none;
-            color: #333;
-            padding: 10px 20px;
-            border-radius: 6px;
-            background-color: #e8f4ff;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .navbar a:hover {
-            background-color: #007bff;
-            color: white;
-            transform: translateY(-1px);
-        }
-
-        .logout-btn {
-            background-color: #ff4757;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: #ff6b81;
-            transform: translateY(-1px);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            color: #2d3436;
-            margin-bottom: 25px;
-            text-align: center;
-            font-size: 24px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin: 20px 0;
-            background-color: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: center;
-            border: 1px solid #e0e0e0;
-        }
-
-        th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            color: #2d3436;
-            text-transform: uppercase;
-            font-size: 14px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        tr:hover {
-            background-color: #f1f7ff;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Specific styling for the header rows */
-        thead tr:first-child th {
-            background-color: #e8f4ff;
-            color: #2d3436;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        thead tr:last-child th {
-            background-color: #f0f7ff;
-        }
-
-        /* Configure button styling */
-        #configure-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            font-size: 16px;
-        }
-
-        #configure-btn:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        #configure-btn:not(:disabled):hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        /* Checkbox styling */
-        input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            border-radius: 4px;
-            border: 2px solid #007bff;
-            transition: all 0.2s ease;
-        }
-
-        input[type="checkbox"]:checked {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        /* Status indicators */
-        .status-up {
-            color: #2ecc71;
-            font-weight: 500;
-        }
-
-        .status-down {
-            color: #e74c3c;
-            font-weight: 500;
-        }
-
-        /* Responsive design */
-        @media (max-width: 1024px) {
-            .container {
-                padding: 15px;
-                margin: 10px;
-            }
-
-            table {
-                font-size: 14px;
-            }
-
-            th, td {
-                padding: 10px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .navbar .links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
-    </style>
-</head>
+    <title>Device Information</title>
+    {%load static%}
+    <link rel="stylesheet" href="{% static 'CSS/router.css' %}"></head>
 <body>
     <div class="navbar">
         <div class="links">
@@ -223,32 +27,73 @@
     </div>
 
     <div class="container">
-        <h2>List of Running Routers</h2>
-        <table id="router-table">
-            <thead>
-                <tr>
-                    <th rowspan="2">Select</th>
-                    <th rowspan="2">Device</th>
-                    <th colspan="3">Interfaces</th>
-                    <th colspan="3">Neighbors</th>
-                </tr>
-                <tr>
-                    <th>Name</th>
-                    <th>IP/Subnet</th>
-                    <th>Status</th>
-                    <th>Name</th>
-                    <th>IP</th>
-                    <th>Port</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Data will be inserted here by JavaScript -->
-            </tbody>
-        </table>
-        <div style="text-align: center;">
-            <button id="configure-btn" disabled>Configure</button>
+        <!-- Device Selection -->
+        <div class="device-selection">
+            <label for="device-select">Select Device:</label>
+            <select id="device-select">
+            </select>
+            <button id="configure-btn">Configure</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tablink active" onclick="openTab('interfaces')">Interfaces</button>
+            <button class="tablink" onclick="openTab('neighbors')">Neighbors</button>
+            <button class="tablink" onclick="openTab('routing-table')">Routing Table</button>
+        </div>
+
+        <!-- Interfaces Section -->
+        <div id="interfaces" class="tabcontent">
+            <h3>Interfaces</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Interface</th>
+                        <th>IP Address</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="interfaces-table">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Neighbors Section -->
+        <div id="neighbors" class="tabcontent">
+            <h3>Neighbors</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>Interface</th>
+                        <th>IP Address</th>
+                    </tr>
+                </thead>
+                <tbody id="neighbors-table">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Routing Table Section -->
+        <div id="routing-table" class="tabcontent">
+            <h3>Routing Table</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Interface</th>
+                        <th>Network</th>
+                        <th>Protocol</th>
+                    </tr>
+                </thead>
+                <tbody id="routing-table-body">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
         </div>
     </div>
-    <script src="{% static 'js/router.js' %}" defer></script>
+    <script src={% static 'js/router.js' %} defer></script>
 </body>
 </html>
