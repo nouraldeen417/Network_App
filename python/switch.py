@@ -2,7 +2,7 @@ import ansible_runner
 import json
 import re
 
-class Facts:
+class Switch_Facts:
     class Interface:
         def __init__(self, name, address_subnet, status,description):
             self.name = name
@@ -52,9 +52,9 @@ def switches_facts():
         with open(facts_file, "r") as f:
             router_facts = json.load(f)
         vlan_output = router_facts["vlans"]["stdout"][0]
-        facts.append(Facts(id=host ,device=router_facts["net_hostname"], 
-                           interfaces=router_interface_list(router_facts["net_interfaces"]),
-                           neighbors=router_neighbor_list(router_facts["net_neighbors"]),
+        facts.append(Switch_Facts(id=host ,device=router_facts["net_hostname"], 
+                           interfaces=switch_interface_list(router_facts["net_interfaces"]),
+                           neighbors=switch_neighbor_list(router_facts["net_neighbors"]),
                            vlans=parse_vlan_table(vlan_output)))
                         
     print (facts[0].id,
@@ -81,17 +81,26 @@ def switches_facts():
     #        facts[1].neighbors[0].port)
     return facts
 
-def router_interface_list(dict):
+def switch_interface_list(dict):
     temp =[]
     for i in dict:
-        temp.append([i,dict[i]["ipv4"],dict[i]["lineprotocol"],dict[i]["description"]])
+        temp.append([
+            i,
+            dict[i]["ipv4"] if dict[i]["ipv4"] not in [None, ""] and dict[i]["ipv4"] != [] else "N/A",
+            dict[i]["lineprotocol"] if dict[i]["lineprotocol"] not in [None, ""] else "N/A",
+            dict[i]["description"] if dict[i]["description"] not in [None, ""] else "N/A"
+        ])  
     return temp    
 
-def router_neighbor_list(dict):
+def switch_neighbor_list(dict):
     temp =[]
     for i in dict:
         for j in dict[i]:
-            temp.append([j["host"],j["ip"],j["port"]])
+            temp.append([
+                j["host"] if j.get("host") not in [None, ""] else "N/A",
+                j["ip"] if j.get("ip") not in [None, ""] else "N/A",
+                j["port"] if j.get("port") not in [None, ""] else "N/A"
+            ])
     return temp    
 
 def parse_vlan_table(output):
@@ -100,64 +109,46 @@ def parse_vlan_table(output):
     
     # Split the output into lines
     lines = output.splitlines()
-    
-    # Regex to match VLAN entries
-    vlan_pattern = re.compile(
-        r"^(?P<vlan_id>\d+)\s+"          # VLAN ID
-        r"(?P<name>\S+)\s+"              # VLAN Name
-        r"(?P<status>\S+)\s*"            # Status
-        r"(?P<ports>.*)$",               # Ports (optional)
-        re.MULTILINE
-    )
-    
+
     # Temporary variable to track the current VLAN
     current_vlan = None
-    
-    # Iterate through each line
+
     for line in lines:
         # Skip lines that are part of the header or footer
-        if re.match(r"^\s*VLAN Name\s+Status\s+Ports", line) or re.match(r"^-+", line):
+        if (
+            "VLAN Name" in line  # Skip header line
+            or "----" in line    # Skip separator line
+            or not line.strip()  # Skip empty lines
+        ):
             continue
-        
-        # Check if the line matches a VLAN entry
-        match = vlan_pattern.search(line)
-        if match:
+
+        # Split the line into parts
+        parts = line.split()
+
+        # Check if the line is a VLAN entry
+        if parts[0].isdigit():  # VLAN ID is numeric
             # If there's a current VLAN being processed, add it to the list
             if current_vlan:
                 vlans.append(current_vlan)
-            
+
             # Start a new VLAN entry
-            vlan_id = int(match.group("vlan_id"))  # VLAN ID
-            name = match.group("name")             # VLAN Name
-            status = match.group("status")         # Status
-            ports = match.group("ports").strip()   # Ports (strip any leading/trailing whitespace)
-            
+            vlan_id = int(parts[0])  # VLAN ID
+            name = parts[1]          # VLAN Name
+            status = parts[2]        # Status
+            ports = " ".join(parts[3:]).strip()  # Ports (join remaining parts)
+            if ports == "" :
+                ports = "N/A"
+                
             current_vlan = [vlan_id, name, status, ports]
         else:
-            # If the line doesn't match a VLAN entry, it's a continuation of ports for the current VLAN
+            # If the line doesn't start with a VLAN ID, it's a continuation of ports for the current VLAN
             if current_vlan and line.strip():
                 current_vlan[3] += ' ' + line.strip()
-    
+
     # Add the last VLAN entry to the list
     if current_vlan:
         vlans.append(current_vlan)
-    
+
     return vlans
 
-
-# data6 = """
-# 1    default    active    Gi3/0, Gi3/1, Gi3/2, Gi3/3
-# 10    Sales    active    Gi1/1, Gi1/2, Gi1/3, Gi2/0
-# 20    Production    active    Gi0/2, Gi0/3, Gi1/0
-# 30    HR    active    Gi2/1, Gi2/2
-# 40    Wi-Fi    active    
-# 1002 fddi-default    act/unsup    
-# 1003 token-ring-default   act/unsup    
-# 1004 fddinet-default   act/unsup    
-# 1005 trnet-default    act/unsup    
-# """
-
-# vlan_info = parse_vlan_table(data6)
-# for vlan in vlan_info:
-#     print(vlan)
-switches_facts()
+# switches_facts()

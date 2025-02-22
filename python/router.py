@@ -1,8 +1,6 @@
 import ansible_runner
 import json
-import re
-
-class Facts:
+class Router_Facts:
     class Interface:
         def __init__(self, name, address_subnet, status,description):
             self.name = name
@@ -54,7 +52,7 @@ def Routers_facts():
         # print(router_interface_list(router_facts["net_interfaces"]))    
         routing_table_output = router_facts["routing_table"]["stdout"][0]
 
-        facts.append(Facts(id=host ,device=router_facts["net_hostname"], 
+        facts.append(Router_Facts(id=host ,device=router_facts["net_hostname"], 
                            interfaces=router_interface_list(router_facts["net_interfaces"]),
                            neighbors=router_neighbor_list(router_facts["net_neighbors"]),
                            routing_tables=parse_routing_table(routing_table_output)))
@@ -69,10 +67,11 @@ def Routers_facts():
            facts[0].neighbors[0].name,
            facts[0].neighbors[0].address_subnet,
            facts[0].neighbors[0].port,
-           facts[0].routing[0].protocol,           
-           facts[0].routing[1].protocol,
-           facts[0].routing[0].next_hop,
-           facts[0].routing[0].admin_distance)
+           facts[1].routing[1].interface,
+           facts[1].routing[1].network,           
+           facts[1].routing[1].protocol,
+           facts[1].routing[1].next_hop,
+           facts[1].routing[1].admin_distance)
     print("\n")
     # print (facts[1].id,
     #        facts[1].device , 
@@ -87,17 +86,24 @@ def Routers_facts():
 def router_interface_list(dict):
     temp =[]
     for i in dict:
-        temp.append([i,dict[i]["ipv4"],dict[i]["lineprotocol"],dict[i]["description"]])
+        temp.append([
+            i,
+            dict[i]["ipv4"] if dict[i]["ipv4"] not in [None, ""] and dict[i]["ipv4"] != [] else "N/A",
+            dict[i]["lineprotocol"] if dict[i]["lineprotocol"] not in [None, ""] else "N/A",
+            dict[i]["description"] if dict[i]["description"] not in [None, ""] else "N/A"
+        ])  
     return temp    
 
 def router_neighbor_list(dict):
     temp =[]
     for i in dict:
         for j in dict[i]:
-            temp.append([j["host"],j["ip"],j["port"]])
+            temp.append([
+                j["host"] if j.get("host") not in [None, ""] else "N/A",
+                j["ip"] if j.get("ip") not in [None, ""] else "N/A",
+                j["port"] if j.get("port") not in [None, ""] else "N/A"
+            ])
     return temp    
-
-
 
 def parse_routing_table(output):
     # Map protocol codes to human-readable descriptions
@@ -112,116 +118,54 @@ def parse_routing_table(output):
         "R": "RIP",
         "B": "BGP",
         "D": "EIGRP",
-        "*": "Default",
+        "S*": "Default",
     }
 
     routes = []
     lines = output.splitlines()
 
-    # Regex to match routing table entries
-    route_pattern = re.compile(
-        r"^\s*(?P<protocol>\*?[A-Za-z0-9\s]+?)\s+"  # Protocol (may include * for default routes)
-        r"(?P<network>[\d./]+)\s+"                 # Network (e.g., 192.168.1.0/24)
-        r"(?:\[(?P<admin_distance>\d+)/(?P<metric>\d+)\])?\s*"  # Admin distance and metric (optional)
-        r"(?:via\s+(?P<next_hop>[\d.]+))?\s*"      # Next hop (optional)
-        r"(?:,\s+(?P<uptime>[\w\s]+))?\s*"         # Uptime (optional)
-        r"(?:,\s+(?P<interface>\S+))?"             # Interface (optional)
-    )
-
-    # Regex to match variably subnetted lines
-    subnetted_pattern = re.compile(
-        r"^\s*(?P<protocol>[CL])\s+"               # Protocol (C or L)
-        r"(?P<network>[\d./]+)\s+"                 # Network (e.g., 192.168.1.0/24)
-        r"is directly connected,\s+"               # Static text
-        r"(?P<interface>\S+)"                      # Interface
-    )
-
     for line in lines:
-        # Skip the "Gateway of last resort" line
-        if "Gateway of last resort" in line:
+        # Skip irrelevant lines
+        if (
+            "Gateway of last resort" in line  # Skip "Gateway of last resort" line
+            or "variably subnetted" in line   # Skip "variably subnetted" lines
+            or not line.strip()               # Skip empty lines
+            or line.startswith("Codes:")      # Skip "Codes:" header lines
+            or line.startswith(" ")           # Skip indented lines (e.g., protocol descriptions)
+        ):
             continue
 
-        # Skip the "variably subnetted" lines (they are not actual routes)
-        if "variably subnetted" in line:
-            continue
+        # Split the line into parts
+        parts = line.split()
 
-        # Check if the line matches a routing table entry
-        match = route_pattern.search(line)
-        if match:
-            protocol_code = match.group("protocol").strip()
-            network = match.group("network")
-            next_hop = match.group("next_hop") or "Directly Connected"
-            interface = match.group("interface") or "N/A"
-            admin_distance = match.group("admin_distance") or "N/A"
+        # Extract protocol, network, and interface
+        protocol_code = parts[0].strip()
+        network = parts[1]
+        interface = parts[-1]  # Interface is always the last part
 
-            # Map protocol code to human-readable description
-            protocol = protocol_map.get(protocol_code, f"Unknown ({protocol_code})")
+        # Handle next hop (if present)
+        next_hop = "N/A"
+        if "via" in parts:
+            via_index = parts.index("via")
+            next_hop = parts[via_index + 1]
 
-            # Append the parsed data as a list
-            routes.append([
-                protocol,
-                network,
-                next_hop,
-                interface,
-                admin_distance
-                                        ])
-        else:
-            # Check if the line matches a variably subnetted entry
-            subnetted_match = subnetted_pattern.search(line)
-            if subnetted_match:
-                protocol_code = subnetted_match.group("protocol").strip()
-                network = subnetted_match.group("network")
-                interface = subnetted_match.group("interface")
+        # Handle admin distance and metric (if present)
+        admin_distance = "N/A"
+        if "[" in line:
+            admin_distance = line.split("[")[1].split("/")[0]
 
-                # Map protocol code to human-readable description
-                protocol = protocol_map.get(protocol_code, f"Unknown ({protocol_code})")
+        # Map protocol code to human-readable description
+        protocol = protocol_map.get(protocol_code, f"Unknown ({protocol_code})")
 
-                # Append the parsed data as a list
-                routes.append([
-                    protocol,
-                    network,
-                    "Directly Connected",
-                    interface,
-                    "N/A"
-                ])
+        # Append the parsed data as a list
+        routes.append([
+            protocol,
+            network,
+            interface,
+            next_hop,
+            admin_distance
+        ])
 
     return routes
 
-# def parse_routing_table(output):
-#     # Map protocol codes to human-readable descriptions
-#     protocol_map = {
-#         "C": "Direct Connected",
-#         "L": "Local",
-#         "S": "Static",
-#         "O": "OSPF",
-#         "R": "RIP",
-#         "B": "BGP",
-#         "D": "EIGRP",
-#     }
-
-#     routes = []
-#     lines = output.splitlines()
-#     # Regex to match routing table entries
-#     route_pattern = re.compile(
-#         r"^\s*(?P<protocol>\w+)\s+"
-#         r"(?P<network>[\d./]+)\s+"
-#         r".*,\s+"
-#         r"(?P<interface>\S+)"
-#     )
-
-#     for line in lines:
-#         match = route_pattern.search(line)
-#         if match:
-#             protocol_code = match.group("protocol")
-#             network = match.group("network")
-#             interface = match.group("interface")
-
-#             # Map protocol code to human-readable description
-#             protocol = protocol_map.get(protocol_code, f"Unknown ({protocol_code})")
-
-#             # Append the parsed data as a list
-#             routes.append([protocol, network, interface])
-
-#     return routes
-
-Routers_facts()
+# Routers_facts()
