@@ -27,7 +27,6 @@ async function fetchDeviceInfo() {
     try {
         const storedData = localStorage.getItem('routerData');
         console.log("hello stored data")
-        console.log(storedData);
         if (!storedData) {
             console.error('No data found in localStorage.');
             storedData = await fetch(routersApiUrl);
@@ -35,7 +34,7 @@ async function fetchDeviceInfo() {
         }
 
         const data = JSON.parse(storedData);
-        
+        console.log(data)
         const deviceSelect = document.getElementById('device-select');
         const selectedDeviceId = deviceSelect.value;
         
@@ -61,11 +60,11 @@ async function fetchDeviceInfo() {
 
             // Populate Neighbors Table
             const neighborsTable = document.getElementById('neighbors-table');
+            
             neighborsTable.innerHTML = selectedDevice.neighbors.map(neighbor => `
                 <tr>
                     <td>${neighbor.name}</td>
                     <td>${neighbor.port}</td>
-                    
                     <td>${neighbor.address_subnet}</td>
                 </tr>
             `).join('');
@@ -77,7 +76,8 @@ async function fetchDeviceInfo() {
                         <td>${route.interface}</td>
                         <td>${route.network}</td>
                         <td>${route.protocol}</td>
-                        
+                        <td>${route.next_hop}</td>
+                        <td>${route.admin_distance}</td>
                     </tr>
                 `).join('');
             }

@@ -4,27 +4,27 @@ import random
 # Add the path to the 'python' folder to the system path
 sys.path.append("..")
 # Now import 'some_file' from the 'python' directory
-from python import hello,router,configration,switch
+#from python import hello,router,configration,switch
 class AutomationMethods:
     @staticmethod
     
     def Ping():
-        status=hello.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
+        status=AutomationMethodsData.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
         print(status)
         return  status
 
     def Router_list():
-        Fact_data=router.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]        
+        Fact_data=AutomationMethodsData.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]        
         print(Fact_data)
         return  Fact_data
     
     def Set_Hostname(selected_host,hostname):
-        status = configration.set_hostname(selected_host,hostname) #"ok"
+        status = 'ok'#configration.set_hostname(selected_host,hostname) #"ok"
         print (status)
         return status
     
     def Set_Banner(selected_host,banner):
-        status = configration.set_banner(selected_host,banner) #"ok"
+        status = 'ok'#configration.set_banner(selected_host,banner) #"ok"
         return status
     
     def set_interfaceconfigration(selected_host,interface_name,ipv4):
@@ -32,12 +32,12 @@ class AutomationMethods:
         print(selected_host)
         print(interface_name)
         print(ipv4)
-        status = configration.set_interfaceconfigration(selected_host,interface_name,ipv4) #"ok"
+        status = 'ok'#configration.set_interfaceconfigration(selected_host,interface_name,ipv4) #"ok"
         print(status)
         return status
     
     def Switch_list():
-        Fact_data=switch.switches_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
+        Fact_data=AutomationMethodsData.switches_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
         print(Fact_data)
         return Fact_data
     def Firewall_list():
@@ -75,48 +75,81 @@ class AutomationMethodsData:
         return devices
     
     def Routers_facts():
-        dummy_interfaces = [
-        ("GigabitEthernet0/0", "192.168.1.1/24", "up"),
-        ("GigabitEthernet0/1", "192.168.2.1/24", "down"),
-        ("GigabitEthernet0/2", "10.0.0.1/24", "up"),
+        interfaces = [
+            ("GigabitEthernet0/1", "192.168.1.1/24", "up", "Connection to Core Switch"),
+            ("GigabitEthernet0/2", "192.168.2.1/24", "down", "Connection to Server"),
+            ("GigabitEthernet0/3", "192.168.3.1/24", "up", "Connection to Access Point")
         ]
 
-        dummy_neighbors = [
-        ("RouterA", "192.168.1.2/24", "GigabitEthernet0/0"),
-        ("Switch1", "192.168.2.2/24", "GigabitEthernet0/1"),
-        ("Firewall1", "10.0.0.2/24", "GigabitEthernet0/2"),
+        # Dummy data for neighbors
+        neighbors = [
+            ("CoreSwitch", "192.168.1.2/24", "GigabitEthernet0/1"),
+            ("Server", "192.168.2.2/24", "GigabitEthernet0/2"),
+            ("AccessPoint", "192.168.3.2/24", "GigabitEthernet0/3")
         ]
 
-        dummy_routing_table = [
-        ("OSPF", "192.168.3.0/24", "GigabitEthernet0/0"),
-        ("Static", "172.16.0.0/16", "GigabitEthernet0/1"),
-        ("BGP", "10.10.10.0/24", "GigabitEthernet0/2"),
+        # Dummy data for routing tables
+        routing_tables = [
+            ("OSPF", "192.168.1.0/24", "GigabitEthernet0/1", "192.168.1.254", 110),
+            ("Static", "192.168.2.0/24", "GigabitEthernet0/2", "192.168.2.254", 1),
+            ("BGP", "192.168.3.0/24", "GigabitEthernet0/3", "192.168.3.254", 20)
         ]
+        routers=[]
+        routers.append(Facts(
+            id="router-1",
+            device="Router1",
+            interfaces=interfaces,
+            neighbors=neighbors,
+            routing_tables=routing_tables
+        ))
+        routers.append(Facts(
+            id="router-2",
+            device="Router2",
+            interfaces=interfaces,
+            neighbors=neighbors,
+            routing_tables=routing_tables
+        ))
+        # Create and return a Facts instance with dummy data
+        return routers
 
-        device_name = f"Device-{random.randint(100, 999)}"
-        device_id = device_name
-        facts=[]
-        facts.append(Facts(device_id, device_name, dummy_interfaces, dummy_neighbors, dummy_routing_table));
-        device_name = f"Device-{random.randint(100, 999)}"
-        device_id = device_name
-        dummy_routing_table = [
-        ("VLAN", "192.168.3.0/24", "GigabitEthernet0/0"),
-        ("Static", "172.16.0.0/16", "GigabitEthernet0/1"),
-        ]
-        facts.append(Facts(device_id, device_name, dummy_interfaces, dummy_neighbors, dummy_routing_table));
-        return facts
-
-    def Switches_facts():
+    def switches_facts():
         # Here you can add your processing logic
         Switches = []
-        
-        # First device
-        d1 = Switch(name="Swithc1" , ip="192.167.0.1",loc="home",stat="Stopped")
-        Switches.append(d1)
-        
-        # Second device
-        d2 = Switch(name="Switch2" , ip="192.167.0.1",loc="home",stat="Running")
-        Switches.append(d2)
+        # Dummy data for interfaces
+        interfaces = [
+            ("GigabitEthernet0/1", "192.168.1.1/24", "up", "Connection to Core Switch"),
+            ("GigabitEthernet0/2", "192.168.2.1/24", "down", "Connection to Server"),
+            ("GigabitEthernet0/3", "192.168.3.1/24", "up", "Connection to Access Point")
+        ]
+
+        # Dummy data for neighbors
+        neighbors = [
+            ("CoreSwitch", "192.168.1.2/24", "GigabitEthernet0/1"),
+            ("Server", "192.168.2.2/24", "GigabitEthernet0/2"),
+            ("AccessPoint", "192.168.3.2/24", "GigabitEthernet0/3")
+        ]
+
+        # Dummy data for vlans
+        vlans = [
+            (10, "VLAN10", "active", "GigabitEthernet0/1"),
+            (20, "VLAN20", "active", "GigabitEthernet0/2"),
+            (30, "VLAN30", "inactive", "GigabitEthernet0/3")
+        ]
+        Switches.append(Switch_Facts(
+            id="swith1",
+            device="Switch1",
+            interfaces=interfaces,
+            neighbors=neighbors,
+            vlans=vlans
+        ))
+        Switches.append(Switch_Facts(
+            id='swith2',
+            device="Switch2",
+            interfaces=interfaces,
+            neighbors=neighbors,
+            vlans=vlans
+        ))
+        print(Switches)
         return Switches
     
     def Firewalls_facts():
@@ -138,12 +171,6 @@ class Device:
         self.task = task
         self.status = status
         
-class Switch:
-    def __init__(self, name, ip, loc,stat):
-        self.name = name
-        self.ip_address=ip
-        self.location=loc,
-        self.status=stat
 
 class Firewall:
     def __init__(self, name, ip, loc,stat):
@@ -182,7 +209,7 @@ class Facts:
         self.routing = [self.Routing(*routing_table) for routing_table in routing_tables]  # List of Neighbor objects
 
 #switch_fact
-class Facts:
+class Switch_Facts:
     class Interface:
         def __init__(self, name, address_subnet, status,description):
             self.name = name
