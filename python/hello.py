@@ -5,7 +5,7 @@ def Ping():
     private_data_dir="../ansible/",  # Current directory
     playbook="playbooks/ping.yaml",
     inventory="hosts",    # Path to external inventory file
-    rotate_artifacts=1
+    rotate_artifacts=10
     )
     #host=[]
     #task=[]

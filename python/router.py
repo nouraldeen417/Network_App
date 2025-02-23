@@ -35,7 +35,7 @@ def Routers_facts():
     playbook="playbooks/device.yaml",
     inventory="hosts",  # Path to external inventory file
     tags="routers",
-    rotate_artifacts=1,        
+    rotate_artifacts=10,        
     extravars={                              # Pass the selected role as a variable
         "target_hosts": 'routers'}
     )

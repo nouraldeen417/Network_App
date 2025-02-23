@@ -3,6 +3,8 @@ import re
 import ipaddress
 # from ..python import show
 
+NO_CHNAGE_MSG="Configuration already exists. No changes were made."
+OK_MSG="ok"
 VALID_IP_PATTERN = r"^((25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])/(1[0-9]|2[0-9]|3[0-2])$"
 
 def _generate_masks(cidr):
@@ -69,7 +71,7 @@ def set_hostname(selected_host,new_hostname):
         playbook="playbooks/site.yaml",
         inventory="hosts",  # Path to external inventory file
         limit=selected_host,  # Dynamically target the selected host
-        rotate_artifacts=1,
+        rotate_artifacts=10,
         extravars={  # Pass the selected role as a variable
                 "selected_roles": 'hostname',  # Dynamically set the role
                 "new_hostname": new_hostname
@@ -88,7 +90,7 @@ def set_banner(selected_hosts,new_banner):
         private_data_dir="../ansible/",      # Current directory
         playbook="playbooks/site.yaml",
         inventory="hosts",                   # Path to external inventory file
-        limit=','.join(selected_hosts) ,     # Limit to selected routers
+        limit=selected_hosts ,     # Limit to selected routers
         extravars={                          # Pass the selected role as a variable
                 "selected_roles": 'banner',  # Dynamically set the role
                 "new_banner": new_banner
@@ -97,7 +99,7 @@ def set_banner(selected_hosts,new_banner):
     error_msg = _get_ansibleresult(runner)
     return error_msg
 
-def set_interfaceconfigration(selected_hosts,interface_name,ip_subnet):
+def set_interfaceconfigration(selected_hosts,interface_name,ip_subnet,tag="add_configration"):
     error_msg = "Please select any Interface to configure! "    
     runner = 0
     if (interface_name == None ):
@@ -108,7 +110,8 @@ def set_interfaceconfigration(selected_hosts,interface_name,ip_subnet):
         playbook="playbooks/site.yaml",
         inventory="hosts",                       # Path to external inventory file
         limit=selected_hosts,          # Limit to selected routers
-        rotate_artifacts=1,                
+        rotate_artifacts=10, 
+        tags=tag,               
         extravars={                              # Pass the selected role as a variable
                 "selected_roles": 'ip_config',   # Dynamically set the role
                 "interfaces": interface_name,
@@ -132,7 +135,7 @@ def set_interfaceon(selected_hosts,interface_name):
         playbook="playbooks/site.yaml",
         inventory="hosts",                       # Path to external inventory file
         limit=selected_hosts,          # Limit to selected routers
-        rotate_artifacts=1,                
+        rotate_artifacts=10,                
         extravars={                              # Pass the selected role as a variable
                 "selected_roles": 'interface-state',   # Dynamically set the role
                 "interfaces": interface_name,
@@ -153,7 +156,7 @@ def set_interfaceoff(selected_hosts,interface_name):
         playbook="playbooks/site.yaml",
         inventory="hosts",                       # Path to external inventory file
         limit=selected_hosts,          # Limit to selected routers
-        rotate_artifacts=1,                
+        rotate_artifacts=10,                
         extravars={                              # Pass the selected role as a variable
                 "selected_roles": 'interface-state',   # Dynamically set the role
                 "interfaces": interface_name,
@@ -185,7 +188,7 @@ def set_ospfconfigration(selected_hosts,tag,interface_name,cidr_list,
         playbook="playbooks/site.yaml",
         inventory="hosts",                       # Path to external inventory file
         limit=selected_hosts,          # Limit to selected routers
-        rotate_artifacts=0,
+        rotate_artifacts=10,
         tags=tag,                
         extravars={                              # Pass the selected role as a variable
                 "selected_roles": 'ospf',   # Dynamically set the role
@@ -203,7 +206,7 @@ def set_ospfconfigration(selected_hosts,tag,interface_name,cidr_list,
 
     error_msg = _get_ansibleresult(runner)
     return error_msg
-def set_static_routing(selected_hosts, tag ,cidr,next_hop,admin_distance):
+def set_static_routing(selected_hosts, tag ,cidrs,next_hop,admin_distance):
     error_msg = "Please select any Interface to configure! "    
     runner = 0
 
@@ -215,11 +218,11 @@ def set_static_routing(selected_hosts, tag ,cidr,next_hop,admin_distance):
         playbook="playbooks/site.yaml",
         inventory="hosts",                       # Path to external inventory file
         limit=selected_hosts,          # Limit to selected routers
-        rotate_artifacts=0,
+        rotate_artifacts=10,
         tags=tag,           
         extravars={                              # Pass the selected role as a variable
                 "selected_roles": 'static_routing',   # Dynamically set the role
-                "cidr": cidr,
+                "cidr_list":   cidrs ,
                 "next_hop":next_hop,
                 "admin_distance":admin_distance
             }
@@ -227,7 +230,57 @@ def set_static_routing(selected_hosts, tag ,cidr,next_hop,admin_distance):
 
     error_msg = _get_ansibleresult(runner)
     return error_msg
+def Switch_gateway(selected_hosts , gateway):
+    command = f"lines='ip default-gateway {gateway}'"
+        # module_args='{"commands": ["ip default-gateway {{ gateway }}"]}',
+    result = ansible_runner.run(
+        private_data_dir="../ansible/",          # Current directory
+        inventory="hosts",  
+        limit=selected_hosts,                     # Path to external inventory file
+        module="ios_config",
+        module_args=command,
+        host_pattern="switches"  # Update with the correct host group from your inventory
+    )
 
+def set_valnconfigration(selected_hosts,tag,interfaces_list,vlan_cidr, 
+                         vlan_id, vlan_name):
+    error_msg = "Please select any Interface to configure! "    
+    runner = 0
+    if (interfaces_list == None ):
+      return error_msg  
+    else:
+        runner = ansible_runner.run(
+        private_data_dir="../ansible/",          # Current directory
+        playbook="playbooks/site.yaml",
+        inventory="hosts",                       # Path to external inventory file
+        limit=selected_hosts,          # Limit to selected routers
+        rotate_artifacts=10,
+        tags=tag,                
+        extravars={                              # Pass the selected role as a variable
+                "selected_roles": 'vlan',   # Dynamically set the role
+                "vlan_id": vlan_id,
+                "vlan_name": vlan_name ,
+                "vlan_interfaces": interfaces_list
+
+            }
+        )
+    error_msg = _get_ansibleresult(runner)
+    print ("vlan"+str(vlan_id))
+    if (error_msg == OK_MSG or error_msg == NO_CHNAGE_MSG ):
+        error_msg=set_interfaceconfigration(selected_hosts,"vlan"+str(vlan_id),vlan_cidr,tag)    
+        return error_msg
+    return error_msg
+
+
+
+
+
+
+
+# set_static_routing('Router_01','remove_configration',["0.0.0.0/0","192.168.10.0/24"],"192.168.3.2",10)
+
+# set_valnconfigration('Switch_01','remove_configration',["GigabitEthernet1/0","GigabitEthernet1/1"],"192.168.10.10/24", 
+#                          50, "work")
 # Run the function
 # if status == 0:
 #     print("OSPF neighbors retrieved successfully!")
@@ -272,3 +325,5 @@ def set_static_routing(selected_hosts, tag ,cidr,next_hop,admin_distance):
 # print(status)
 
 # set_static_routing('Router_01','remove_configration',"0.0.0.0/0","192.168.3.2",150)
+
+# Switch_gateway('Switch_01', "192.168.2.1")
