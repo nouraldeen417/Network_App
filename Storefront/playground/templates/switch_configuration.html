@@ -28,7 +28,7 @@
     </div>
 
     <div class="container">
-        <h1>Router Configurations</h1>
+        <h1>Switch Configurations</h1>
 
         <div class="config-nav">
             <a href="#hostname-section">Hostname</a>
@@ -43,7 +43,7 @@
                 <div class="form-group">
                     <label for="hostname">Host Name:</label>
                     <input type="text" id="hostname" name="hostname" placeholder="Enter new host name">
-                    <input type="hidden" name="router" value="{{ router }}">
+                    <input type="hidden" name="switch" value="{{ switch }}">
                     <button type="submit">Set Host Name</button>
                 </div>
                 <div class="message-container">
@@ -65,7 +65,7 @@
                 <div class="form-group">
                     <label for="banner">Banner:</label>
                     <input type="text" id="banner" name="banner" placeholder="Enter new banner">
-                    <input type="hidden" name="router" value="{{ router }}">
+                    <input type="hidden" name="switch" value="{{ switch }}">
                     <button type="submit">Set Banner</button>
                 </div>
                 <div class="message-container">
@@ -84,8 +84,7 @@
             <h2>Set Interface Configuration</h2>
             <form id="interface-form" action="{% url 'setInterfaceConfigration' %}" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="router" value="{{ router }}">
-                
+                <input type="hidden" name="switch" value="{{ switch }}">
 
                 <div class="form-group">
                     <label>Select Interface:</label>
@@ -112,6 +111,6 @@
         </div>
     </div>
     
-    <script src="{% static 'js/routerConfigurations.js' %}" defer></script>
+    <script src="{% static 'js/switchConfigurations.js' %}" defer></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const routersApiUrl = 'http://127.0.0.1:8000/playground/api/routers/';
+const routersApiUrl = '/playground/api/routers/';
 let currentDeviceData = null;
 
 // Function to switch tabs

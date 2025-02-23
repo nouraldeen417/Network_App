@@ -104,7 +104,7 @@
         <div><a href="{% url 'sayhello' %}">Home</a></div>
         <div><a href="{% url 'RoutersView' %}">Routers</a></div>
         <div><a href="{% url 'SwitchesView' %}">Switches</a></div>
-        <div><a href="{% url 'FirewallView' %}">Firewall</a></div>
+        <div><a href="{% url 'FirewallView' %}">Add Device</a></div>
         {% if request.user.is_staff %}
         <div><a href="{% url 'approve_users' %}">Pending Users</a></div>
         {% endif %}

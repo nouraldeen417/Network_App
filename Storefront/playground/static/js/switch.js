@@ -1,4 +1,4 @@
-const routersApiUrl = 'http://127.0.0.1:8000/playground/api/switches/';
+const routersApiUrl = '/playground/api/switches/';
 let currentDeviceData = null;
 
 // Function to switch tabs
@@ -25,7 +25,7 @@ function enableConfigureButton() {
 // Function to fetch device information
 async function fetchDeviceInfo() {
     try {
-        const storedData = localStorage.getItem('swicthData');
+        const storedData = localStorage.getItem('switchData');
         //console.log("hello stored data")
         //console.log(storedData);
         if (!storedData) {
@@ -73,10 +73,10 @@ async function fetchDeviceInfo() {
             if (selectedDevice.vlan) {
                 vlanTableBody.innerHTML = selectedDevice.vlan.map(vl => `
                     <tr>
+                        <td>${vl.id}</td>
                         <td>${vl.name}</td>
                         <td>${vl.status}</td>
                         <td>${vl.port}</td>
-                        
                     </tr>
                 `).join('');
             }
@@ -92,7 +92,7 @@ async function populateDeviceSelect() {
         const response = await fetch(routersApiUrl);
         const data = await response.json();
         console.log(data);
-        localStorage.setItem('swicthData', JSON.stringify(data));
+        localStorage.setItem('switchData', JSON.stringify(data));
         const deviceSelect = document.getElementById('device-select');
         deviceSelect.innerHTML = data.map(device => 
             `<option value="${device.id}">${device.device}</option>`
@@ -133,3 +133,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set up auto-refresh
     setInterval(fetchDeviceInfo, 600000); // Refresh every 10 minutes
 });
+

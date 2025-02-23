@@ -12,7 +12,7 @@
             <a href="{% url 'sayhello' %}">Home</a>
             <a href="{% url 'RoutersView' %}">Routers</a>
             <a href="{% url 'SwitchesView' %}">Switches</a>
-            <a href="{% url 'FirewallView' %}">Firewall</a>
+            <a href="{% url 'FirewallView' %}">Add Device</a>
             {% if request.user.is_staff %}
             <a href="{% url 'approve_users' %}">Pending Users</a>
             {% endif %}

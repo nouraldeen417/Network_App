@@ -21,6 +21,7 @@ urlpatterns=[
     path('logout/', LogoutView.as_view(), name='logout'),
     path('approve_users/', views.approve_users, name='approve_users'),
     path('routerconfiguration/', views.routerconfiguration, name='routerconfiguration'),
+    path('switchconfiguration/', views.switchconfiguration, name='switchconfiguration'),
     path('sethostname/', views.sethostname, name='sethostname'),
     path('setbanner/', views.setbanner, name='setbanner'), 
     path('setInterfaceConfigration/', views.setInterfaceConfigration, name='setInterfaceConfigration'), 

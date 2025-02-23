@@ -1,6 +1,6 @@
 // Fetch and display devices
 
-const apiUrl = 'http://127.0.0.1:8000/playground/api/devices/';
+const apiUrl = '/playground/api/devices/';
 // Function to fetch device data from the API and update the table
 async function fetchDeviceData() {
     try {

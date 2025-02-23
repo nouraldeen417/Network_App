@@ -70,8 +70,6 @@ def login_view(request):
 # Create your views here.
 @login_required
 def sayhello(request):
-    if request.user.is_staff:  # Check if the user is an admin
-        return render(request, 'admin_hello.html')  # Admin-specific homepage
     return render(request, 'hello.html')  # User-specific homepage
     #return HttpResponse('Hello')
 
@@ -86,62 +84,101 @@ def SwitchesView(request):
 @login_required
 def FirewallView(request):
     return render(request,'firewall.html')
-    
+@login_required
 def routerconfiguration(request):
     router = request.GET.get('router', None)
     print(router)
     return render(request,'router_configuration.html',{'router': router})
 
-
+@login_required
+def switchconfiguration(request):
+    switch = request.GET.get('switch', None)
+    print(switch)
+    return render(request,'switch_configuration.html',{'switch': switch})
+@login_required
 def sethostname(request):
-    selectedrouter=None
     if request.method == "POST":
         router=request.POST.get('router')
+        switch=request.POST.get('switch')
         hostname=request.POST.get('hostname')
         print(router)
+        print(switch)
         print(hostname)
-        result = AutomationMethods.Set_Hostname(router,hostname)
+        result=""
+        if(router):
+            print("set Router")
+            result = AutomationMethods.Set_Hostname(router,hostname)
+        elif(switch):
+            print("set switch")
+            result = AutomationMethods.Set_Hostname(switch,hostname)
         selectedrouter=router
+        selectedswitch=switch
         if(result == "ok"):# i change here
             messages.success(request,"Hostname has been set Successfully")
         else :
             messages.error(request,f"Error while setting setting Host name: {result}")# i change here
-    return render(request,'router_configuration.html',{'router': selectedrouter})
-
+        
+        if(router):    
+            return render(request,'router_configuration.html',{'router': selectedrouter})
+        else :
+            return render(request,'switch_configuration.html',{'switch': selectedswitch})
+@login_required
 def setbanner(request):
-    selectedrouter=None
     if request.method == "POST":
         router=request.POST.get('router')
+        switch=request.POST.get('switch')
         banner=request.POST.get('banner')
         print(router)
+        print(switch)
         print(banner)
-        result = AutomationMethods.Set_Banner(router,banner)
-        selectedrouter=router
+        result=""
+        if(router):
+            print("set Router")
+            result = AutomationMethods.Set_Banner(router,banner)
+        elif(switch):
+            print("set switch")
+            result = AutomationMethods.Set_Banner(switch,banner)
+        
         if(result == "ok" ):# i change here
             messages.success(request,"Banner has been set Successfully")
         else :
-            messages.error(request,f"Error while setting setting Banner name: {result}")# i change here
-    return render(request,'router_configuration.html',{'router': selectedrouter})
+            messages.error(request,f"Error while setting setting Banner name: {result}")
+        
+        if(router):    
+            return render(request,'router_configuration.html',{'router': router})
+        else :
+            return render(request,'switch_configuration.html',{'switch': switch})
+        
 
-
+@login_required
 def setInterfaceConfigration(request):
-    selectedrouter=None
     if request.method == "POST":
         router=request.POST.get('router')
+        switch=request.POST.get('switch')
         interfacename=request.POST.get('interface')
         ipv4=request.POST.get('ipv4')
-        
         print(router)
+        print(switch)
         print(interfacename)
         print(ipv4)
-        result = AutomationMethods.set_interfaceconfigration(router,interfacename,ipv4)
-        selectedrouter=router
+        result=""
+        if(router):
+            print("set Router")
+            result = AutomationMethods.set_interfaceconfigration(router,interfacename,ipv4)
+        elif(switch):
+            print("set switch")
+            result = AutomationMethods.set_interfaceconfigration(router,interfacename,ipv4)
+        
         if(result == "ok" ): # i change here
             messages.success(request,"Interface IP has been set successfully.")
         else :
             messages.error(request,f"Error while setting the Interface Ip: {result}")# i change here
-    return render(request,'router_configuration.html',{'router': selectedrouter})
-
+        
+        if(router):    
+            return render(request,'router_configuration.html',{'router': router})
+        else :
+            return render(request,'switch_configuration.html',{'switch': switch})
+        
 # API 
 @login_required
 def devices_list(request):
