@@ -18,6 +18,11 @@ class AutomationMethods:
         print(Fact_data)
         return  Fact_data
     
+    def Switch_list():
+        Fact_data=switch.switches_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
+        print(Fact_data)
+        return Fact_data
+
     def Set_Hostname(selected_host,hostname):
         status = configration.set_hostname(selected_host,hostname) #"ok"
         print (status)
@@ -36,14 +41,60 @@ class AutomationMethods:
         print(status)
         return status
     
-    def Switch_list():
-        Fact_data=switch.switches_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
-        print(Fact_data)
-        return Fact_data
-    def Firewall_list():
-        Fact_data=AutomationMethodsData.Firewalls_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
-        print(Fact_data)
-        return Fact_data
+
+    def Ospf_routing(selected_hosts,interface_name,cidr_list, 
+                     ospf_process_id, router_id, area_id,
+                     hello_timer, dead_timer,tag):
+        status = configration.set_ospfconfigration((selected_hosts,interface_name,cidr_list, 
+                         ospf_process_id, router_id, area_id,
+                         hello_timer, dead_timer,tag))
+        # status = "ok"
+        print(status)
+        return status
+    """
+    selected_hosts, ----->one router selected or more must be list 
+                        number of arguemnets depend on one device selected or more
+    interface_name, ----->interfaces of selected router or routers (dropdown menue)
+    cidr_list,------> list of ip/subnet 192.168.1.0/24,192.168.2.0/24 comma seprated 
+    ospf_process_id,-----> any value 
+    router_id, any value
+    area_id, any value
+    hello_timer,any value
+    dead_timer,any value
+    tag ----> i give it default value "add_configration" if user click remove configration make its value "remove_configration" 
+    """
+                                                               
+    def Static_routing(selected_hosts, cidrs,next_hop,admin_distance,tag):
+        status = configration.set_static_routing(selected_hosts, cidrs,next_hop,admin_distance,tag)
+        # status = "ok"
+        print(status)
+        return status
+    """
+    selected_hosts, ----->one router only not supported multi device configration 
+    cidrs------> list of ip/subnet 192.168.1.0/24,192.168.2.0/24 comma seprated 
+    ospf_process_id,-----> any value 
+    next_hop, ip
+    admin_distance, any value
+    tag ----> i give it default value "add_configration" if user click remove configration make its value "remove_configration" 
+    """
+
+    def Vlans_configs(selected_hosts,interfaces_list,vlan_cidr, 
+                         vlan_id, vlan_name,tag):
+        status = configration.set_valnconfigration(selected_hosts,interfaces_list,vlan_cidr, 
+                         vlan_id, vlan_name,tag)
+        # status = "ok"
+        print(status)
+        return status
+    """
+    selected_hosts, ----->one switch selected or more must be list 
+                         number of arguemnets depend on one device selected or more
+    interfaces_list, ----->interfaces must be list (allow to select more than interface)
+    vlan_cidr,------> ip/subnet
+    vlan_id,  -----> any value 
+    vlan_name, any value
+    tag ----> i give it default value "add_configration" ,if user click remove configration make its value "remove_configration" 
+    """
+
 
 
 

@@ -166,9 +166,21 @@ def set_interfaceoff(selected_hosts,interface_name):
 
     error_msg = _get_ansibleresult(runner)
     return error_msg
-def set_ospfconfigration(selected_hosts,tag,interface_name,cidr_list, 
+def Switch_gateway(selected_hosts , gateway):
+    command = f"lines='ip default-gateway {gateway}'"
+        # module_args='{"commands": ["ip default-gateway {{ gateway }}"]}',
+    result = ansible_runner.run(
+        private_data_dir="../ansible/",          # Current directory
+        inventory="hosts",  
+        limit=selected_hosts,                     # Path to external inventory file
+        module="ios_config",
+        module_args=command,
+        host_pattern="switches"  # Update with the correct host group from your inventory
+    )
+
+def set_ospfconfigration(selected_hosts,interface_name,cidr_list, 
                          ospf_process_id, router_id, area_id,
-                        interface_ip, hello_timer, dead_timer):
+                         hello_timer, dead_timer,tag="add_configration"):
     error_msg = "Please select any Interface to configure! "    
     runner = 0
     network_address=[]
@@ -197,7 +209,6 @@ def set_ospfconfigration(selected_hosts,tag,interface_name,cidr_list,
                 "network_data": [{"network": net, "wildcard": wc} for net, wc in zip(network_address, wildcard_mask)],
                 "area_id": area_id,
                 "interface_name": interface_name,
-                "interface_ip": interface_ip,
                 "subnet_mask": subnet_mask,
                 "hello_timer": hello_timer,
                 "dead_timer": dead_timer 
@@ -206,7 +217,7 @@ def set_ospfconfigration(selected_hosts,tag,interface_name,cidr_list,
 
     error_msg = _get_ansibleresult(runner)
     return error_msg
-def set_static_routing(selected_hosts, tag ,cidrs,next_hop,admin_distance):
+def set_static_routing(selected_hosts,cidrs,next_hop,admin_distance,tag="add_configration"):
     error_msg = "Please select any Interface to configure! "    
     runner = 0
 
@@ -230,20 +241,9 @@ def set_static_routing(selected_hosts, tag ,cidrs,next_hop,admin_distance):
 
     error_msg = _get_ansibleresult(runner)
     return error_msg
-def Switch_gateway(selected_hosts , gateway):
-    command = f"lines='ip default-gateway {gateway}'"
-        # module_args='{"commands": ["ip default-gateway {{ gateway }}"]}',
-    result = ansible_runner.run(
-        private_data_dir="../ansible/",          # Current directory
-        inventory="hosts",  
-        limit=selected_hosts,                     # Path to external inventory file
-        module="ios_config",
-        module_args=command,
-        host_pattern="switches"  # Update with the correct host group from your inventory
-    )
 
-def set_valnconfigration(selected_hosts,tag,interfaces_list,vlan_cidr, 
-                         vlan_id, vlan_name):
+def set_valnconfigration(selected_hosts,interfaces_list,vlan_cidr, 
+                         vlan_id, vlan_name,tag="add_configration"):
     error_msg = "Please select any Interface to configure! "    
     runner = 0
     if (interfaces_list == None ):
