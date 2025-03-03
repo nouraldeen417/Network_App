@@ -120,12 +120,12 @@
             margin: 0 5px;
         }
 
-        button[name="action"][value="approve"] {
+        button[name="action"] {
             background-color: #007bff;
             color: white;
         }
 
-        button[name="action"][value="approve"]:hover {
+        button[name="action"]:hover {
             background-color: #0056b3;
             transform: translateY(-1px);
         }
@@ -218,6 +218,7 @@
                             {% csrf_token %}
                             <input type="hidden" name="user_id" value="{{ user.id }}">
                             <button type="submit" name="action" value="approve">Approve</button>
+                            <button type="submit" name="action" value="approveAsAdmin">ِApprove As Admin</button>
                         </form>
                         <form method="post" style="display: inline;">
                             {% csrf_token %}

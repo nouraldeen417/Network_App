@@ -1,63 +1,211 @@
-// Path: your-javascript-file.js
 
-// Function to fetch data and populate the form
-async function fetchAndPopulateInterfaces() {
-    try {
-        // Fetch the data from the API
-        const storedData = localStorage.getItem('switchData');
-        console.log("hello switch stored data")
-        //console.log(storedData);
-        if (!storedData) {
-            console.error('No data found in localStorage.');
-            //storedData = await fetch(routersApiUrl);
+function ShowSwitches(){
+    const data= localStorage.getItem("switchData");
+    if(!data){
+        console.log("No Data stored");
         return;
-        }
-
-        const data = JSON.parse(storedData);
-
-        // Get the router ID from the hidden input
-        const routerId = document.querySelector('input[name="switch"]').value;
-
-        // Find the router with the matching ID
-        const selectedRouter = data.find(router => router.id === routerId);
-        console.log(selectedRouter);
-        if (!selectedRouter) {
-            console.error('Router not found.');
-            return;
-        }
-
-        // Get the container for the radio buttons
-        const radioContainer = document.getElementById('interface-radio-container');
-
-        // Clear any existing content
-        radioContainer.innerHTML = '';
-
-        // Loop through the interfaces and create radio buttons
-        selectedRouter.interfaces.forEach(interface => {
-            // Create a radio button for the interface
-            const radioButton = document.createElement('input');
-            radioButton.type = 'radio';
-            radioButton.name = 'interface';
-            radioButton.value = interface.name; // Use interface name as the value
-            radioButton.id = `interface-${interface.name}`;
-
-            // Create a label for the radio button
-            const label = document.createElement('label');
-            label.htmlFor = `interface-${interface.name}`;
-            label.textContent = `${interface.name}`;
-
-            // Append the radio button and label to the container
-            radioContainer.appendChild(radioButton);
-            radioContainer.appendChild(label);
-            radioContainer.appendChild(document.createElement('br')); // Add a line break
-        });
-    } catch (error) {
-        console.error('Error fetching or populating data:', error);
     }
+    const switches=JSON.parse(data);
+    console.log(switches);
+    const switch_list=document.getElementById("table-body");
+    switch_list.innerHTML='';
+    switch_list.innerHTML=switches.map(r=>`
+        <tr>
+            <td><input type="checkbox" class="tableCheck" id=${r.id} value="${r.id}"></td>
+            <td><label for="${r.id}">${r.device}</label></td>
+        </tr>
+        `).join('');
+    handleSelectSwitches();
 }
-// Call the function when the page loads
-//document.addEventListener('DOMContentLoaded', fetchRouters);
+
+function HostName(device){
+    const host_content=document.getElementById("form-groups");
+    host_content.innerHTML='';
+    host_content.innerHTML=`
+    <div class="form-group">
+    <label for="hostname">Host Name:</label>
+    <input type="text" id="hostname" name="hostname" placeholder="Enter new host name"> 
+    </div>
+    <input type="hidden" name="switch" value="${device}"> 
+    <button type="submit" class="btn">Apply Configuration</button>
+    `
+    const form=document.getElementById('config-form');
+    form.action="/playground/sethostname/";
+
+}
+function Banner(device){
+    const banner_content=document.getElementById("form-groups");
+    banner_content.innerHTML='';
+    banner_content.innerHTML=
+    `
+    <div class="form-group">
+    <label for="banner">Banner:</label>     
+    <input type="text" id="banner" name="banner" placeholder="Enter new banner">         
+    </div>
+    <input type="hidden" name="switch" value="${device}">      
+    <button type="submit" class="btn">Apply Configuration</button>
+    `
+    const form=document.getElementById('config-form');
+    form.action="/playground/setbanner/";
+}
+
+function interfaceOptions(selectedDeviceId,type="checkbox") {
+    const data = localStorage.getItem('switchData');
+    if (!data) {
+        console.error('No data found in localStorage.');
+        return ;
+    }
+    const switchesData = JSON.parse(data);
+    const selected_switch = switchesData.find(d => d.id === selectedDeviceId);
+    console.log(selected_switch.interfaces);
+    const options = selected_switch.interfaces.map(intf => `
+            <input type="${type}" id="${intf.name}" name="interfaces" value="${intf.name}">
+            <label for="${intf.name}">${intf.name}(${intf.address_subnet})</label>
+    `).join('');
+    console.log(options);
+    return options;
+}
+
+function Interface_IP(device){
+    const form_content=document.getElementById("form-groups");
+    form_content.innerHTML='';
+    form_content.innerHTML=
+    `
+    <div class="form-group">
+        <label>Interfaces</label>
+        <div id="interface-check-container" class="check-group">
+        ${interfaceOptions(device,"radio")}
+        </div>
+    </div>
+    <div class="form-group">
+    <label for="ipv4">IPv4:</label>
+    <input type="text" id="ipv4" name="ipv4" placeholder="Enter IPv4 (ip/subnet) required">
+    <div>
+    <input type="hidden" name="switch" value="${device}">
+    <button type="submit" class="btn">Apply Configuration</button>
+    `
+    const form=document.getElementById('config-form');
+    form.action="/playground/setInterfaceIP/";
+}
+function vlan(selectedDeviceId) {
+    let configBody = document.getElementById("form-groups");
+    configBody.innerHTML = '';
+    configBody.innerHTML = `
+        <div class="form-group">
+            <label for="vlan-id">VLAN ID</label>
+            <input type="number" id="vlan-id" name="vlan-id" placeholder="Enter VLAN ID (1-4094)" min="1" max="4094" oninput="validateVlanId(this) required">
+        </div>
+        <div class="form-group">
+            <label for="vlan-name" required>VLAN Name</label>
+            <input type="text" id="vlan-name" name="vlan-name" placeholder="Enter VLAN Name">
+        </div>
+        <div class="form-group">
+            <label>Interfaces</label>
+            <div id="interface-check-container" class="check-group">
+            ${interfaceOptions(selectedDeviceId)}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="vlan-cidr" >VLAN CIDR</label>
+            <input type="text" id="vlan-cidr" name="vlan-cidr" required>
+        </div>
+        <input type="hidden" id="switches" name="switches" value=${[selectedDeviceId]}>
+        <input type="hidden" id="tag" name="tag" value="add_configration">
+        <button type="submit" class="btn">Apply Configuration</button>
+        <button type="action" id="delete"class="btn delete">Delete Configuration</button>
+    `;
+    const form=document.getElementById('config-form');
+    form.action="/playground/vlan/";
+    document.getElementById("delete").addEventListener("click", ()=> 
+    {
+        document.getElementById("tag").value = "remove_configration";
+    });
+}
+function OneSwitchSelected(device){
+    const tab_buttons=document.getElementById("tab-buttons");
+    tab_buttons.innerHTML='';
+    tab_buttons.innerHTML=`
+    <button id="host-tab">Set Host Name</button>
+    <button id="banner-tab">Set Banner</button>
+    <button id="interface-tab">Set Interface IP</button>
+    <button id="vlan-tab">Vlan Configuration</button>
+    `;  
+    const host_tab=document.getElementById("host-tab");
+    host_tab.addEventListener('click',()=>{
+        HostName(device);
+        const active=document.getElementsByClassName("active")[0]?.classList.remove("active");
+        host_tab.classList.add("active");
+    });
+    const banner_tab=document.getElementById("banner-tab");
+    banner_tab.addEventListener('click',()=>{
+        Banner(device);
+        document.getElementsByClassName("active")[0]?.classList.remove("active");
+        banner_tab.classList.add("active");
+    });
+    const interface_tab= document.getElementById("interface-tab");
+    interface_tab.addEventListener('click',()=>{
+        Interface_IP(device);
+        document.getElementsByClassName("active")[0]?.classList.remove("active");
+        interface_tab.classList.add("active");
+    });
+    const vlan_tab=document.getElementById("vlan-tab");
+    vlan_tab.addEventListener('click',()=>{
+        vlan(device);
+        document.getElementsByClassName("active")[0]?.classList.remove("active");
+        vlan_tab.classList.add("active");    
+    });
+    
+}
+function ManySwitchSelected(selected){
+    const tab_buttons=document.getElementById("tab-buttons");
+    tab_buttons.innerHTML='';
+    tab_buttons.innerHTML=`
+    <button id="vlan-tab" class="active">Vlan Configuration</button>
+    `;
+    const configBody = document.getElementById("form-groups");
+        configBody.innerHTML = '';
+        configBody.innerHTML = `
+            <div class="form-group">
+                <label for="vlan-id">VLAN ID</label>
+                <input type="number" id="vlan-id" name="vlan-id" placeholder="Enter VLAN ID (1-4094)" min="1" max="4094" required">
+            </div>
+            <div class="form-group">
+                <label for="vlan-name">VLAN Name</label>
+                <input type="text" id="vlan-name" name="vlan-name" placeholder="Enter VLAN Name" required>
+            </div>
+            <input type="hidden" id="switches" name="switches" value=${selected}>
+            <input type="hidden" id="tag" name="tag" value="add_configration">
+            <button type="submit" class="btn">Apply Configuration</button>
+            <button type="action" id="delete" class="btn delete">Delete Configuration</button>`;
+    console.log(configBody.innerHTML);
+    const form=document.getElementById('config-form');
+    form.action="/playground/vlan/";
+    document.getElementById("delete").addEventListener("click", ()=> 
+    {
+        document.getElementById("tag").value = "remove_configration";
+    });
+}
+function handleSelectSwitches(){
+    let checkboxs = document.querySelectorAll("input.tableCheck");
+    console.log(checkboxs);
+    checkboxs.forEach(check=>{
+        check.addEventListener('change',()=>{
+            
+            document.getElementById("form-groups").innerHTML='';
+            const selected=document.querySelectorAll("input.tableCheck:checked");
+            if(selected.length===0){
+                document.getElementById("tab-buttons").innerHTML='';
+            }else if(selected.length===1){
+                OneSwitchSelected(selected[0].value);
+            }else{
+                const routers=Array.from(selected).map(x=>x.value);
+                ManySwitchSelected(routers);
+            }
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    fetchAndPopulateInterfaces();
-    setInterval(fetchAndPopulateInterfaces, 600000);  // Refresh every 600,000 milliseconds (10 minutes)
+    ShowSwitches();
+    setInterval(ShowSwitches, 600000);  // Refresh every 600,000 milliseconds (10 minutes)
 });

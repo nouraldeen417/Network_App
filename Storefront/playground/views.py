@@ -40,6 +40,10 @@ def approve_users(request):
         if action == 'approve':
             user.is_active = True
             user.save()
+        elif action == 'approveAsAdmin':
+            user.is_active = True
+            user.is_staff=True
+            user.save()
         elif action == 'reject':
             user.delete()  # Delete user if rejected
         return redirect('approve_users')
@@ -86,15 +90,78 @@ def FirewallView(request):
     return render(request,'firewall.html')
 @login_required
 def routerconfiguration(request):
-    router = request.GET.get('router', None)
-    print(router)
-    return render(request,'router_configuration.html',{'router': router})
+    return render(request,'router_configuration.html')
 
 @login_required
 def switchconfiguration(request):
-    switch = request.GET.get('switch', None)
-    print(switch)
-    return render(request,'switch_configuration.html',{'switch': switch})
+    return render(request,'switch_configuration.html')
+
+
+@login_required
+def static_routing(request):
+    if request.method=="POST":
+        router=request.POST.get('router')
+        cidr=request.POST.get('cidr')
+        next_hop=request.POST.get('next-hop')
+        admin_dist=request.POST.get('admin-dist')
+        tag=request.POST.get('tag')
+        print(router)
+        print(cidr)
+        print(next_hop)
+        print(admin_dist)
+        print(tag)
+        result=AutomationMethods.Static_routing(router,cidr,next_hop,admin_dist,tag)
+    return redirect('/playground/routerconfiguration')
+
+
+@login_required
+def ospf(request):
+    if request.method=="POST":
+        routers=request.POST.getlist('routers')
+        cidr=request.POST.get('cidr')
+        ospf_id=request.POST.get('ospf-id')
+        area_id=request.POST.get('area-id')
+        interfaces=request.POST.getlist('interfaces')
+        hello_timer=request.POST.get('hello-timer')
+        dead_timer=request.POST.get('dead-timer')
+        tag=request.POST.get('tag')
+        print(routers)
+        print(cidr)
+        print(ospf_id)
+        print(area_id)
+        print(interfaces)
+        print(hello_timer)
+        print(dead_timer)
+        print(tag)
+        result=AutomationMethods.Ospf_routing(
+            routers,interfaces,cidr,
+            ospf_id,routers,area_id,
+            hello_timer,dead_timer,tag
+        )
+        print(result)
+    return redirect('/playground/routerconfiguration')
+
+
+@login_required
+def vlan(request):
+    if request.method=="POST":
+        vlanid=request.POST.get('vlan-id')
+        vlanname=request.POST.get('vlan-name')
+        switches=request.POST.getlist('switches')
+        interfaces=request.POST.getlist('interfaces')
+        vlan_cidr=request.POST.get('vlan-cidr')
+        tag=request.POST.get('tag')
+        print(switches)
+        print(interfaces)
+        print(tag)
+        print(vlan_cidr)
+        print(vlanid)
+        print(vlanname)
+        
+        AutomationMethods.Vlans_configs(switches,interfaces,vlan_cidr,vlanid,vlanname,tag)
+    return redirect('/playground/switchconfiguration')
+
+
 @login_required
 def sethostname(request):
     if request.method == "POST":
@@ -111,23 +178,22 @@ def sethostname(request):
         elif(switch):
             print("set switch")
             result = AutomationMethods.Set_Hostname(switch,hostname)
-        selectedrouter=router
-        selectedswitch=switch
         if(result == "ok"):# i change here
             messages.success(request,"Hostname has been set Successfully")
         else :
             messages.error(request,f"Error while setting setting Host name: {result}")# i change here
         
         if(router):    
-            return render(request,'router_configuration.html',{'router': selectedrouter})
+            return redirect('/playground/routerconfiguration');# render(request,'router_configuration.html')
         else :
-            return render(request,'switch_configuration.html',{'switch': selectedswitch})
+            return redirect('/playground/switchconfiguration');# render(request,'switch_configuration.html')
 @login_required
 def setbanner(request):
     if request.method == "POST":
         router=request.POST.get('router')
         switch=request.POST.get('switch')
         banner=request.POST.get('banner')
+        print("hello banner")
         print(router)
         print(switch)
         print(banner)
@@ -145,17 +211,17 @@ def setbanner(request):
             messages.error(request,f"Error while setting setting Banner name: {result}")
         
         if(router):    
-            return render(request,'router_configuration.html',{'router': router})
+            return redirect('/playground/routerconfiguration');# render(request,'router_configuration.html')
         else :
-            return render(request,'switch_configuration.html',{'switch': switch})
+            return redirect('/playground/switchconfiguration');# render(request,'switch_configuration.html')
         
 
 @login_required
-def setInterfaceConfigration(request):
+def setInterfaceIP(request):
     if request.method == "POST":
         router=request.POST.get('router')
         switch=request.POST.get('switch')
-        interfacename=request.POST.get('interface')
+        interfacename=request.POST.get('interfaces')
         ipv4=request.POST.get('ipv4')
         print(router)
         print(switch)
@@ -175,9 +241,9 @@ def setInterfaceConfigration(request):
             messages.error(request,f"Error while setting the Interface Ip: {result}")# i change here
         
         if(router):    
-            return render(request,'router_configuration.html',{'router': router})
+            return redirect('/playground/routerconfiguration');# render(request,'router_configuration.html')
         else :
-            return render(request,'switch_configuration.html',{'switch': switch})
+            return redirect('/playground/switchconfiguration');# render(request,'switch_configuration.html')
         
 # API 
 @login_required

@@ -24,6 +24,9 @@ urlpatterns=[
     path('switchconfiguration/', views.switchconfiguration, name='switchconfiguration'),
     path('sethostname/', views.sethostname, name='sethostname'),
     path('setbanner/', views.setbanner, name='setbanner'), 
-    path('setInterfaceConfigration/', views.setInterfaceConfigration, name='setInterfaceConfigration'), 
+    path('setInterfaceIP/', views.setInterfaceIP, name='setInterfaceIP'), 
+    path('vlan/', views.vlan, name='vlan'), 
+    path('staticrouting/', views.static_routing, name='staticrouting'), 
+    path('ospf/', views.ospf, name='ospf'), 
     
 ]

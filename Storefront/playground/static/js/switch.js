@@ -114,6 +114,7 @@ function handleConfigureClick() {
     }
 }
 
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
     const configureButton = document.getElementById('configure-btn');

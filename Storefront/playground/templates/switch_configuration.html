@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Router Configuration</title>
+    <title>Switch Configuration</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'CSS/configurations.css' %}"></head>
+    <link rel="stylesheet" href="{% static 'CSS/configurations.css' %}">
 </head>
 <body>
     <div class="navbar">
@@ -28,89 +28,47 @@
     </div>
 
     <div class="container">
-        <h1>Switch Configurations</h1>
+        <h1>Switches Configurations</h1>
+        <div class="command-output">
+            <h2>VLAN Brief Information</h2>
+            <textarea name="vlan-brief" id="vlan-brief" readonly>
+        
+            </textarea>
+            <h2>VLAN Detailed Information</h2>
+            <textarea name="vlan-detail" id="vlan-detail" readonly>
 
-        <div class="config-nav">
-            <a href="#hostname-section">Hostname</a>
-            <a href="#banner-section">Banner</a>
-            <a href="#interface-section">Interface</a>
+            </textarea>
+        </div>
+        <div class="devices-list">
+            <h2>Available Switches</h2>
+            <table class="info-table">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Switch Name</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+
+                </tbody>
+            </table>
         </div>
 
-        <div class="form-section" id = "hostname-section">
-            <h2>Set Host Name</h2>
-            <form id="hostname-form" action="{% url 'sethostname' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="hostname">Host Name:</label>
-                    <input type="text" id="hostname" name="hostname" placeholder="Enter new host name">
-                    <input type="hidden" name="switch" value="{{ switch }}">
-                    <button type="submit">Set Host Name</button>
-                </div>
-                <div class="message-container">
-                    {% if messages %}
-                        {% for message in messages %}
-                            {% if "Host" in message.message %}
-                            <div class="message {{ message.tags }}">{{ message }}</div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </form>
-        </div>
+        <div class="config" id="config">
+            <h2>Configurations</h2>
+            <div class="tab-buttons" id="tab-buttons">
+            
+            </div>
+            <div class="config-section" id="config-section">
+                <form id="config-form" class="config-form" method="post">
+                    {% csrf_token %}
+                    <div id="form-groups">
 
-        <div class="form-section" id ="banner-section">
-            <h2>Set Banner</h2>
-            <form id="banner-form" action="{% url 'setbanner' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="banner">Banner:</label>
-                    <input type="text" id="banner" name="banner" placeholder="Enter new banner">
-                    <input type="hidden" name="switch" value="{{ switch }}">
-                    <button type="submit">Set Banner</button>
-                </div>
-                <div class="message-container">
-                    {% if messages %}
-                        {% for message in messages %}
-                            {% if "Banner" in message.message %}
-                            <div class="message {{ message.tags }}">{{ message }}</div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </form>
-        </div>
-
-        <div class="form-section" id ="interface-section">
-            <h2>Set Interface Configuration</h2>
-            <form id="interface-form" action="{% url 'setInterfaceConfigration' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="switch" value="{{ switch }}">
-
-                <div class="form-group">
-                    <label>Select Interface:</label>
-                    <div id="interface-radio-container" class="radio-group"></div>
-                </div>
-
-                
-                <div class="form-group">
-                    <label for="ipv4">IPv4:</label>
-                    <input type="text" id="ipv4" name="ipv4" placeholder="Enter IPv4 (ip/subnet)">
-                    <button type="submit">Set Interface</button>
-                </div>
-
-                <div class="message-container">
-                    {% if messages %}
-                        {% for message in messages %}
-                            {% if "Interface" in message.message %}
-                            <div class="message {{ message.tags }}">{{ message }}</div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </form>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-    
     <script src="{% static 'js/switchConfigurations.js' %}" defer></script>
 </body>
 </html>
