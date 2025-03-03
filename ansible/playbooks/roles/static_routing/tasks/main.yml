@@ -14,7 +14,7 @@
   loop: "{{ cidr_list }}"  
   tags: add_configration     
 
-- name: Add a static route
+- name: remove a static route
   cisco.ios.ios_static_routes:
     config:
       - address_families:

@@ -199,7 +199,7 @@ def set_ospfconfigration(selected_hosts,interface_name,cidr_list,
         private_data_dir="../ansible/",          # Current directory
         playbook="playbooks/site.yaml",
         inventory="hosts",                       # Path to external inventory file
-        limit=selected_hosts,          # Limit to selected routers
+        limit=','.join(selected_hosts),                     # Path to external inventory file
         rotate_artifacts=10,
         tags=tag,                
         extravars={                              # Pass the selected role as a variable

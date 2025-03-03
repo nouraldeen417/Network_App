@@ -141,9 +141,9 @@ def ospf(request):
         print(tag)
         result=AutomationMethods.Ospf_routing(
             routers,interfaces,cidr,
-            ospf_id,routers,area_id,
+            ospf_id,"1.1.1.1",area_id,
             hello_timer,dead_timer,tag
-        )
+        )#router_id required --->"1.1.1.1"
         if(result == "ok"):# i change here
             messages.success(request,"OSPF has been Done Successfully")
         else :
