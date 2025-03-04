@@ -151,6 +151,14 @@ function ospf(router){
         </div>
         <button type="submit" class="btn">Apply Configuration</button>
         <button type="action" id="delete"class="btn delete">Delete Configuration</button>   
+        <div class="command-output" id="command-output">
+            <h2>OSPF Neighbor Information</h2>
+            <textarea id="ospf-neighbors" readonly>
+            </textarea>
+            <h2>OSPF Database  Summary</h2>
+            <textarea id="ospf-database" readonly>
+            </textarea>
+        </div>
         `;
     
     const form=document.getElementById('config-form');
@@ -159,6 +167,7 @@ function ospf(router){
         {
             document.getElementById("tag").value = "remove_configration";
         });
+
 }
 function OneRouterSelected(router){
     const tab_buttons=document.getElementById("tab-buttons");
@@ -209,7 +218,6 @@ function ManyRouterSelected(selected){
     <button id="ospf-tab" class="active">OSPF Configuration</button>
     `;
     const form_content=document.getElementById("form-groups");
-    console.log(form_content);
     form_content.innerHTML='';
     form_content.innerHTML=`
         <input type="hidden" name="routers" value="${selected}">
@@ -227,14 +235,25 @@ function ManyRouterSelected(selected){
             <input type="number" id="dead-timer" name="dead-timer" required>
         </div>
         <button type="submit" class="btn">Apply Configuration</button>
-        <button type="action" id="delete"class="btn delete">Delete Configuration</button>`;
+        <button type="action" id="delete"class="btn delete">Delete Configuration</button>
+        
+        <div class="command-output" id="command-output">
+            <h2>OSPF Neighbor Information</h2>
+            <textarea id="ospf-neighbors" readonly>
+            </textarea>
+            <h2>OSPF Database  Summary</h2>
+            <textarea id="ospf-database" readonly>
+            </textarea>
+        </div>
+        `;
     const form=document.getElementById('config-form');
     form.action="/playground/ospf/";
     document.getElementById("delete").addEventListener("click", ()=> 
         {
             document.getElementById("tag").value = "remove_configration";
         });
-    }
+    
+}
 function handleSelectRouters(){
     let checkboxs = document.querySelectorAll("input.tableCheck");
     console.log(checkboxs);

@@ -111,7 +111,13 @@ def static_routing(request):
         print(admin_dist)
         print(tag)
         result=AutomationMethods.Static_routing(router,cidr,next_hop,admin_dist,tag)
-    return redirect('/playground/routerconfiguration')
+        if(result == "ok"):# i change here
+            messages.success(request,"Static Routing has been Done Successfully")
+        else :
+            messages.error(request,f"Error while doing Static Routing Configuration: {result}")# i change here
+        
+        return render(request,'result.html',{'page':'routerconfiguration'})
+        return redirect('/playground/routerconfiguration')
 
 
 @login_required
@@ -138,7 +144,12 @@ def ospf(request):
             ospf_id,routers,area_id,
             hello_timer,dead_timer,tag
         )
-        print(result)
+        if(result == "ok"):# i change here
+            messages.success(request,"OSPF has been Done Successfully")
+        else :
+            messages.error(request,f"Error while doing OSPF Configuration: {result}")# i change here
+        
+    return render(request,'result.html',{'page':'routerconfiguration'})
     return redirect('/playground/routerconfiguration')
 
 
@@ -158,7 +169,13 @@ def vlan(request):
         print(vlanid)
         print(vlanname)
         
-        AutomationMethods.Vlans_configs(switches,interfaces,vlan_cidr,vlanid,vlanname,tag)
+        result=AutomationMethods.Vlans_configs(switches,interfaces,vlan_cidr,vlanid,vlanname,tag)
+        if(result == "ok"):# i change here
+            messages.success(request,"VLAN has been Done Successfully")
+        else :
+            messages.error(request,f"Error while doing VLAN Configuration: {result}")# i change here
+        
+    return render(request,'result.html',{'page':'switchconfiguration'})
     return redirect('/playground/switchconfiguration')
 
 
@@ -184,8 +201,10 @@ def sethostname(request):
             messages.error(request,f"Error while setting setting Host name: {result}")# i change here
         
         if(router):    
+            return render(request,'result.html',{'page':'routerconfiguration'})
             return redirect('/playground/routerconfiguration');# render(request,'router_configuration.html')
         else :
+            return render(request,'result.html',{'page':'switchconfiguration'})
             return redirect('/playground/switchconfiguration');# render(request,'switch_configuration.html')
 @login_required
 def setbanner(request):
@@ -211,10 +230,11 @@ def setbanner(request):
             messages.error(request,f"Error while setting setting Banner name: {result}")
         
         if(router):    
+            return render(request,'result.html',{'page':'routerconfiguration'})
             return redirect('/playground/routerconfiguration');# render(request,'router_configuration.html')
         else :
+            return render(request,'result.html',{'page':'switchconfiguration'})
             return redirect('/playground/switchconfiguration');# render(request,'switch_configuration.html')
-        
 
 @login_required
 def setInterfaceIP(request):
@@ -241,10 +261,11 @@ def setInterfaceIP(request):
             messages.error(request,f"Error while setting the Interface Ip: {result}")# i change here
         
         if(router):    
+            return render(request,'result.html',{'page':'routerconfiguration'})
             return redirect('/playground/routerconfiguration');# render(request,'router_configuration.html')
         else :
+            return render(request,'result.html',{'page':'switchconfiguration'})
             return redirect('/playground/switchconfiguration');# render(request,'switch_configuration.html')
-        
 # API 
 @login_required
 def devices_list(request):

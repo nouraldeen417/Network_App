@@ -24,7 +24,7 @@ class AutomationMethods:
         return Fact_data
 
     def Set_Hostname(selected_host,hostname):
-        status ='ok'# .set_hostname(selected_host,hostname) #"ok"
+        status ='fail'# .set_hostname(selected_host,hostname) #"ok"
         print (status)
         return status
     

@@ -113,7 +113,17 @@ function vlan(selectedDeviceId) {
         <input type="hidden" id="tag" name="tag" value="add_configration">
         <button type="submit" class="btn">Apply Configuration</button>
         <button type="action" id="delete"class="btn delete">Delete Configuration</button>
-    `;
+        <div class="command-output">
+            <h2>VLAN Brief Information</h2>
+            <textarea name="vlan-brief" id="vlan-brief" readonly>
+        
+            </textarea>
+            <h2>VLAN Detailed Information</h2>
+            <textarea name="vlan-detail" id="vlan-detail" readonly>
+
+            </textarea>
+        </div>
+        `;
     const form=document.getElementById('config-form');
     form.action="/playground/vlan/";
     document.getElementById("delete").addEventListener("click", ()=> 
@@ -176,7 +186,17 @@ function ManySwitchSelected(selected){
             <input type="hidden" id="switches" name="switches" value=${selected}>
             <input type="hidden" id="tag" name="tag" value="add_configration">
             <button type="submit" class="btn">Apply Configuration</button>
-            <button type="action" id="delete" class="btn delete">Delete Configuration</button>`;
+            <button type="action" id="delete" class="btn delete">Delete Configuration</button>
+            <div class="command-output">
+            <h2>VLAN Brief Information</h2>
+            <textarea name="vlan-brief" id="vlan-brief" readonly>
+            </textarea>
+            <h2>VLAN Detailed Information</h2>
+            <textarea name="vlan-detail" id="vlan-detail" readonly>
+
+            </textarea>
+            </div>
+            `;
     console.log(configBody.innerHTML);
     const form=document.getElementById('config-form');
     form.action="/playground/vlan/";
