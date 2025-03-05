@@ -4,13 +4,9 @@ from . import views
 
 urlpatterns=[
     path('hello/',views.sayhello,name='sayhello'),
-    path('dowork/',views.dowork,name='dowork'),
     path('RoutersView/',views.RoutersView,name='RoutersView'),
     path('SwitchesView/',views.SwitchesView,name='SwitchesView'),
     path('FirewallView/',views.FirewallView,name='FirewallView'),
-    path('RouterDoWork/',views.RouterDoWork,name='RouterDoWork'),
-    path('SwitchDoWork/',views.SwitchDoWork,name='SwitchDoWork'),
-    path('FirewallDoWork/',views.FirewallDoWork,name='FirewallDoWork'),
     path('api/routers/', views.RouterList, name='router_list_api'),  
     path('api/devices/', views.devices_list, name='devices_list'),
     path('api/switches/', views.SwitchList, name='switch_list_api'),
@@ -27,6 +23,9 @@ urlpatterns=[
     path('setInterfaceIP/', views.setInterfaceIP, name='setInterfaceIP'), 
     path('vlan/', views.vlan, name='vlan'), 
     path('staticrouting/', views.static_routing, name='staticrouting'), 
-    path('ospf/', views.ospf, name='ospf'), 
+    path('ospf/', views.ospf, name='ospf'),
+    path('gateway/', views.gateway, name='gateway'),
+    path('vlan-brief/', views.display_VLAN_Brief, name='vlan-brief'),
+    path('ospf-data/', views.OSPF_Data, name='ospf-data'),
     
 ]

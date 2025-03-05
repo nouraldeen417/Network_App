@@ -1,6 +1,7 @@
-
 function ShowSwitches(){
     const data= localStorage.getItem("switchData");
+    console.log("before");
+    console.log(data);
     if(!data){
         console.log("No Data stored");
         return;
@@ -24,7 +25,7 @@ function HostName(device){
     host_content.innerHTML=`
     <div class="form-group">
     <label for="hostname">Host Name:</label>
-    <input type="text" id="hostname" name="hostname" placeholder="Enter new host name"> 
+    <input type="text" id="hostname" name="hostname" placeholder="Enter new host name" required> 
     </div>
     <input type="hidden" name="switch" value="${device}"> 
     <button type="submit" class="btn">Apply Configuration</button>
@@ -40,7 +41,7 @@ function Banner(device){
     `
     <div class="form-group">
     <label for="banner">Banner:</label>     
-    <input type="text" id="banner" name="banner" placeholder="Enter new banner">         
+    <input type="text" id="banner" name="banner" placeholder="Enter new banner" required>         
     </div>
     <input type="hidden" name="switch" value="${device}">      
     <button type="submit" class="btn">Apply Configuration</button>
@@ -66,38 +67,44 @@ function interfaceOptions(selectedDeviceId,type="checkbox") {
     return options;
 }
 
-function Interface_IP(device){
+function gateway(device){
     const form_content=document.getElementById("form-groups");
     form_content.innerHTML='';
     form_content.innerHTML=
     `
     <div class="form-group">
-        <label>Interfaces</label>
-        <div id="interface-check-container" class="check-group">
-        ${interfaceOptions(device,"radio")}
-        </div>
+    <label for="gateway">Gateway:</label>     
+    <input type="text" id="gateway" name="gateway" placeholder="Enter Gateway" required>         
     </div>
+
     <div class="form-group">
-    <label for="ipv4">IPv4:</label>
-    <input type="text" id="ipv4" name="ipv4" placeholder="Enter IPv4 (ip/subnet) required">
-    <div>
-    <input type="hidden" name="switch" value="${device}">
+            <label>Interfaces</label>
+            <div id="interface-check-container" class="check-group">
+            ${interfaceOptions(device,'radio')}
+            </div>
+        </div>
+
+    <input type="hidden" name="switch" value="${device}">      
     <button type="submit" class="btn">Apply Configuration</button>
-    `
+    `;
     const form=document.getElementById('config-form');
-    form.action="/playground/setInterfaceIP/";
+    form.action="/playground/gateway/";
 }
-function vlan(selectedDeviceId) {
+async function vlan(selectedDeviceId) {
+    console.log("Fetching VLAN brief from URL...");
+    const reponse = await fetch(`/playground/vlan-brief/`);
+    const vlanBrief = await reponse.json();
+    console.log(vlanBrief.vlan);
     let configBody = document.getElementById("form-groups");
     configBody.innerHTML = '';
     configBody.innerHTML = `
         <div class="form-group">
             <label for="vlan-id">VLAN ID</label>
-            <input type="number" id="vlan-id" name="vlan-id" placeholder="Enter VLAN ID (1-4094)" min="1" max="4094" oninput="validateVlanId(this) required">
+            <input type="number" id="vlan-id" name="vlan-id" placeholder="Enter VLAN ID (1-4094)" min="1" max="4094" required">
         </div>
         <div class="form-group">
             <label for="vlan-name" required>VLAN Name</label>
-            <input type="text" id="vlan-name" name="vlan-name" placeholder="Enter VLAN Name">
+            <input type="text" id="vlan-name" name="vlan-name" placeholder="Enter VLAN Name" required>
         </div>
         <div class="form-group">
             <label>Interfaces</label>
@@ -116,7 +123,7 @@ function vlan(selectedDeviceId) {
         <div class="command-output">
             <h2>VLAN Brief Information</h2>
             <textarea name="vlan-brief" id="vlan-brief" readonly>
-        
+                ${vlanBrief.vlan}
             </textarea>
             <h2>VLAN Detailed Information</h2>
             <textarea name="vlan-detail" id="vlan-detail" readonly>
@@ -124,10 +131,9 @@ function vlan(selectedDeviceId) {
             </textarea>
         </div>
         `;
-    const form=document.getElementById('config-form');
-    form.action="/playground/vlan/";
-    document.getElementById("delete").addEventListener("click", ()=> 
-    {
+    const form = document.getElementById('config-form');
+    form.action = "/playground/vlan/";
+    document.getElementById("delete").addEventListener("click", () => {
         document.getElementById("tag").value = "remove_configration";
     });
 }
@@ -137,7 +143,7 @@ function OneSwitchSelected(device){
     tab_buttons.innerHTML=`
     <button id="host-tab">Set Host Name</button>
     <button id="banner-tab">Set Banner</button>
-    <button id="interface-tab">Set Interface IP</button>
+    <button id="gateway-tab">Switch gateway</button>
     <button id="vlan-tab">Vlan Configuration</button>
     `;  
     const host_tab=document.getElementById("host-tab");
@@ -152,9 +158,9 @@ function OneSwitchSelected(device){
         document.getElementsByClassName("active")[0]?.classList.remove("active");
         banner_tab.classList.add("active");
     });
-    const interface_tab= document.getElementById("interface-tab");
+    const interface_tab= document.getElementById("gateway-tab");
     interface_tab.addEventListener('click',()=>{
-        Interface_IP(device);
+        gateway(device);
         document.getElementsByClassName("active")[0]?.classList.remove("active");
         interface_tab.classList.add("active");
     });
@@ -166,7 +172,10 @@ function OneSwitchSelected(device){
     });
     
 }
-function ManySwitchSelected(selected){
+async function ManySwitchSelected(selected){
+    console.log("Fetching VLAN brief from URL...");
+    const reponse = await fetch(`/playground/vlan-brief/`);
+    const vlanBrief = await reponse.json();
     const tab_buttons=document.getElementById("tab-buttons");
     tab_buttons.innerHTML='';
     tab_buttons.innerHTML=`
@@ -190,10 +199,11 @@ function ManySwitchSelected(selected){
             <div class="command-output">
             <h2>VLAN Brief Information</h2>
             <textarea name="vlan-brief" id="vlan-brief" readonly>
+                ${vlanBrief.vlan}
             </textarea>
             <h2>VLAN Detailed Information</h2>
             <textarea name="vlan-detail" id="vlan-detail" readonly>
-
+                
             </textarea>
             </div>
             `;

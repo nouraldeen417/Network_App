@@ -116,7 +116,9 @@ function Static_Routing(router){
         });
 }
 
-function ospf(router){
+async function ospf(router){
+    const data = await fetch(`/playground/ospf-data/`);
+    const ospf_data = await data.json();
     const form_content=document.getElementById("form-groups");
     form_content.innerHTML='';
     form_content.innerHTML=`
@@ -134,6 +136,10 @@ function ospf(router){
         <div class="form-group">
             <label for="area-id">Area ID</label>
             <input type="text" id="area-id" name="area-id" required>
+        </div>
+        <div class="form-group">
+            <label for="router-id">Router ID</label>
+            <input type="text" id="router-id" name="router-id" required>
         </div>
         <div class="form-group">
             <label>Interfaces</label>
@@ -154,9 +160,11 @@ function ospf(router){
         <div class="command-output" id="command-output">
             <h2>OSPF Neighbor Information</h2>
             <textarea id="ospf-neighbors" readonly>
+                ${ospf_data.neighborInfo}
             </textarea>
             <h2>OSPF Database  Summary</h2>
             <textarea id="ospf-database" readonly>
+                ${ospf_data.databaseInfo}
             </textarea>
         </div>
         `;
@@ -204,14 +212,16 @@ function OneRouterSelected(router){
         static_tab.classList.add("active");
     });
     const ospf_tab=document.getElementById("ospf-tab");
-    ospf_tab.addEventListener('click',()=>{
-        ospf(router);
+    ospf_tab.addEventListener('click',async ()=>{
+        await ospf(router);
         document.getElementsByClassName("active")[0]?.classList.remove("active");
         ospf_tab.classList.add("active");
     });
 }
 
-function ManyRouterSelected(selected){
+async function ManyRouterSelected(selected){
+    const data = await fetch(`/playground/ospf-data/`);
+    const ospf_data = await data.json();
     const tab_buttons=document.getElementById("tab-buttons");
     tab_buttons.innerHTML='';
     tab_buttons.innerHTML=`
@@ -227,6 +237,10 @@ function ManyRouterSelected(selected){
             <input type="text" id="area-id" name="area-id" required>
         </div>
         <div class="form-group">
+            <label for="router-id">Router ID</label>
+            <input type="text" id="router-id" name="router-id" required>
+        </div>
+        <div class="form-group">
             <label for="hello-timer">Hello Timer</label>
             <input type="number" id="hell-timer" name="hello-timer" required>
         </div>
@@ -240,9 +254,11 @@ function ManyRouterSelected(selected){
         <div class="command-output" id="command-output">
             <h2>OSPF Neighbor Information</h2>
             <textarea id="ospf-neighbors" readonly>
+                ${ospf_data.neighborInfo}
             </textarea>
             <h2>OSPF Database  Summary</h2>
             <textarea id="ospf-database" readonly>
+                ${ospf_data.databaseInfo}
             </textarea>
         </div>
         `;
@@ -258,7 +274,7 @@ function handleSelectRouters(){
     let checkboxs = document.querySelectorAll("input.tableCheck");
     console.log(checkboxs);
     checkboxs.forEach(check=>{
-        check.addEventListener('change',()=>{
+        check.addEventListener('change',async ()=>{
             
             document.getElementById("form-groups").innerHTML='';
             const selected=document.querySelectorAll("input.tableCheck:checked");
@@ -268,7 +284,7 @@ function handleSelectRouters(){
                 OneRouterSelected(selected[0].value);
             }else{
                 const routers=Array.from(selected).map(x=>x.value);
-                ManyRouterSelected(routers);
+                await ManyRouterSelected(routers);
             }
         });
     });

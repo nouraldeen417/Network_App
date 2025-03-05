@@ -13,7 +13,7 @@ from .form import RegisterForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404
-
+from django.views.decorators.cache import cache_page
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -96,6 +96,22 @@ def routerconfiguration(request):
 def switchconfiguration(request):
     return render(request,'switch_configuration.html')
 
+@login_required
+def gateway(request):
+    if request.method=='POST':
+        switch=request.POST.get('switch')
+        gateway=request.POST.get('gateway')
+        interface=request.POST.get('interfaces')
+        print(switch)
+        print(gateway)
+        print(interface)
+        result = AutomationMethods.set_switchgateway(switch,interface,gateway)
+        if(result == "ok"):# i change here
+            messages.success(request,"Switch Gateway has been Done Successfully")
+        else :
+            messages.error(request,f"Error while Switch Gateway Configuration: {result}")# i change here
+        
+        return render(request,'result.html',{'page':'switchconfiguration'})
 
 @login_required
 def static_routing(request):
@@ -131,6 +147,7 @@ def ospf(request):
         hello_timer=request.POST.get('hello-timer')
         dead_timer=request.POST.get('dead-timer')
         tag=request.POST.get('tag')
+        router_id=request.POST.get('router-id')
         print(routers)
         print(cidr)
         print(ospf_id)
@@ -139,9 +156,10 @@ def ospf(request):
         print(hello_timer)
         print(dead_timer)
         print(tag)
+        print(router_id)
         result=AutomationMethods.Ospf_routing(
             routers,interfaces,cidr,
-            ospf_id,"1.1.1.1",area_id,
+            ospf_id,router_id,area_id,
             hello_timer,dead_timer,tag
         )#router_id required --->"1.1.1.1"
         if(result == "ok"):# i change here
@@ -266,8 +284,28 @@ def setInterfaceIP(request):
         else :
             return render(request,'result.html',{'page':'switchconfiguration'})
             return redirect('/playground/switchconfiguration');# render(request,'switch_configuration.html')
+
+
+
 # API 
+
 @login_required
+def display_VLAN_Brief(request):
+    data={
+        'vlan':AutomationMethods.display_VLAN_Brief()
+    }
+    return JsonResponse(data,safe=False)
+
+@login_required
+def OSPF_Data(request):
+    data={
+        'neighborInfo':AutomationMethods.display_OSPF_Neighbor_Information(),
+        'databaseInfo':AutomationMethods.display_OSPF_Database_Summary(),
+    }
+    return JsonResponse(data)
+
+@login_required
+#@cache_page(60 * 15)  # Cache for 15 minutes
 def devices_list(request):
     devices = AutomationMethods.Ping()  # Call the ping method to get the list of devices
     print(devices)
@@ -278,6 +316,7 @@ def devices_list(request):
     return JsonResponse(serializable_devices, safe=False)
 
 @login_required
+#@cache_page(60 * 15)  # Cache for 15 minutes
 def RouterList(request):
     # Fetch the list of devices (Facts objects)
     devices = AutomationMethods.Router_list()
@@ -323,6 +362,7 @@ def RouterList(request):
     return JsonResponse(serializable_devices, safe=False)
 
 @login_required
+#@cache_page(60 * 15)  # Cache for 15 minutes
 def SwitchList(request):
         # Fetch the list of devices (Facts objects)
     devices = AutomationMethods.Switch_list()
@@ -377,52 +417,3 @@ def FirewallList(request):
         return JsonResponse(serializable_devices, safe=False)
         return Response([{'name':"Firewall1" , 'ip_address':"192.167.0.1",'location':"home",'status':"Stopped"},{'name':"firewall2" , 'ip_address':"192.167.0.2",'location':"home",'status':"Running"}] ,status=status.HTTP_200_OK)
 
-@login_required
-def RouterDoWork(request):
-    # Data I will Take from nour (Routers and thier status[stop, active]) 
-    if request.method == 'POST':
-        selected_router_ids = request.POST.getlist('selectedRouterIPs[]')
-        print(selected_router_ids)
-        if selected_router_ids:
-            messages.success(request, "Routers selected successfully!")
-        else:
-            messages.error(request, "No routers selected. Please try again.")
-            
-    # Redirect to the main view
-    return redirect('RoutersView')
-
-@login_required
-def SwitchDoWork(request):
-    # Data I will Take from nour (Routers and thier status[stop, active]) 
-    if request.method == 'POST':
-        selected_router_ids = request.POST.getlist('selectedRouterIPs[]')
-        print(selected_router_ids)
-        if selected_router_ids:
-            messages.success(request, "Routers selected successfully!")
-        else:
-            messages.error(request, "No routers selected. Please try again.")
-            
-    # Redirect to the main view
-    return redirect('RoutersView')
-
-@login_required
-def FirewallDoWork(request):
-    # Data I will Take from nour (Routers and thier status[stop, active]) 
-    if request.method == 'POST':
-        selected_router_ids = request.POST.getlist('selectedRouterIPs[]')
-        print(selected_router_ids)
-        if selected_router_ids:
-            messages.success(request, "Routers selected successfully!")
-        else:
-            messages.error(request, "No routers selected. Please try again.")
-            
-    # Redirect to the main view
-    return redirect('RoutersView')
-
-@login_required
-def dowork(request):
-    if request.method == 'POST':
-        user_input = request.POST.get('ip')
-        # You can process the input here
-        return HttpResponse(f'You entered: {AutomationMethods.Ping()}')
-    return  render(request,'hello.html',{'name':"Hagag"})

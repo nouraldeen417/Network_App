@@ -1,5 +1,5 @@
 const routersApiUrl = '/playground/api/routers/';
-let currentDeviceData = null;
+let RoutersData = null;
 
 // Function to switch tabs
 function openTab(tabName) {
@@ -25,15 +25,7 @@ function enableConfigureButton() {
 // Function to fetch device information
 async function fetchDeviceInfo() {
     try {
-        const storedData = localStorage.getItem('routerData');
-        console.log("hello stored data")
-        if (!storedData) {
-            console.error('No data found in localStorage.');
-            storedData = await fetch(routersApiUrl);
-        return;
-        }
-
-        const data = JSON.parse(storedData);
+        const data = RoutersData;
         console.log(data)
         const deviceSelect = document.getElementById('device-select');
         const selectedDeviceId = deviceSelect.value;
@@ -93,7 +85,7 @@ async function populateDeviceSelect() {
         const response = await fetch(routersApiUrl);
         const data = await response.json();
         console.log(data);
-        localStorage.setItem('routerData', JSON.stringify(data));
+        RoutersData = data;
         const deviceSelect = document.getElementById('device-select');
         deviceSelect.innerHTML = data.map(device => 
             `<option value="${device.id}">${device.device}</option>`
