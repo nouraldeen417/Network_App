@@ -253,7 +253,7 @@ def set_valnconfigration(selected_hosts,interfaces_list,vlan_cidr,
         private_data_dir="../ansible/",          # Current directory
         playbook="playbooks/site.yaml",
         inventory="hosts",                       # Path to external inventory file
-        limit=selected_hosts,          # Limit to selected routers
+        limit=','.join(selected_hosts),          # Limit to selected routers
         rotate_artifacts=10,
         tags=tag,                
         extravars={                              # Pass the selected role as a variable
@@ -267,7 +267,7 @@ def set_valnconfigration(selected_hosts,interfaces_list,vlan_cidr,
     error_msg = _get_ansibleresult(runner)
     print ("vlan"+str(vlan_id))
     if (error_msg == OK_MSG or error_msg == NO_CHNAGE_MSG ):
-        error_msg=set_interfaceconfigration(selected_hosts,"vlan"+str(vlan_id),vlan_cidr,tag)    
+        error_msg=set_interfaceconfigration(selected_hosts[0],"vlan"+str(vlan_id),vlan_cidr,tag)    
         return error_msg
     return error_msg
 

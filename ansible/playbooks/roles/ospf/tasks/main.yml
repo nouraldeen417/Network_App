@@ -16,7 +16,7 @@
 - name: Configure OSPF on the interface
   cisco.ios.ios_ospf_interfaces:
     config:
-      - name: "{{ interface_name }}"
+      - name: "{{ item }}"
         address_family:
           - afi: ipv4
             process:
@@ -27,6 +27,7 @@
               time: "{{ dead_timer }}"
 
     state: merged
+  loop: "{{ interface_name }}"
   tags: add_configration
 
 - name: delete OSPF process and router ID
