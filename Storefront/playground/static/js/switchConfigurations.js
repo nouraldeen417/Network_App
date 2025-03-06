@@ -16,14 +16,14 @@ async function ShowSwitches(){
             <td><label for="${r.id}">${r.device}</label></td>
         </tr>
         `).join('');
-        
+    handleSelectSwitches();     
     console.log("Fetching VLAN brief from URL...");
     const reponse = await fetch(`/playground/vlan-brief/`);
     const vlanBrief = await reponse.json();
     console.log(vlanBrief.vlan);       
     document.getElementById("vlan-brief").innerHTML
     =`${vlanBrief.vlan}`
-    handleSelectSwitches();
+   
 }
 
 function HostName(device){

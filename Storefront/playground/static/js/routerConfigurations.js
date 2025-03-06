@@ -15,13 +15,14 @@ async function ShowRouters(){
             <td><label for="${r.id}">${r.device}</label></td>
         </tr>
         `).join('');
+    
+    handleSelectRouters();
     const ospfResponse = await fetch(`/playground/ospf-data/`);
     const ospf_data = await ospfResponse.json();    
     document.getElementById("ospf-neighbors").innerHTML
     =`${ospf_data.neighborInfo}`;
     document.getElementById("ospf-database").innerHTML
     =`${ospf_data.databaseInfo}`;
-    handleSelectRouters();
 }
 
 function HostName(router){
