@@ -1,4 +1,4 @@
-function ShowSwitches(){
+async function ShowSwitches(){
     const data= localStorage.getItem("switchData");
     console.log("before");
     console.log(data);
@@ -16,6 +16,13 @@ function ShowSwitches(){
             <td><label for="${r.id}">${r.device}</label></td>
         </tr>
         `).join('');
+        
+    console.log("Fetching VLAN brief from URL...");
+    const reponse = await fetch(`/playground/vlan-brief/`);
+    const vlanBrief = await reponse.json();
+    console.log(vlanBrief.vlan);       
+    document.getElementById("vlan-brief").innerHTML
+    =`${vlanBrief.vlan}`
     handleSelectSwitches();
 }
 
@@ -77,24 +84,13 @@ function gateway(device){
     <input type="text" id="gateway" name="gateway" placeholder="Enter Gateway" required>         
     </div>
 
-    <div class="form-group">
-            <label>Interfaces</label>
-            <div id="interface-check-container" class="check-group">
-            ${interfaceOptions(device,'radio')}
-            </div>
-        </div>
-
     <input type="hidden" name="switch" value="${device}">      
     <button type="submit" class="btn">Apply Configuration</button>
     `;
     const form=document.getElementById('config-form');
     form.action="/playground/gateway/";
 }
-async function vlan(selectedDeviceId) {
-    console.log("Fetching VLAN brief from URL...");
-    const reponse = await fetch(`/playground/vlan-brief/`);
-    const vlanBrief = await reponse.json();
-    console.log(vlanBrief.vlan);
+function vlan(selectedDeviceId) {
     let configBody = document.getElementById("form-groups");
     configBody.innerHTML = '';
     configBody.innerHTML = `
@@ -120,16 +116,7 @@ async function vlan(selectedDeviceId) {
         <input type="hidden" id="tag" name="tag" value="add_configration">
         <button type="submit" class="btn">Apply Configuration</button>
         <button type="action" id="delete"class="btn delete">Delete Configuration</button>
-        <div class="command-output">
-            <h2>VLAN Brief Information</h2>
-            <textarea name="vlan-brief" id="vlan-brief" readonly>
-                ${vlanBrief.vlan}
-            </textarea>
-            <h2>VLAN Detailed Information</h2>
-            <textarea name="vlan-detail" id="vlan-detail" readonly>
-
-            </textarea>
-        </div>
+        
         `;
     const form = document.getElementById('config-form');
     form.action = "/playground/vlan/";
@@ -172,10 +159,7 @@ function OneSwitchSelected(device){
     });
     
 }
-async function ManySwitchSelected(selected){
-    console.log("Fetching VLAN brief from URL...");
-    const reponse = await fetch(`/playground/vlan-brief/`);
-    const vlanBrief = await reponse.json();
+function ManySwitchSelected(selected){
     const tab_buttons=document.getElementById("tab-buttons");
     tab_buttons.innerHTML='';
     tab_buttons.innerHTML=`
@@ -196,16 +180,6 @@ async function ManySwitchSelected(selected){
             <input type="hidden" id="tag" name="tag" value="add_configration">
             <button type="submit" class="btn">Apply Configuration</button>
             <button type="action" id="delete" class="btn delete">Delete Configuration</button>
-            <div class="command-output">
-            <h2>VLAN Brief Information</h2>
-            <textarea name="vlan-brief" id="vlan-brief" readonly>
-                ${vlanBrief.vlan}
-            </textarea>
-            <h2>VLAN Detailed Information</h2>
-            <textarea name="vlan-detail" id="vlan-detail" readonly>
-                
-            </textarea>
-            </div>
             `;
     console.log(configBody.innerHTML);
     const form=document.getElementById('config-form');
@@ -235,7 +209,7 @@ function handleSelectSwitches(){
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    ShowSwitches();
+document.addEventListener('DOMContentLoaded', async () => {
+    await ShowSwitches();
     setInterval(ShowSwitches, 600000);  // Refresh every 600,000 milliseconds (10 minutes)
 });

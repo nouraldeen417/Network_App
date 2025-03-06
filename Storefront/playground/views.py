@@ -101,11 +101,9 @@ def gateway(request):
     if request.method=='POST':
         switch=request.POST.get('switch')
         gateway=request.POST.get('gateway')
-        interface=request.POST.get('interfaces')
         print(switch)
         print(gateway)
-        print(interface)
-        result = AutomationMethods.set_switchgateway(switch,interface,gateway)
+        result = AutomationMethods.set_switchgateway(switch,gateway)
         if(result == "ok"):# i change here
             messages.success(request,"Switch Gateway has been Done Successfully")
         else :

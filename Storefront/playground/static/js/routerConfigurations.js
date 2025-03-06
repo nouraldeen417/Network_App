@@ -1,5 +1,5 @@
 
-function ShowRouters(){
+async function ShowRouters(){
     const data= localStorage.getItem("routerData");
     if(!data){
         console.log("No Data stored");
@@ -15,7 +15,13 @@ function ShowRouters(){
             <td><label for="${r.id}">${r.device}</label></td>
         </tr>
         `).join('');
-        handleSelectRouters();
+    const ospfResponse = await fetch(`/playground/ospf-data/`);
+    const ospf_data = await ospfResponse.json();    
+    document.getElementById("ospf-neighbors").innerHTML
+    =`${ospf_data.neighborInfo}`;
+    document.getElementById("ospf-database").innerHTML
+    =`${ospf_data.databaseInfo}`;
+    handleSelectRouters();
 }
 
 function HostName(router){
@@ -72,15 +78,17 @@ function Interface_IP(router){
     form_content.innerHTML=
     `
     <div class="form-group">
+    <label for="ipv4">IPv4:</label>
+    <input type="text" id="ipv4" name="ipv4" placeholder="Enter IPv4 (ip/subnet)" required>
+    <div>
+
+    <div class="form-group">
         <label>Interfaces</label>
         <div id="interface-check-container" class="check-group">
         ${interfaceOptions(router,"radio")}
         </div>
     </div>
-    <div class="form-group">
-    <label for="ipv4">IPv4:</label>
-    <input type="text" id="ipv4" name="ipv4" placeholder="Enter IPv4 (ip/subnet) required">
-    <div>
+    
     <input type="hidden" name="router" value="${router}">
     <button type="submit" class="btn">Apply Configuration</button>
     `
@@ -116,9 +124,7 @@ function Static_Routing(router){
         });
 }
 
-async function ospf(router){
-    const data = await fetch(`/playground/ospf-data/`);
-    const ospf_data = await data.json();
+function ospf(router){
     const form_content=document.getElementById("form-groups");
     form_content.innerHTML='';
     form_content.innerHTML=`
@@ -157,16 +163,6 @@ async function ospf(router){
         </div>
         <button type="submit" class="btn">Apply Configuration</button>
         <button type="action" id="delete"class="btn delete">Delete Configuration</button>   
-        <div class="command-output" id="command-output">
-            <h2>OSPF Neighbor Information</h2>
-            <textarea id="ospf-neighbors" readonly>
-                ${ospf_data.neighborInfo}
-            </textarea>
-            <h2>OSPF Database  Summary</h2>
-            <textarea id="ospf-database" readonly>
-                ${ospf_data.databaseInfo}
-            </textarea>
-        </div>
         `;
     
     const form=document.getElementById('config-form');
@@ -212,16 +208,14 @@ function OneRouterSelected(router){
         static_tab.classList.add("active");
     });
     const ospf_tab=document.getElementById("ospf-tab");
-    ospf_tab.addEventListener('click',async ()=>{
-        await ospf(router);
+    ospf_tab.addEventListener('click',()=>{
+        ospf(router);
         document.getElementsByClassName("active")[0]?.classList.remove("active");
         ospf_tab.classList.add("active");
     });
 }
 
-async function ManyRouterSelected(selected){
-    const data = await fetch(`/playground/ospf-data/`);
-    const ospf_data = await data.json();
+function ManyRouterSelected(selected){
     const tab_buttons=document.getElementById("tab-buttons");
     tab_buttons.innerHTML='';
     tab_buttons.innerHTML=`
@@ -237,10 +231,6 @@ async function ManyRouterSelected(selected){
             <input type="text" id="area-id" name="area-id" required>
         </div>
         <div class="form-group">
-            <label for="router-id">Router ID</label>
-            <input type="text" id="router-id" name="router-id" required>
-        </div>
-        <div class="form-group">
             <label for="hello-timer">Hello Timer</label>
             <input type="number" id="hell-timer" name="hello-timer" required>
         </div>
@@ -250,17 +240,6 @@ async function ManyRouterSelected(selected){
         </div>
         <button type="submit" class="btn">Apply Configuration</button>
         <button type="action" id="delete"class="btn delete">Delete Configuration</button>
-        
-        <div class="command-output" id="command-output">
-            <h2>OSPF Neighbor Information</h2>
-            <textarea id="ospf-neighbors" readonly>
-                ${ospf_data.neighborInfo}
-            </textarea>
-            <h2>OSPF Database  Summary</h2>
-            <textarea id="ospf-database" readonly>
-                ${ospf_data.databaseInfo}
-            </textarea>
-        </div>
         `;
     const form=document.getElementById('config-form');
     form.action="/playground/ospf/";
@@ -284,13 +263,13 @@ function handleSelectRouters(){
                 OneRouterSelected(selected[0].value);
             }else{
                 const routers=Array.from(selected).map(x=>x.value);
-                await ManyRouterSelected(routers);
+                ManyRouterSelected(routers);
             }
         });
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    ShowRouters();
+document.addEventListener('DOMContentLoaded', async () => {
+    await ShowRouters();
     setInterval(ShowRouters, 600000);  // Refresh every 600,000 milliseconds (10 minutes)
 });

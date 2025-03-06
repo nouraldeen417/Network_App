@@ -29,6 +29,7 @@
 
     <div class="container">
         <h1>Switches Configurations</h1>
+        
         <div class="devices-list">
             <h2>Available Switches</h2>
             <table class="info-table">
@@ -57,6 +58,16 @@
                     </div>
                 </form>
             </div>
+        </div>
+        <div class="command-output">
+            <h2>VLAN Brief Information</h2>
+            <textarea name="vlan-brief" id="vlan-brief" readonly>
+                
+            </textarea>
+            <h2>VLAN Detailed Information</h2>
+            <textarea name="vlan-detail" id="vlan-detail" readonly>
+
+            </textarea>
         </div>
     </div>
     <script src="{% static 'js/switchConfigurations.js' %}" defer></script>
