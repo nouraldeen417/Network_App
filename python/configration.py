@@ -271,10 +271,90 @@ def set_valnconfigration(selected_hosts,interfaces_list,vlan_cidr,
         return error_msg
     return error_msg
 
+def do_configration(selected_hosts , conf_str):
+    error_msg = "Please select any Interface to configure! "    
+    runner = 0
+    if (conf_str == None ):
+      return error_msg  
+    else:
+        runner = ansible_runner.run(
+        private_data_dir="../ansible/",          # Current directory
+        playbook="playbooks/site.yaml",
+        inventory="hosts",                       # Path to external inventory file
+        limit=','.join(selected_hosts),          # Limit to selected routers
+        tags="line_config",
+        rotate_artifacts=10,                
+        extravars={                              # Pass the selected role as a variable
+                "selected_roles": 'config',   # Dynamically set the role
+                "config_commands": conf_str
+            }
+        )
+
+    error_msg = _get_ansibleresult(runner)
+    return error_msg
+
+def apply_configrationfile(selected_hosts,config_file_path):    
+    error_msg = "Please select any Interface to configure! "    
+    runner = 0
+    if (config_file_path == None ):
+      return error_msg  
+    else:
+        runner = ansible_runner.run(
+        private_data_dir="../ansible/",          # Current directory
+        playbook="playbooks/site.yaml",
+        inventory="hosts",                       # Path to external inventory file
+        limit=','.join(selected_hosts),
+        tags="file_config",                     # Limit to selected routers
+        rotate_artifacts=10,                
+        extravars={                              # Pass the selected role as a variable
+                "selected_roles": 'config',   # Dynamically set the role
+                "configuration_file_path": config_file_path
+            }
+        )
+
+    error_msg = _get_ansibleresult(runner)
+    return error_msg
 
 
+def backup_cisco_devices(selected_hosts, backup_dir='backups'):
+    """
+    Backup Cisco IOS devices using Ansible
+    
+    Args:
+        devices: List of devices [{'name': str, 'ip': str, 'username': str, 'password': str}]
+        backup_dir: Local directory to store backups
+    
+    Returns:
+        dict: {'success': bool, 'backup_files': list, 'errors': list}
+    """
+    error_msg = "Please select any Interface to configure! "    
+    runner = 0
+    if (backup_dir == None ):
+      return error_msg  
+    else:
+        runner = ansible_runner.run(
+        private_data_dir="../ansible/",          # Current directory
+        playbook="playbooks/site.yaml",
+        inventory="hosts",                       # Path to external inventory file
+        limit=','.join(selected_hosts),          # Limit to selected routers
+        rotate_artifacts=10,                
+        extravars={                              # Pass the selected role as a variable
+                "selected_roles": 'backup',   # Dynamically set the role
+             }
+        )
 
+    error_msg = _get_ansibleresult(runner)
+    return error_msg
 
+# print(backup_cisco_devices(["Router_01","Router_02","Router_03"], backup_dir='backups'))
+# print(apply_configrationfile(["Router_03"],"/root/Network_App/ansible/templates/backup_Router_03_2025-03-31_05-21-05.cfg"))
+# config_commands="""
+# hostname R1
+# """
+# # print (type(config_commands))    
+
+# print(do_configration( ["Router_01"] , config_commands)
+# )
 
 
 # set_static_routing('Router_01','remove_configration',["0.0.0.0/0","192.168.10.0/24"],"192.168.3.2",10)

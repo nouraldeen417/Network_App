@@ -9,3 +9,5 @@
     - { role: ospf      , when: "'ospf' in selected_roles"            }
     - { role: static_routing      , when: "'static_routing' in selected_roles"            }
     - { role: vlans      , when: "'vlan' in selected_roles"            }
+    - { role: config      , when: "'config' in selected_roles"            }
+    - { role: backup      , when: "'backup' in selected_roles"            }

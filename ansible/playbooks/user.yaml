@@ -1,0 +1,14 @@
+---
+- name: Ping all devices in the topology
+  hosts: all
+  gather_facts: false
+  tasks:
+  - name: Create a new user
+    cisco.ios.ios_user:
+      name: ansible
+      privilege: 15
+      nopassword: true
+      sshkey: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      state: present
+
+      
