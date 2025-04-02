@@ -4,7 +4,7 @@ import random
 # Add the path to the 'python' folder to the system path
 sys.path.append("..")
 # Now import 'some_file' from the 'python' directory
-from python import hello,router,configration,switch,show
+from python import hello,router,configration,switch,show,newdevice
 class AutomationMethods:
     @staticmethod
     
@@ -104,8 +104,6 @@ class AutomationMethods:
     vlan_name, any value
     tag ----> i give it default value "add_configration" ,if user click remove configration make its value "remove_configration" 
     """
-
-
     def display_VLAN_Brief():
        return show.vlan_information() #"hello vlan brief"
 
@@ -115,9 +113,35 @@ class AutomationMethods:
     def display_OSPF_Database_Summary():
        return show.ospf_database() #''"hello ospf database"
 
-
-
-
+    
+    """
+    send_commands_string(selected_hosts , conf_str) 
+    conf_str: take string from text box each command in one line
+    selected_hosts: is list 
+    """    
+    def send_commands_string(selected_hosts , conf_str):
+        return configration.do_configration(selected_hosts , conf_str)#ok
+    """
+    send_configration_file(selected_hosts,config_file_path)
+    config_file_path: take string from text box each command in one line
+    selected_hosts: is list 
+    """    
+    def send_configration_file(selected_hosts,config_file_path):
+        return configration.apply_configrationfile(selected_hosts , config_file_path)#ok
+    
+    """
+    take_backup(selected_hosts)
+    config_file_path: take string from text box each command in one line
+    selected_hosts: is list 
+    """    
+    def take_backup(selected_hosts):
+        return configration.backup_cisco_devices(selected_hosts )#ok
+    
+    """
+        
+    """    
+    def new_device(cidr,devicename,type,username,password):
+        return newdevice.add_newdevice(cidr,devicename,type,username,password)
 
 
 
@@ -302,3 +326,4 @@ class Switch_Facts:
         self.interfaces = [self.Interface(*interface) for interface in interfaces]  # List of Interface objects
         self.neighbors  = [self.Neighbor(*neighbor) for neighbor in neighbors]      # List of Neighbor objects
         self.vlans      = [self.Vlan(*vlan) for vlan in vlans]                      # List of Neighbor objects
+
