@@ -86,6 +86,7 @@ async function populateDeviceSelect() {
         const data = await response.json();
         console.log(data);
         RoutersData = data;
+        sessionStorage.setItem('routerData',JSON.stringify(data));
         const deviceSelect = document.getElementById('device-select');
         deviceSelect.innerHTML = data.map(device => 
             `<option value="${device.id}">${device.device}</option>`

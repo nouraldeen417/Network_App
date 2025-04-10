@@ -4,13 +4,14 @@ const apiUrl = '/playground/api/devices/';
 // Function to fetch device data from the API and update the table
 async function fetchDeviceData() {
     try {
-        const response = await fetch(apiUrl); // Replace with the actual API endpoint
+        const response = await fetch(apiUrl); 
         if (!response.ok) {
             throw new Error("Network response was not ok " + response.statusText);
         }
 
         const devices = await response.json();
-
+        console.log(devices);
+        sessionStorage.setItem('devices',JSON.stringify(devices));
         // Clear existing rows in the table body
         const tableBody = document.querySelector("#deviceTable tbody");
         tableBody.innerHTML = "";

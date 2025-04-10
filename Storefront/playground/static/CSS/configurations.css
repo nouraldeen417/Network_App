@@ -69,7 +69,7 @@ h1 {
 .command-output, .devices-list, .config,.config-section {
   margin-bottom: 30px;
 }
-.command-output h2, .devices-list h2, .config h2 {
+.command-output h2, .devices-list h2, .config h2{
   color: #007bff;
   border-bottom: 2px solid #007bff;
   padding-bottom: 10px;
@@ -192,4 +192,142 @@ h1 {
 .tab-buttons button:hover {
   background-color: #007bff;
   color: #fff;
+}
+.ssh-notice {
+  background: #fff8e1;
+  border-left: 4px solid #ffc107;
+  padding: 15px;
+  margin: 20px 0;
+  font-size: 14px;
+}
+
+.header {
+  background: #0066cc;
+  color: white;
+  padding: 15px 20px;
+}
+.header h1 {
+  display: flex;
+  font-size: 2em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  unicode-bidi: isolate;
+  color: white;
+}
+.tab_buttons {
+  display: flex;
+  background: #e0e0e0;
+}
+.tab-btn {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: #555;
+}
+.tab-btn.active {
+  background: white;
+  color: #0066cc;
+  border-top: 3px solid #0066cc;
+}
+
+.non-active-section {
+  display: none;
+}
+
+.file-upload-box {
+  border: 2px dashed #aaa;
+  padding: 40px;
+  text-align: center;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  background: #fafafa;
+  cursor: pointer;
+}
+
+.device-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.device-table th {
+  background: #0066cc;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+.device-table tr {
+  display: table-row;
+  vertical-align: inherit;
+  unicode-bidi: isolate;
+  border-color: inherit;
+}
+.device-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+textarea {
+  width: 95%;
+  height: 300px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 20px;
+}
+
+
+.backup-options input[type="radio"] {
+    background-color: initial;
+    display: inline;
+    cursor: pointer;
+    appearance: auto;
+    box-sizing: border-box;
+    margin: 10px 10px 50px 90px;
+    padding: initial;
+    border: initial;
+    transform: scale(1);
+}
+.backup-options label{
+  margin-right: 15px;
+  font-size: large;
+  cursor: pointer;
+}
+
+.upload-box:hover {
+  border-color: #999;
+  background-color: #f0f0f0;
+}
+
+.upload-box.highlight {
+  border-color: #0066cc;
+  background-color: #e6f2ff;
+}
+
+.result {
+  display: inline-block;
+  font-size: 16px;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-left: 10px; /* Adjust spacing from the button */
+  font-weight: bold;
+}
+
+.result.success {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.result.error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
 }

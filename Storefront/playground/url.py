@@ -6,7 +6,7 @@ urlpatterns=[
     path('hello/',views.sayhello,name='sayhello'),
     path('RoutersView/',views.RoutersView,name='RoutersView'),
     path('SwitchesView/',views.SwitchesView,name='SwitchesView'),
-    path('FirewallView/',views.FirewallView,name='FirewallView'),
+    path('AdvancedConfigView/',views.AdvancedConfigView,name='AdvancedConfig'),
     path('api/routers/', views.RouterList, name='router_list_api'),  
     path('api/devices/', views.devices_list, name='devices_list'),
     path('api/switches/', views.SwitchList, name='switch_list_api'),
@@ -27,5 +27,10 @@ urlpatterns=[
     path('gateway/', views.gateway, name='gateway'),
     path('vlan-brief/', views.display_VLAN_Brief, name='vlan-brief'),
     path('ospf-data/', views.OSPF_Data, name='ospf-data'),
+    path('add_device/', views.add_device, name='add_device'),
+    path('upload-file/', views.upload_file, name='upload-file'),
+    path('paste-config/', views.paste_config, name='paste-config'),
+    path('backup/', views.backup, name='backup'),
+
     
 ]

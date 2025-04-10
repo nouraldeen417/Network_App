@@ -1,5 +1,5 @@
 async function ShowSwitches(){
-    const data= localStorage.getItem("switchData");
+    const data=sessionStorage.getItem('switchData');
     console.log("before");
     console.log(data);
     if(!data){
@@ -58,7 +58,7 @@ function Banner(device){
 }
 
 function interfaceOptions(selectedDeviceId,type="checkbox") {
-    const data = localStorage.getItem('switchData');
+    const data = sessionStorage.getItem('switchData');
     if (!data) {
         console.error('No data found in localStorage.');
         return ;

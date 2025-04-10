@@ -1,6 +1,6 @@
 
 async function ShowRouters(){
-    const data= localStorage.getItem("routerData");
+    const data= sessionStorage.getItem("routerData");
     if(!data){
         console.log("No Data stored");
         return;
@@ -57,7 +57,7 @@ function Banner(router){
 }
 
 function interfaceOptions(selectedDeviceId,type="checkbox") {
-    const data = localStorage.getItem('routerData');
+    const data = sessionStorage.getItem("routerData");
     if (!data) {
         console.error('No data found in localStorage.');
         return ;

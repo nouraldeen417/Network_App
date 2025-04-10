@@ -86,8 +86,9 @@ def SwitchesView(request):
     return render(request,'switch.html')
 
 @login_required
-def FirewallView(request):
-    return render(request,'firewall.html')
+def AdvancedConfigView(request):
+    return render(request,'advanced_config.html')
+
 @login_required
 def routerconfiguration(request):
     return render(request,'router_configuration.html')
@@ -95,6 +96,59 @@ def routerconfiguration(request):
 @login_required
 def switchconfiguration(request):
     return render(request,'switch_configuration.html')
+
+
+@login_required
+def add_device(request):
+    
+    if request.method=='POST':
+        cidr=request.POST.get('ip')
+        devicename=request.POST.get('name')
+        type=request.POST.get('type')
+        username=request.POST.get('ssh-username')
+        password=request.POST.get('ssh-pass')
+        print(cidr)
+        print(devicename)
+        print(type)
+        print(username)
+        print(password)
+        result=AutomationMethods.new_device(cidr,devicename,type,username,password)
+        return JsonResponse({'response':result})  
+    return render(request,'advanced_config.html')
+    
+
+@login_required
+def upload_file(request):
+    if request.method=='POST':
+        file=request.FILES.get('file')
+        device=request.POST.get('device')
+        print(file)
+        print(device)
+        result =AutomationMethods.send_configration_file(file,device)
+        return JsonResponse({'response':result})
+    return render(request,'advanced_config.html')
+
+@login_required
+def paste_config(request):
+    if request.method=='POST':
+        paste_config=request.POST.get('paste-config')
+        device=request.POST.get('device')
+        print(paste_config)
+        print(device)
+        result =AutomationMethods.send_commands_string(paste_config,device)
+        return JsonResponse({'response':result})
+    return render(request,'advanced_config.html')
+
+
+@login_required
+def backup(request):
+    if request.method=='POST':
+        devices=request.POST.getlist('device')
+        print(devices)
+        result =AutomationMethods.take_backup(devices)
+        return JsonResponse({'response':result})
+    return render(request,'advanced_config.html')
+
 
 @login_required
 def gateway(request):
@@ -300,7 +354,7 @@ def OSPF_Data(request):
         'neighborInfo':AutomationMethods.display_OSPF_Neighbor_Information(),
         'databaseInfo':AutomationMethods.display_OSPF_Database_Summary(),
     }
-    return JsonResponse(data)
+    return JsonResponse(data,safe=False)
 
 @login_required
 #@cache_page(60 * 15)  # Cache for 15 minutes

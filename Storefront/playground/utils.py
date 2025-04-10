@@ -4,32 +4,32 @@ import random
 # Add the path to the 'python' folder to the system path
 sys.path.append("..")
 # Now import 'some_file' from the 'python' directory
-from python import hello,router,configration,switch,show,newdevice
+# from python import hello,router,configration,switch,show,newdevice
 class AutomationMethods:
     @staticmethod
     
     def Ping():
-        status=hello.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
+        status=AutomationMethodsData.Ping() #status has three lists host-ip list[], status list[] ,task name list[]
         print(status)
         return  status
 
     def Router_list():
-        Fact_data=router.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]        
+        Fact_data=AutomationMethodsData.Routers_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]        
         print(Fact_data)
         return  Fact_data
     
     def Switch_list():
-        Fact_data=switch.switches_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
+        Fact_data=AutomationMethodsData.switches_facts() #Fact_data has three lists host-ip list[], status list[] ,task name list[]
         print(Fact_data)
         return Fact_data
 
     def Set_Hostname(selected_host,hostname):
-        status = configration.set_hostname(selected_host,hostname) #"ok"
+        status = 'ok'#configration.set_hostname(selected_host,hostname) #"ok"
         print (status)
         return status
     
     def Set_Banner(selected_host,banner):
-        status = configration.set_banner(selected_host,banner) #"ok"
+        status = 'ok'#configration.set_banner(selected_host,banner) #"ok"
         return status
     
     def set_interfaceconfigration(selected_host,interface_name,ipv4):
@@ -37,29 +37,29 @@ class AutomationMethods:
         print(selected_host)
         print(interface_name)
         print(ipv4)
-        status = configration.set_interfaceconfigration(selected_host,interface_name,ipv4) #"ok"
+        status = 'ok'#configration.set_interfaceconfigration(selected_host,interface_name,ipv4) #"ok"
         print(status)
         return status
     def set_switchgateway(selected_host,ipv4):
         print("sucess")
         print(selected_host)
         print(ipv4)
-        status = configration.Switch_gateway(selected_host,ipv4) #"ok"
+        status = 'ok'#configration.Switch_gateway(selected_host,ipv4) #"ok"
         print(status)
         return status
     def Ospf_routing(selected_hosts,interface_name,cidr_list, 
                     ospf_process_id, router_id, area_id,
                     hello_timer, dead_timer,tag):        
-        status = configration.set_ospfconfigration( selected_hosts=selected_hosts,
-                                                    interface_name=interface_name,
-                                                    cidr_list=cidr_list, 
-                                                    ospf_process_id=ospf_process_id,
-                                                    router_id=router_id,
-                                                    area_id= area_id,
-                                                    hello_timer=hello_timer,
-                                                    dead_timer= dead_timer,
-                                                    tag=tag)
-        # status = "ok"
+        # status = configration.set_ospfconfigration( selected_hosts=selected_hosts,
+        #                                             interface_name=interface_name,
+        #                                             cidr_list=cidr_list, 
+        #                                             ospf_process_id=ospf_process_id,
+        #                                             router_id=router_id,
+        #                                             area_id= area_id,
+        #                                             hello_timer=hello_timer,
+        #                                             dead_timer= dead_timer,
+        #                                             tag=tag)
+        status = "ok"
         print(status)
         return status
     """
@@ -75,8 +75,8 @@ class AutomationMethods:
     tag ----> i give it default value "add_configration" if user click remove configration make its value "remove_configration" 
     """                                                         
     def Static_routing(selected_hosts, cidrs,next_hop,admin_distance,tag):
-        status = configration.set_static_routing(selected_hosts, cidrs.split(','),next_hop,admin_distance,tag)
-        # status = "ok"
+        # status = configration.set_static_routing(selected_hosts, cidrs.split(','),next_hop,admin_distance,tag)
+        status = "ok"
         print(status)
         return status
     """
@@ -90,9 +90,9 @@ class AutomationMethods:
 
     def Vlans_configs(selected_hosts,interfaces_list,vlan_cidr, 
                         vlan_id, vlan_name,tag):
-        status = configration.set_valnconfigration(selected_hosts,interfaces_list,vlan_cidr, 
-                       vlan_id, vlan_name,tag)
-        # status = "ok"
+        # status = configration.set_valnconfigration(selected_hosts,interfaces_list,vlan_cidr, 
+        #                vlan_id, vlan_name,tag)
+        status = "ok"
         print(status)
         return status
     """
@@ -105,13 +105,13 @@ class AutomationMethods:
     tag ----> i give it default value "add_configration" ,if user click remove configration make its value "remove_configration" 
     """
     def display_VLAN_Brief():
-       return show.vlan_information() #"hello vlan brief"
+       return "hello vlan brief" #show.vlan_information()
 
     def display_OSPF_Neighbor_Information():
-       return show.ospf_neighbors() #"hello ospf neighbour"
+       return "hello ospf neighbour"#show.ospf_neighbors() 
 
     def display_OSPF_Database_Summary():
-       return show.ospf_database() #''"hello ospf database"
+       return "hello ospf database" #show.ospf_database() 
 
     
     """
@@ -120,14 +120,14 @@ class AutomationMethods:
     selected_hosts: is list 
     """    
     def send_commands_string(selected_hosts , conf_str):
-        return configration.do_configration(selected_hosts , conf_str)#ok
+        return 'ok'#configration.do_configration(selected_hosts , conf_str)#ok
     """
     send_configration_file(selected_hosts,config_file_path)
     config_file_path: take string from text box each command in one line
     selected_hosts: is list 
     """    
     def send_configration_file(selected_hosts,config_file_path):
-        return configration.apply_configrationfile(selected_hosts , config_file_path)#ok
+        return 'ok'#configration.apply_configrationfile(selected_hosts , config_file_path)#ok
     
     """
     take_backup(selected_hosts)
@@ -135,13 +135,13 @@ class AutomationMethods:
     selected_hosts: is list 
     """    
     def take_backup(selected_hosts):
-        return configration.backup_cisco_devices(selected_hosts )#ok
+        return 'ok'#configration.backup_cisco_devices(selected_hosts )#ok
     
     """
         
     """    
     def new_device(cidr,devicename,type,username,password):
-        return newdevice.add_newdevice(cidr,devicename,type,username,password)
+        return 'ok'#newdevice.add_newdevice(cidr,devicename,type,username,password)
 
 
 

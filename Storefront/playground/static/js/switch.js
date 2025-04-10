@@ -87,6 +87,7 @@ async function populateDeviceSelect() {
         console.log(data);
         SwitchesData=data;
         //localStorage.setItem('switchData', JSON.stringify(data));
+        sessionStorage.setItem('switchData',JSON.stringify(data));
         const deviceSelect = document.getElementById('device-select');
         deviceSelect.innerHTML = data.map(device => 
             `<option value="${device.id}">${device.device}</option>`
