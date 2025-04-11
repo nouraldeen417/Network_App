@@ -1,0 +1,1 @@
+{"event": "verbose", "uuid": "9731e51b-7fad-4c03-85d9-9b6d3652d1d2", "counter": 5, "stdout": "\u001b[1;35m[WARNING]: To ensure idempotency and correct diff the input configuration lines\u001b[0m", "start_line": 4, "end_line": 5, "runner_ident": "71272931-97e6-47fc-9dbd-b9e96f75139e", "created": "2025-04-11T16:13:40.129164+00:00"}

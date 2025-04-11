@@ -1,0 +1,9 @@
+[1;35m[WARNING]: Could not match supplied host pattern, ignoring: d[0m
+[1;35m[WARNING]: Could not match supplied host pattern, ignoring: o[0m
+[1;35m[WARNING]: Could not match supplied host pattern, ignoring: s[0m
+[1;35m[WARNING]: Could not match supplied host pattern, ignoring: h[0m
+[1;35m[WARNING]: Could not match supplied host pattern, ignoring: i[0m
+[1;35m[WARNING]: Could not match supplied host pattern, ignoring: p[0m
+[1;35m[WARNING]: Could not match supplied host pattern, ignoring: n[0m
+[1;35m[WARNING]: Could not match supplied host pattern, ignoring: t[0m
+[0;31mERROR! Specified inventory, host pattern and/or --limit leaves us with no hosts to target.[0m

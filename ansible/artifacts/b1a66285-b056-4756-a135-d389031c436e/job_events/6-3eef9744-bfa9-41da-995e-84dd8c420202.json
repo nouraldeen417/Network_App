@@ -1,0 +1,1 @@
+{"event": "verbose", "uuid": "3eef9744-bfa9-41da-995e-84dd8c420202", "counter": 6, "stdout": "\u001b[1;35m[WARNING]: Module did not set no_log for password_type\u001b[0m", "start_line": 5, "end_line": 6, "runner_ident": "b1a66285-b056-4756-a135-d389031c436e", "created": "2025-04-11T15:58:25.247442+00:00"}

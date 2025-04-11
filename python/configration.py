@@ -60,6 +60,24 @@ def _get_ansibleresult(runner):
 
     return "ok"
 
+def _validate_and_convert_to_list(input_data):
+    """
+    Validates input and converts to list if needed.
+    
+    Args:
+        input_data: Input to be validated (can be list, string, or other type)
+        
+    Returns:
+        list: The converted list or original list if input was already a list
+    """
+    if isinstance(input_data, list):
+        return input_data
+    elif isinstance(input_data, str):
+        # Split by comma and strip whitespace from each element
+        return [item.strip() for item in input_data.split(',')]
+    else:
+        # For other types, wrap in a list
+        return [input_data]
 def set_hostname(selected_host,new_hostname):
     error_msg = "Empty input"
     runner = 0
@@ -177,6 +195,7 @@ def Switch_gateway(selected_hosts , gateway):
         module_args=command,
         host_pattern="switches"  # Update with the correct host group from your inventory
     )
+    return _get_ansibleresult(result)
 
 def set_ospfconfigration(selected_hosts,interface_name,cidr_list, 
                          ospf_process_id, router_id, area_id,
@@ -186,7 +205,7 @@ def set_ospfconfigration(selected_hosts,interface_name,cidr_list,
     network_address=[]
     wildcard_mask=[]
     subnet_mask=[]
-
+    cidr_list= _validate_and_convert_to_list(cidr_list)
     if (interface_name == None ):
       return error_msg  
     else:
@@ -248,7 +267,7 @@ def set_valnconfigration(selected_hosts,interfaces_list,vlan_cidr,
     runner = 0
     if (interfaces_list == None ):
       return error_msg  
-    else:
+    if re.fullmatch(VALID_IP_PATTERN, vlan_cidr):
         runner = ansible_runner.run(
         private_data_dir="../ansible/",          # Current directory
         playbook="playbooks/site.yaml",
@@ -264,6 +283,8 @@ def set_valnconfigration(selected_hosts,interfaces_list,vlan_cidr,
 
             }
         )
+    else :
+        return "please add valid ip "
     error_msg = _get_ansibleresult(runner)
     print ("vlan"+str(vlan_id))
     if (error_msg == OK_MSG or error_msg == NO_CHNAGE_MSG ):

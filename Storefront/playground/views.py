@@ -122,10 +122,10 @@ def add_device(request):
 def upload_file(request):
     if request.method=='POST':
         file=request.FILES.get('file')
-        device=request.POST.get('device')
+        device=request.POST.getlist('device')
         print(file)
         print(device)
-        result =AutomationMethods.send_configration_file(file,device)
+        result =AutomationMethods.send_configration_file(device,file)
         return JsonResponse({'response':result})
     return render(request,'advanced_config.html')
 
@@ -133,10 +133,10 @@ def upload_file(request):
 def paste_config(request):
     if request.method=='POST':
         paste_config=request.POST.get('paste-config')
-        device=request.POST.get('device')
+        device=request.POST.getlist('device')
         print(paste_config)
         print(device)
-        result =AutomationMethods.send_commands_string(paste_config,device)
+        result =AutomationMethods.send_commands_string(device,paste_config)
         return JsonResponse({'response':result})
     return render(request,'advanced_config.html')
 
