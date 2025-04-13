@@ -10,7 +10,6 @@ urlpatterns=[
     path('api/routers/', views.RouterList, name='router_list_api'),  
     path('api/devices/', views.devices_list, name='devices_list'),
     path('api/switches/', views.SwitchList, name='switch_list_api'),
-    path('api/firewalls/', views.FirewallList, name='firewall_list_api'),
     
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),

@@ -5,6 +5,10 @@ function switch_tabs(tab){
     document.getElementsByClassName('active-section')[0]?.classList.remove('active-section');
     document.getElementsByClassName(tab)[0]?.classList.remove('non-active-section');
     document.getElementsByClassName(tab)[0]?.classList.add('active-section');
+    let result_box=document.getElementById('result-box');
+    result_box.innerHTML=``;
+    result_box.classList.remove('error');
+    result_box.classList.remove('success');
     populateDevices(tab);
 }
 document.addEventListener('DOMContentLoaded',function(){
@@ -50,16 +54,34 @@ document.addEventListener('DOMContentLoaded',function(){
     
     document.getElementById('upload-form').addEventListener('submit',async (e)=>{
         e.preventDefault();
+        let devices = document.querySelectorAll('input[type="radio"]:checked');
+        if(devices.length==0){
+            showMessage("you must choose device");
+            return false;
+        }
+        console.log(devices);
+        
         let url='/playground/upload-file/'
         await sendRequest(url,e);
     });
     document.getElementById('paste-form').addEventListener('submit',async (e)=>{
         e.preventDefault();
+        
+        let devices = document.querySelectorAll('input[type="radio"]:checked');
+        if(devices.length==0){
+            showMessage("you must choose device");
+            return false;
+        }
         let url='/playground/paste-config/'
         await sendRequest(url,e);
     });
     document.getElementById('backup-form').addEventListener('submit',async (e)=>{
         e.preventDefault();
+        let devices = document.querySelectorAll('input[type="radio"]:checked');
+        if(devices.length==0){
+            showMessage("you must choose device");
+            return false;
+        }
         let url='/playground/backup/'
         await sendRequest(url,e);
     });
@@ -77,14 +99,19 @@ async function sendRequest(url,e){
         console.log(data);
         await e.target.reset();
         let result_box=document.getElementById('result-box');
-        result_box.innerHTML=data.response;
-        if(data.response=='ok'){
-            result_box.classList.remove('error');
-            result_box.classList.add('success');
-        }else {
-            result_box.classList.remove('success');
-            result_box.classList.add('error');
-        }
+        showMessage(response.data);
+}
+function showMessage(message){
+    let result_box=document.getElementById('result-box');
+    if(message=='ok'){
+        result_box.innerHTML="Operation Done Successfully";
+        result_box.classList.remove('error');
+        result_box.classList.add('success');
+    }else {
+        result_box.innerHTML=`Error: ${message}`;
+        result_box.classList.remove('success');
+        result_box.classList.add('error');
+    }
 }
 
 function populateDevices(tab){
@@ -98,6 +125,7 @@ function populateDevices(tab){
         radio.type=(tab=='backup')?'checkbox':'radio';
         radio.name='device';
         radio.value=d.host;
+        radio.onclick=(e)=>e.stopPropagation();
         let cell=document.createElement('td');
         cell.appendChild(radio)
         row.appendChild(cell);
@@ -107,7 +135,9 @@ function populateDevices(tab){
             row.appendChild(cell);
         });
         row.style.cursor='pointer';
-        row.onclick=()=>radio.checked=!radio.checked;
+        row.onclick=()=>{
+            radio.checked=!radio.checked
+        };
         table_body.appendChild(row);
     });
 

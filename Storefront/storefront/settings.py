@@ -137,3 +137,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/playground/login/'  # Replace with the URL pattern for your login page
 LOGOUT_REDIRECT_URL = '/playground/login/'
+
+
+
+
+

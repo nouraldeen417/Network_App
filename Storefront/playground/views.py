@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -356,8 +357,6 @@ def OSPF_Data(request):
     }
     return JsonResponse(data,safe=False)
 
-@login_required
-#@cache_page(60 * 15)  # Cache for 15 minutes
 def devices_list(request):
     devices = AutomationMethods.Ping()  # Call the ping method to get the list of devices
     print(devices)
@@ -367,8 +366,9 @@ def devices_list(request):
     ]
     return JsonResponse(serializable_devices, safe=False)
 
+
+
 @login_required
-#@cache_page(60 * 15)  # Cache for 15 minutes
 def RouterList(request):
     # Fetch the list of devices (Facts objects)
     devices = AutomationMethods.Router_list()
@@ -414,7 +414,6 @@ def RouterList(request):
     return JsonResponse(serializable_devices, safe=False)
 
 @login_required
-#@cache_page(60 * 15)  # Cache for 15 minutes
 def SwitchList(request):
         # Fetch the list of devices (Facts objects)
     devices = AutomationMethods.Switch_list()
@@ -458,14 +457,4 @@ def SwitchList(request):
 
     # Return the serialized data as a JSON response
     return JsonResponse(serializable_devices, safe=False)
-
-@login_required
-def FirewallList(request):
-        devices=AutomationMethods.Firewall_list()
-        serializable_devices = [
-        {'name':device.name , 'ip_address':device.ip_address,'location':device.location,'status':device.status}
-        for device in devices
-        ]
-        return JsonResponse(serializable_devices, safe=False)
-        return Response([{'name':"Firewall1" , 'ip_address':"192.167.0.1",'location':"home",'status':"Stopped"},{'name':"firewall2" , 'ip_address':"192.167.0.2",'location':"home",'status':"Running"}] ,status=status.HTTP_200_OK)
 
