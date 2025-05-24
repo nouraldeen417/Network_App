@@ -1,0 +1,10 @@
+---
+- name: Get Egypt time (UTC+2)
+  set_fact:
+    egypt_time: "{{ lookup('pipe', 'TZ=Africa/Cairo date +%Y-%m-%d_%H-%M-%S') }}"
+- name: Configurable backup path
+  cisco.ios.ios_config:
+    backup: true
+    backup_options:
+      filename: backup_{{ inventory_hostname }}_{{ egypt_time }}.cfg
+      dir_path: "{{ playbook_dir }}/../backups/{{ inventory_hostname }}" 

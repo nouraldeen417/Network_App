@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Switch Configuration</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CSS/configurations.css' %}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="links">
+            <a href="{% url 'sayhello' %}">Home</a>
+            <a href="{% url 'RoutersView' %}">Routers</a>
+            <a href="{% url 'SwitchesView' %}">Switches</a>
+            <a href="{% url 'AdvancedConfig' %}">Advanced Configuration</a>
+            {% if request.user.is_staff %}
+            <a href="{% url 'approve_users' %}">Pending Users</a>
+            {% endif %}
+        </div>
+
+        {% if user.is_authenticated %}
+        <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <h1>Switches Configurations</h1>
+        
+        <div class="devices-list">
+            <h2>Available Switches</h2>
+            <table class="info-table">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Switch Name</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="config" id="config">
+            <h2>Configurations</h2>
+            <div class="tab-buttons" id="tab-buttons">
+            
+            </div>
+            <div class="config-section" id="config-section">
+                <form id="config-form" class="config-form" method="post">
+                    {% csrf_token %}
+                    <div id="form-groups">
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="command-output">
+            <h2>VLAN Brief Information</h2>
+            <textarea name="vlan-brief" id="vlan-brief" readonly>
+                
+            </textarea>
+            <h2>VLAN Detailed Information</h2>
+            <textarea name="vlan-detail" id="vlan-detail" readonly>
+
+            </textarea>
+        </div>
+    </div>
+    <script src="{% static 'js/switchConfigurations.js' %}" defer></script>
+</body>
+</html>

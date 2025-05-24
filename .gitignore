@@ -1,0 +1,52 @@
+# Ignore all logs
+*.log
+
+# Ignore specific directories (single-level)
+/cache/
+/temp/
+
+# Ignore multi-level directories (anywhere in repo)
+**/logs/
+**/temp/
+**/artifacts/
+
+# Ignore specific file types in subdirectories
+**/*.cache
+**/*.swp
+
+# But keep some important files (even if in ignored dirs)
+!**/important.log
+!cache/keep_this_file.txt
+# Byte-compiled Python files
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+venv/
+.env/
+.venv/
+env/
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+media/
+staticfiles/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

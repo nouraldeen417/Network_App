@@ -1,0 +1,22 @@
+---
+- name: Send configuration commands
+  ios_config:
+    lines: "{{ config_commands }}"
+  
+    # save_when: modified
+  tags: line_config
+
+- name: Get Egypt time (UTC+2)
+  set_fact:
+    egypt_time: "{{ lookup('pipe', 'TZ=Africa/Cairo date +%Y-%m-%d_%H-%M-%S') }}"
+  tags: file_config
+
+- name: Configurable backup path
+  cisco.ios.ios_config:
+    src: "{{ playbook_dir }}/../ansible_uploads/{{ configuration_file_path }}"
+    backup: true
+    backup_options:
+      filename: backup_{{ inventory_hostname }}_{{ egypt_time }}.cfg
+      dir_path: "{{ playbook_dir }}/../backups/{{ inventory_hostname }}" 
+  tags: file_config
+

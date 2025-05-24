@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Information</title>
+    {%load static%}
+    <link rel="stylesheet" href="{% static 'CSS/configurations.css' %}">
+<body>
+    <div class="navbar">
+        <div class="links">
+            <a href="{% url 'sayhello' %}">Home</a>
+            <a href="{% url 'RoutersView' %}">Routers</a>
+            <a href="{% url 'SwitchesView' %}">Switches</a>
+            <a href="{% url 'AdvancedConfig' %}">Advanced Configuration</a>
+            {% if request.user.is_staff %}
+            <a href="{% url 'approve_users' %}">Pending Users</a>
+            {% endif %}
+        </div>
+
+        {% if user.is_authenticated %}
+        <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <div class='header'>
+            <h1 color='white'>Advanced Configurations</h1>
+        </div>
+        <div class='tab_buttons '>
+            <button class='tab-btn active' id='add-device'>Add Device</button>
+            <button class='tab-btn' id='upload-file'>Upload File</button>
+            <button class='tab-btn' id='paste-config'>Paste Config</button>
+            <button class='tab-btn' id='backup'>Back Up</button>
+            
+        </div>
+        <div class ='config add-device active-section'>
+        <h2>Add New Network Device</h2>
+        <form id='add-device-form' method='post'>
+            {% csrf_token %}
+            <div class='form-group'>
+            <label for='name'>Device Name *</label>
+            <input type='text' id='name' name='name' Required>
+            </div>
+            <div class='form-group'>
+            <label for='ip'>IP Address *</label>
+            <input type='text' id='ip' name='ip' Required>
+            </div>
+            <div class='form-group'>
+            <label for='device-type'>Device Type *</label>
+            <select id ='device-type' name='type'>
+                <option value='router'>Router</option>
+                <option value='switch'>Switch</option>
+                <option value='l3switch'>Layer 3 Switch</option>
+                <option value='other'>Other</option>
+            </select>
+        </div>
+        <div class='form-group'>
+            <label for='ssh-username'>SSH Username *</label>
+            <input type='text' id='ssh-username' name='ssh-username' Required>
+        </div>
+        <div class='form-group'>
+        
+            <label for='ssh-pass'>SSH Password *</label>
+            <input type='Password' id='ssh-pass' name='ssh-pass'  Required>
+        </div>
+            <div class ='ssh-notice'>
+                <h3>SSH Access Required</h3>
+                <p>
+                    Before adding this device, please ensure:
+                </p>
+                <ol>
+                    <li>SSH is enabled on the device</li>
+                    <li>The IP address is reachable from this system</li>
+                    <li>The provided credentials have sufficient privileges</li>
+                    <li>Firewall rules allow SSH access (TCP port 22)</li>
+                </ol>
+                <p>
+                    <strong>Tip:</strong> Test connectivity with: ssh username@ip_address
+                </p>
+            </div>
+            <div class="btns">
+            <button type="submit" class ='btn'>Add Device</button>
+            <button type="reset" class='btn delete'>Cancel</button>
+            </div>
+        </form>
+    </div>
+    <div class='config upload-file non-active-section'>
+        <h2>Upload Configuration File</h2>
+        <form id='upload-form' method='post'>
+            {% csrf_token %}
+            <input type='file' id='file-input' name='file' style="display : none">
+            <div class='file-upload-box' id='upload-box'>
+                <p>Drag and drop your Cisco config file here or <span style='color:#0066cc'><u>browse</u></span></p>
+            </div>
+        <div class='devices'>
+            <h3>Select Target Device:</h3>
+            <table class='device-table' id='device-table-upload-file'>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Device</th>
+                        <th>Task</th>
+                        <th>Status</th>                    
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+            </div>
+            <div class="btns">
+                <button type="submit" class ='btn'>Upload</button>
+                <button type="reset" class='btn delete'>Cancel</button>
+            </div>
+        </form>
+    </div>
+    <div class="config paste-config non-active-section">
+        <h2>Paste Configuration</h2>
+        <form id='paste-form'>
+            {% csrf_token %}
+            <div class='text-content'>
+                <textarea id='config-textarea' name='paste-config' placeholder="paste your Configuration here ..." Required></textarea>
+            </div>
+            <div class='devices'>
+                <h3>Select Target Device:</h3>
+                <table class='device-table' id='device-table-paste-config'>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Device</th>
+                            <th>Task</th>
+                            <th>Status</th>                    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+                </div>
+                <div class="btns">
+                    <button type="submit" class ='btn'>Apply Configuration</button>
+                    <button type="reset" class='btn delete'>Cancel</button>
+                </div>
+        </form>
+    </div>
+
+    <div class="config backup non-active-section">
+        <h2>Back Up</h2>
+        <form id='backup-form'>
+            {% csrf_token %}
+            <div class='devices'>
+                <h3>Select Target Device:</h3>
+                <table class='device-table' id='device-table-backup'>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Device</th>
+                            <th>Task</th>
+                            <th>Status</th>                    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+                </div>
+                <div class="btns">
+                    <button type="submit" class ='btn'>Back Up</button>
+                    <button type="reset" class='btn delete'>Cancel</button>
+                </div>
+        </form>
+    </div>
+    <div class='result' id='result-box'>
+
+    </div>
+</div>
+    <script src={% static 'js/advanced_config.js' %} defer></script>
+</body>
+</html>
