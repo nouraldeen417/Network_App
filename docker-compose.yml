@@ -5,10 +5,11 @@ services:
     ports:
       - "8000:8000"
     volumes:
+      - ./src/hosts:/app/ansible/inventory/hosts:ro # Mount nginx configuration file
       - staticfiles:/app/djangoapp/staticfiles  # Mount staticfiles volume
     environment:
-      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,192.168.1.200
-      - DJANGO_TRUSTED_ORIGIN=http://localhost,192.168.1.200    
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,192.168.1.107
+      - DJANGO_TRUSTED_ORIGIN=http://localhost,192.168.1.107    
            
 
   nginx:
