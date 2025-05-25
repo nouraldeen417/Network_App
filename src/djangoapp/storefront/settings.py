@@ -12,32 +12,26 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # settings.py
-
-# Define the folder where your static files (like JavaScript, CSS) are located
+# settings.py
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Directory where static files will be collected
 
-# You may also need to define the directory where Django looks for static files during development
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # assuming the folder is named 'static'
-]
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory for user-uploa
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure--+-848#y$j224=fua9w6fppx=#jl&l%y#izbl2uvvl!jget^%%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
+# Read ALLOWED_HOSTS from environment variable
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_TRUSTED_ORIGIN', '').split(',')
 # Application definition
 
 INSTALLED_APPS = [

@@ -1,6 +1,5 @@
 # Ignore all logs
 *.log
-
 # Ignore specific directories (single-level)
 /cache/
 /temp/
