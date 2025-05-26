@@ -30,9 +30,12 @@ SECRET_KEY = 'django-insecure--+-848#y$j224=fua9w6fppx=#jl&l%y#izbl2uvvl!jget^%%
 DEBUG = True
 
 # Read ALLOWED_HOSTS from environment variable
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
-CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_TRUSTED_ORIGIN', '').split(',')
+# ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+# CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_TRUSTED_ORIGIN', '').split(',')
 # Application definition
+ALLOWED_HOSTS = ['*']  # Replace with your actual allowed hosts in production
+CSRF_TRUSTED_ORIGINS = []
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -131,6 +134,46 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/playground/login/'  # Replace with the URL pattern for your login page
 LOGOUT_REDIRECT_URL = '/playground/login/'
+
+
+LOG_DIR = os.path.join(BASE_DIR.parent, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'standard': {
+            'format': '[{asctime}] {levelname} {name}: {message}',
+            'style': '{',
+        },
+    },
+
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'django.log'),
+            'formatter': 'standard',
+        },
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # You can also log your app separately if you want
+        'playground': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+
+}
 
 
 

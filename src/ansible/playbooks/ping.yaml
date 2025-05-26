@@ -2,6 +2,9 @@
 - name: Ping all devices in the topology
   hosts: all
   gather_facts: false
+  vars:
+    ansible_command_timeout: 3  # 3 seconds is plenty for ping
+    ansible_connect_timeout: 3  # 5s max for connection setup
   tasks:
     - name: Ping devices
       cisco.ios.ios_ping:

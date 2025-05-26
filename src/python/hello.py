@@ -7,9 +7,7 @@ def Ping():
     inventory="hosts",    # Path to external inventory file
     rotate_artifacts=10
     )
-    #host=[]
-    #task=[]
-    #status=[]
+
     devices = []
 
     for event in r.events: 

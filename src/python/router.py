@@ -41,46 +41,33 @@ def Routers_facts():
     )
     # Get the list of hosts where tasks ran
     hosts_with_tasks = [host for host in  r.stats["ok"]]
+    hosts_with_failed = [host for host in  r.stats["failures"]]
     facts = []
     # Print the hosts where tasks were executed
+    if (hosts_with_failed):
+        print(hosts_with_failed)
+        for host in hosts_with_failed:
+            facts.append(Router_Facts(
+                            id=host ,
+                            device=host, 
+                            interfaces=[(host, "NOT_Found", "NOT_Found", "Connection to Switch failed may be network issues ")],  # Fills all 4 Interface fields with "NOT_SET",          
+                            neighbors= [("NOT_Found",) * 3] , # Fills all 4 Interface fields with "NOT_SET",
+                            routing_tables=[("NOT_Found",) * 5]  # Fills all 4 Interface fields with "NOT_SET",
+                            )
+                        )
+    if (hosts_with_tasks):
+        print("hosts_with_tasks")
+        for host in hosts_with_tasks:
+            facts_file = "../ansible/temp/router_facts_" + host + ".json"
+            with open(facts_file, "r") as f:
+                router_facts = json.load(f)
+            # print(router_interface_list(router_facts["net_interfaces"]))    
+            routing_table_output = router_facts["routing_table"]["stdout"][0]
+            facts.append(Router_Facts(id=host ,device=router_facts["net_hostname"], 
+                            interfaces=router_interface_list(router_facts["net_interfaces"]),
+                            neighbors=router_neighbor_list(router_facts["net_neighbors"]),
+                            routing_tables=parse_routing_table(routing_table_output)))
 
-    for host in hosts_with_tasks:
-        facts_file = "../ansible/temp/router_facts_" + host + ".json"
-
-        with open(facts_file, "r") as f:
-            router_facts = json.load(f)
-        # print(router_interface_list(router_facts["net_interfaces"]))    
-        routing_table_output = router_facts["routing_table"]["stdout"][0]
-
-        facts.append(Router_Facts(id=host ,device=router_facts["net_hostname"], 
-                           interfaces=router_interface_list(router_facts["net_interfaces"]),
-                           neighbors=router_neighbor_list(router_facts["net_neighbors"]),
-                           routing_tables=parse_routing_table(routing_table_output)))
-
-
-    print (facts[0].id,
-           facts[0].device , 
-           facts[0].interfaces[0].name , 
-           facts[0].interfaces[0].address_subnet ,
-           facts[0].interfaces[0].status ,
-           facts[0].interfaces[0].description ,
-           facts[0].neighbors[0].name,
-           facts[0].neighbors[0].address_subnet,
-           facts[0].neighbors[0].port,
-           facts[1].routing[1].interface,
-           facts[1].routing[1].network,           
-           facts[1].routing[1].protocol,
-           facts[1].routing[1].next_hop,
-           facts[1].routing[1].admin_distance)
-    print("\n")
-    # print (facts[1].id,
-    #        facts[1].device , 
-    #        facts[1].interfaces[1].name , 
-    #        facts[1].interfaces[1].address_subnet ,
-    #        facts[1].interfaces[1].status ,
-    #        facts[1].neighbors[0].name,
-    #        facts[1].neighbors[0].address_subnet,
-    #        facts[1].neighbors[0].port)
     return facts
 
 def router_interface_list(dict):
@@ -168,4 +155,3 @@ def parse_routing_table(output):
 
     return routes
 
-# Routers_facts()

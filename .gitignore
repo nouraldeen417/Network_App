@@ -33,6 +33,7 @@ env/
 
 # IDE/Editor files
 .vscode/
+*.vscode/
 .idea/
 *.swp
 *.swo

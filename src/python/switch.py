@@ -43,42 +43,31 @@ def switches_facts():
     )
     # Get the list of hosts where tasks ran
     hosts_with_tasks = [host for host in  r.stats["ok"]]
+    hosts_with_failed = [host for host in  r.stats["failures"]]
+    # print("Hosts with tasks executed: ", hosts_with_tasks)
     facts = []
     # Print the hosts where tasks were executed
+    if ( hosts_with_tasks):
+        for host in hosts_with_tasks:
+            facts_file = "../ansible/temp/switch_facts_" + host + ".json"
 
-    for host in hosts_with_tasks:
-        facts_file = "../ansible/temp/switch_facts_" + host + ".json"
-
-        with open(facts_file, "r") as f:
-            router_facts = json.load(f)
-        vlan_output = router_facts["vlans"]["stdout"][0]
-        facts.append(Switch_Facts(id=host ,device=router_facts["net_hostname"], 
-                           interfaces=switch_interface_list(router_facts["net_interfaces"]),
-                           neighbors=switch_neighbor_list(router_facts["net_neighbors"]),
-                           vlans=parse_vlan_table(vlan_output)))
-                        
-    print (facts[0].id,
-           facts[0].device , 
-           facts[0].interfaces[0].name , 
-           facts[0].interfaces[0].address_subnet ,
-           facts[0].interfaces[0].status ,
-           facts[0].interfaces[0].description ,
-           facts[0].neighbors[0].name,
-           facts[0].neighbors[0].address_subnet,
-           facts[0].neighbors[0].port,
-           facts[0].vlans[0].id,
-           facts[0].vlans[0].name,
-           facts[0].vlans[0].status,
-           facts[0].vlans[0].port)
-    print("\n")
-    # print (facts[1].id,
-    #        facts[1].device , 
-    #        facts[1].interfaces[1].name , 
-    #        facts[1].interfaces[1].address_subnet ,
-    #        facts[1].interfaces[1].status ,
-    #        facts[1].neighbors[0].name,
-    #        facts[1].neighbors[0].address_subnet,
-    #        facts[1].neighbors[0].port)
+            with open(facts_file, "r") as f:
+                router_facts = json.load(f)
+            vlan_output = router_facts["vlans"]["stdout"][0]
+            facts.append(Switch_Facts(id=host ,device=router_facts["net_hostname"], 
+                            interfaces=switch_interface_list(router_facts["net_interfaces"]),
+                            neighbors=switch_neighbor_list(router_facts["net_neighbors"]),
+                            vlans=parse_vlan_table(vlan_output)))
+    if (hosts_with_failed):
+        for host in hosts_with_failed:
+            facts.append(Switch_Facts(
+                            id=host ,
+                            device=host, 
+                            interfaces=[(host, "NOT_Found", "NOT_Found", "Connection to Switch failed may be network issues ")],  # Fills all 4 Interface fields with "NOT_SET",          
+                            neighbors= [("NOT_Found",) * 3] , # Fills all 4 Interface fields with "NOT_SET",
+                            vlans=[("NOT_Found",) * 4]  # Fills all 4 Interface fields with "NOT_SET",
+                            )
+                        )       
     return facts
 
 def switch_interface_list(dict):
@@ -150,5 +139,3 @@ def parse_vlan_table(output):
         vlans.append(current_vlan)
 
     return vlans
-
-# switches_facts()

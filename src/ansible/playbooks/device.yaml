@@ -1,6 +1,9 @@
 ---
 - name: Configure IOS devices
   hosts: "{{ target_hosts }}"
+  vars:
+    ansible_command_timeout: 10  # 3 seconds is plenty for ping
+    ansible_connect_timeout: 10  # 5s max for connection setup
   gather_facts: false
   roles:
     - role: ping 
