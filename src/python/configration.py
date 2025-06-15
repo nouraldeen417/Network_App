@@ -328,23 +328,21 @@ def apply_configrationfile(selected_hosts,config_file):
         temp_path = os.path.join(temp_dir, config_file.name)  
         file_path = os.path.join(Base_dir, config_file.name)        
         # Save file
-
-
         with open(temp_path, 'wb+') as destination:
             for chunk in config_file.chunks():
                 destination.write(chunk)
         print(f"File saved to {file_path}")
         runner = ansible_runner.run(
-        private_data_dir="../ansible/",          # Current directory
-        playbook="playbooks/site.yaml",
-        inventory="hosts",                       # Path to external inventory file
-        limit=','.join(selected_hosts),
-        tags="file_config",                     # Limit to selected routers
-        rotate_artifacts=10,                
-        extravars={                              # Pass the selected role as a variable
-                "selected_roles": 'config',   # Dynamically set the role
-                "configuration_file_path": config_file.name
-            }
+            private_data_dir="../ansible/",          # Current directory
+            playbook="playbooks/site.yaml",
+            inventory="hosts",                       # Path to external inventory file
+            limit=','.join(selected_hosts),
+            tags="file_config",                     # Limit to selected routers
+            rotate_artifacts=10,                
+            extravars={                              # Pass the selected role as a variable
+                    "selected_roles": 'config',   # Dynamically set the role
+                    "configuration_file_path": config_file.name
+                }
         )
 
     error_msg = _get_ansibleresult(runner)
@@ -368,14 +366,14 @@ def backup_cisco_devices(selected_hosts, backup_dir='backups'):
       return error_msg  
     else:
         runner = ansible_runner.run(
-        private_data_dir="../ansible/",          # Current directory
-        playbook="playbooks/site.yaml",
-        inventory="hosts",                       # Path to external inventory file
-        limit=','.join(selected_hosts),          # Limit to selected routers
-        rotate_artifacts=10,                
-        extravars={                              # Pass the selected role as a variable
-                "selected_roles": 'backup',   # Dynamically set the role
-             }
+            private_data_dir="../ansible/",          # Current directory
+            playbook="playbooks/site.yaml",
+            inventory="hosts",                       # Path to external inventory file
+            limit=','.join(selected_hosts),          # Limit to selected routers
+            rotate_artifacts=10,                
+            extravars={                              # Pass the selected role as a variable
+                    "selected_roles": 'backup',   # Dynamically set the role
+                }
         )
 
     error_msg = _get_ansibleresult(runner)

@@ -1,11 +1,13 @@
 [routers]
 Router_01 ansible_host=192.168.3.1
 Router_02 ansible_host=192.168.3.2
+L3_Switche_01 ansible_host=192.168.3.110
 [switches]
-Switch_01 ansible_host=192.168.3.100
+L3_Switche_01 ansible_host=192.168.3.110
+;Switch_01 ansible_host=192.168.3.100
 [L3_switches]
-L3_Switche_01 ansible_host=192.168.3.100
-L3_Switche_02 ansible_host=192.168.3.100
+L3_Switche_01 ansible_host=192.168.3.110
+;L3_Switche_02 ansible_host=192.168.3.100
 [all:vars]
 ansible_connection=ansible.netcommon.network_cli
 ansible_become=yes

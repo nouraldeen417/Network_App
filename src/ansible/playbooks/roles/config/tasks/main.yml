@@ -2,8 +2,6 @@
 - name: Send configuration commands
   ios_config:
     lines: "{{ config_commands }}"
-  
-    # save_when: modified
   tags: line_config
 
 - name: Get Egypt time (UTC+2)

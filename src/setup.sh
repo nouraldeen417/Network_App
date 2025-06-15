@@ -7,11 +7,10 @@ set -e
 VENV_NAME="venv"
 REQUIREMENTS_FILE="requirements.txt"
 PROJECT_DIR="Network_App"
-INVENTORY_SOURCE="./hosts-sample"
+INVENTORY_SOURCE="./hosts"
 INVENTORY_DEST="./ansible/inventory/"
 
-# go to project directory
-cd $PROJECT_DIR
+
 
 # Check if Python 3 is installed
 if ! command -v python3 &> /dev/null
@@ -54,7 +53,7 @@ fi
 
 # Move the edited inventory file
 echo "Moving the hosts file to $INVENTORY_DEST..."
-sudo mv "$INVENTORY_SOURCE" "$INVENTORY_DEST"
+sudo cp "$INVENTORY_SOURCE" "$INVENTORY_DEST"
 sudo chmod 644 "$INVENTORY_DEST"
 # Deactivate the virtual environment
 echo "Deactivating virtual environment..."

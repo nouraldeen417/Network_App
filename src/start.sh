@@ -2,12 +2,10 @@
 
 # Define variables
 PROJECT_DIR="Network_App"
-VENV_DIR="Network_App/venv"
+VENV_DIR="./venv"
 
 
-# Navigate to Django project directory
-cd "$PROJECT_DIR"
-# Check if the virtual environment exists
+# Navigate to Django project directory# Check if the virtual environment exists
 if [ ! -d "$VENV_DIR" ]; then
     echo "Error: Virtual environment not found. Please run setup.sh first."
     exit 1

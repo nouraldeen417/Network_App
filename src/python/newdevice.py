@@ -15,18 +15,18 @@ def add_device_to_inventory(device_name, device_ip, device_type):
     group_mapping = {
         "router": "routers",
         "switch": "switches",
-        "L3_switche": "L3_switches"
+        "l3switch": "L3_switches"
     }
-    
+
     target_group = group_mapping.get(device_type.lower())
     if not target_group:
         raise ValueError(f"Invalid device type: {device_type}")
-    
+        
+
     new_entry = f"{device_name} ansible_host={device_ip}"
     added = False
     output_lines = []
     in_target_group = False
-    
     with open('../ansible/inventory/hosts', 'r') as f:
         for line in f:
             line = line.rstrip('\n')
@@ -113,9 +113,10 @@ def add_newdevice(cidr,devicename,type,username,password):
     )
     result = _get_ansibleresult(r)
     if result == "ok":
-        result = add_ansibleuser(cidr,username,password)
+        result = add_ansibleuser(cidr,username,password) # helping function
         if result == "ok" :
-            add_device_to_inventory(devicename,cidr,type)
+            print(result)
+            add_device_to_inventory(devicename,cidr,type) # helping function
     return result
 def add_ansibleuser(cidr,username,password):
     # Create minimal in-memory inventory
@@ -142,9 +143,3 @@ def add_ansibleuser(cidr,username,password):
     result = _get_ansibleresult(r)
     return result
 
-# print(add_newdevice("192.168.4.2","Router_03","router","admin","admin"))
-# add_device_to_inventory(
-#     device_name="Router_03",
-#     device_ip="192.168.4.2",
-#     device_type="switch"
-# )

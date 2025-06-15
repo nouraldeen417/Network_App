@@ -17,7 +17,7 @@
       {{
         ansible_facts | combine({'routing_table': routing_table}) | to_nice_json
       }}
-    dest: "./temp/router_facts_{{ inventory_hostname }}.json"
+    dest: "{{ playbook_dir }}/../temp/router_facts_{{ inventory_hostname }}.json"
   tags: routers
 
 - name: Run 'show vlan breif' command
