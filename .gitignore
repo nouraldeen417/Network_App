@@ -1,12 +1,11 @@
 # Ignore all logs
 *.log
 # Ignore specific directories (single-level)
-/cache/
-/temp/
+
 
 # Ignore multi-level directories (anywhere in repo)
-**/logs/
-**/temp/
+**/logs/*
+**/temp/*
 **/artifacts/
 
 # Ignore specific file types in subdirectories
